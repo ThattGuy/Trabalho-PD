@@ -14,12 +14,9 @@ public class Initial extends ClientStateAdapter {
     @Override
     public boolean selOpt(OPTIONS opt) {
 
-        if(opt == OPTIONS.REG){
-            changeState(ClientStates.REG_USER);
-        }
-
         switch (opt){
             case REG -> changeState(ClientStates.REG_USER);
+            case LOGIN -> changeState(ClientStates.LOGIN);
             case BACK -> changeState(context.getState());
         }
 
