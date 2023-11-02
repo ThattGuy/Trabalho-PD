@@ -12,7 +12,7 @@ public class EditData extends ClientStateAdapter {
 
 
     @Override
-    public boolean selOpt(OPTIONS opt) {
+    public boolean selOpt(OPTIONS opt, String string) {
         //todo edit user data
 
         switch (opt){
@@ -21,5 +21,7 @@ public class EditData extends ClientStateAdapter {
 
         return true;
     }
+
+
 
 }

@@ -4,6 +4,6 @@ import pt.isec.pa.projetopd.cliente.model.data.OPTIONS;
 
 public interface IClientState {
 
-    boolean selOpt(OPTIONS opt);
+    boolean selOpt(OPTIONS opt, String string);
     ClientStates getState();
 }

@@ -8,8 +8,8 @@ public class ClientContext {
     private transient IClientState state;
     protected ClientStates lastState;
 
-    public ClientContext() {
-        data = new ClientData();
+    public ClientContext(String ip, int port) {
+        data = new ClientData(ip,port);
         state = ClientStates.INITIAL.createState(this, data);
     }
 
@@ -25,6 +25,5 @@ public class ClientContext {
     public ClientStates getState() {
         return state.getState();
     }
-
 
 }

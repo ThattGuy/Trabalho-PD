@@ -12,7 +12,7 @@ public class SelectOption extends ClientStateAdapter {
     }
 
     @Override
-    public boolean selOpt(OPTIONS opt) {
+    public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
             case EDIT_DATA -> changeState(ClientStates.EDIT_USER_DATA);

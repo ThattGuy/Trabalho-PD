@@ -12,7 +12,7 @@ public class RegisterPresence extends ClientStateAdapter {
 
 
     @Override
-    public boolean selOpt(OPTIONS opt) {
+    public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
             case BACK -> changeState(context.getLastState());

@@ -12,7 +12,7 @@ public class RegisterUser extends ClientStateAdapter {
     }
 
     @Override
-    public boolean selOpt(OPTIONS opt) {
+    public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
             case SUBMIT -> {

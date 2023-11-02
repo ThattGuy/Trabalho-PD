@@ -17,8 +17,9 @@ public class ClientStateAdapter implements IClientState {
         context.changeState(newState.createState(context,data));
     }
 
+
     @Override
-    public boolean selOpt(OPTIONS opt) {
+    public boolean selOpt(OPTIONS opt, String string) {
         return false;
     }
 
