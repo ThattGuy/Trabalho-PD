@@ -13,7 +13,7 @@ public class EditData extends ClientStateAdapter {
 
     @Override
     public boolean selOpt(OPTIONS opt) {
-        //todo edit suer data
+        //todo edit user data
 
         switch (opt){
             case BACK -> changeState(context.getLastState());

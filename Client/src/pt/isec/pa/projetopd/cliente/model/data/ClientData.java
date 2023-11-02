@@ -4,14 +4,16 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientData {
-    private int CONNECTION_PORT; //Porto TCP
-    private String IP_ADDRESS_OF_SERVER;
-    private String username;
-    private String password;
-
+    private static int CONNECTION_PORT; //Porto TCP
+    private static String IP_ADDRESS_OF_SERVER;
     private final Socket socket = null;
 
-    public ClientData(){
+
+    public static String getIpAddressOfServer() {
+        return IP_ADDRESS_OF_SERVER;
     }
 
+    public static int getConnectionPort() {
+        return CONNECTION_PORT;
+    }
 }
