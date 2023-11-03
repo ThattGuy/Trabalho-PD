@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.server.handleclient;
+package pt.isec.pd.projetopd.server;
 
 import java.io.*;
 import java.net.Socket;
