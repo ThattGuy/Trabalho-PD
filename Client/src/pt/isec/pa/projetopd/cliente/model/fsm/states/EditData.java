@@ -22,6 +22,8 @@ public class EditData extends ClientStateAdapter {
         return true;
     }
 
-
-
+    @Override
+    public boolean receiveMesage(String msg) {
+        return false;
+    }
 }

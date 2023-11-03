@@ -21,4 +21,9 @@ public class RegisterPresence extends ClientStateAdapter {
         return true;
     }
 
+    @Override
+    public boolean receiveMesage(String msg) {
+        return false;
+    }
+
 }
