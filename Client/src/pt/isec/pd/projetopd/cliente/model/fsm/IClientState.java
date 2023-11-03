@@ -1,6 +1,6 @@
-package pt.isec.pa.projetopd.cliente.model.fsm;
+package pt.isec.pd.projetopd.cliente.model.fsm;
 
-import pt.isec.pa.projetopd.cliente.model.data.OPTIONS;
+import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
 public interface IClientState {
 

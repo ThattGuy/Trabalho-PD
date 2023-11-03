@@ -1,7 +1,8 @@
-package pt.isec.pa.projetopd.cliente.model.fsm;
+package pt.isec.pd.projetopd.cliente.model.fsm;
 
-import pt.isec.pa.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.ClientData;
 import pt.isec.pa.projetopd.cliente.model.fsm.states.*;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.*;
 
 public enum ClientStates {
     INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE;

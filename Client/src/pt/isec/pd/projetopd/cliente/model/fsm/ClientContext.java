@@ -1,7 +1,7 @@
-package pt.isec.pa.projetopd.cliente.model.fsm;
+package pt.isec.pd.projetopd.cliente.model.fsm;
 
 import pt.isec.pa.projetopd.cliente.communication.TCPConnection;
-import pt.isec.pa.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.ClientData;
 
 public class ClientContext {
 

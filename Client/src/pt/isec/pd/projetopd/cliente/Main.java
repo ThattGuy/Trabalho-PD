@@ -1,6 +1,6 @@
-package pt.isec.pa.projetopd.cliente;
+package pt.isec.pd.projetopd.cliente;
 
-import pt.isec.pa.projetopd.cliente.model.Manager;
+import pt.isec.pd.projetopd.cliente.model.Manager;
 
 public class Main {
 

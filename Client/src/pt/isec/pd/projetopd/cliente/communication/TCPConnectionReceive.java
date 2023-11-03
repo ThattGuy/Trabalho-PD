@@ -1,6 +1,6 @@
-package pt.isec.pa.projetopd.cliente.communication;
+package pt.isec.pd.projetopd.cliente.communication;
 
-import pt.isec.pa.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.ClientData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,9 +9,19 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class TCPConnection {
+public class TCPConnectionReceive {
 
-    public void TCPconnection(String message)
+    public static String IP_ADDRESS_OF_SERVER;
+    public static int CONNECTION_PORT; //Porto TCP
+    private final Socket socket = null;
+
+    public TCPConnectionReceive(String ip, int port) {
+        CONNECTION_PORT = port;
+        IP_ADDRESS_OF_SERVER = ip;
+        socket = new Socket(InetAddress.getByName(ClientData.IP_ADDRESS_OF_SERVER), ClientData.CONNECTION_PORT);
+    }
+
+    public void receive(String message)
     {
 
         try {
@@ -23,6 +33,7 @@ public class TCPConnection {
 
             // Send data to the server
             OutputStream out = socket.getOutputStream();
+
 
             out.write(filename.getBytes());
 

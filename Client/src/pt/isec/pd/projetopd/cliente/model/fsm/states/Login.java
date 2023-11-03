@@ -1,10 +1,10 @@
-package pt.isec.pa.projetopd.cliente.model.fsm.states;
+package pt.isec.pd.projetopd.cliente.model.fsm.states;
 
 import pt.isec.pa.projetopd.cliente.communication.TCPConnection;
-import pt.isec.pa.projetopd.cliente.model.data.ClientData;
-import pt.isec.pa.projetopd.cliente.model.data.OPTIONS;
-import pt.isec.pa.projetopd.cliente.model.fsm.ClientContext;
-import pt.isec.pa.projetopd.cliente.model.fsm.ClientStateAdapter;
+import pt.isec.pd.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
 import java.util.StringTokenizer;
 

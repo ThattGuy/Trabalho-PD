@@ -1,7 +1,7 @@
-package pt.isec.pa.projetopd.cliente.model;
+package pt.isec.pd.projetopd.cliente.model;
 
 import pt.isec.pa.projetopd.cliente.communication.TCPConnection;
-import pt.isec.pa.projetopd.cliente.model.fsm.ClientContext;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 
 import java.beans.PropertyChangeSupport;
 
