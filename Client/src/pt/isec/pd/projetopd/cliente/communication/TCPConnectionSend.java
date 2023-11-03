@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class TCPConnectionSend {
 
@@ -15,10 +16,8 @@ public class TCPConnectionSend {
 
         public static String IP_ADDRESS_OF_SERVER;
         public static int CONNECTION_PORT; //Porto TCP
-        private final Socket socket = null;
-
-
-        public TCPconnectionSend(String ip, int port) {
+        private Socket socket = null;
+        public TCPconnectionSend(String ip, int port) throws IOException {
             CONNECTION_PORT = port;
             IP_ADDRESS_OF_SERVER = ip;
             socket = new Socket(InetAddress.getByName(ClientData.IP_ADDRESS_OF_SERVER), ClientData.CONNECTION_PORT);
@@ -30,7 +29,6 @@ public class TCPConnectionSend {
             try {
                 // Send data to the server
                 OutputStream out = socket.getOutputStream();
-
 
                 String filename = "test";
                 out.write(filename.getBytes());

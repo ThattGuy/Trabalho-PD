@@ -1,7 +1,6 @@
-package pt.isec.pd.projetopd.server;
+package pt.isec.pd.projetopd.server.handleclient;
 
 import java.io.*;
-import java.net.BindException;
 import java.net.Socket;
 
 public class HandleClient implements Runnable {

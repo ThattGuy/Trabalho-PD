@@ -1,6 +1,6 @@
-package pt.isec.pd.projetopd.server;
+package pt.isec.pd.projetopd.server.receiveclient;
 
-import pt.isec.pd.projetopd.server.HandleClient;
+import pt.isec.pd.projetopd.server.handleclient.HandleClient;
 
 import java.net.ServerSocket;
 import java.net.Socket;
