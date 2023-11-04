@@ -1,5 +1,8 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
+import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
+
 import java.net.*;
 import java.io.*;
 
@@ -86,13 +89,20 @@ public class Server
             System.err.println("Syntax <portUDP>");
 
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
+        ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
+        SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
+        ServerInfo serverInfo = new ServerInfo(sendHBeat);
+
+
 
         //Informação Debug
         System.out.println("Estou à escuta no endereço IP: " + server.getIpGroup().getHostAddress());
         System.out.println("O meu porto é o: " + server.getPort());
 
-        //Fase de arranque
-        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT);
+
+        //Start
+        sendHBeat.start();
+        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
 
         new Thread(recvClient).start();
 

@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.HandleClient;
+import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,38 +8,38 @@ import java.net.Socket;
 public class ReceiveTCPClients extends Thread {
 
     private ServerSocket CliSocket = null;
-      public ReceiveTCPClients(int port)
+    private ServerInfo serverInfo;
+    private ThreadGroup threadsClients;
+      public ReceiveTCPClients(int port,ServerInfo serverInfo)
       {
           try {
+              this.serverInfo = serverInfo;
               CliSocket = new ServerSocket(port);
+              this.threadsClients = new ThreadGroup("TCP Clients");
           }catch (Exception e)
           {
               System.err.println("Error: " + e);
           }
       }
 
+
     @Override
     public void run() {
-        try
-        {
-            ThreadGroup tcpServer = new ThreadGroup("TCP Clients");
-            for (int i = 0; i < 3; ++i)
-            {
-                Socket nextClient = CliSocket.accept(); //Aceita um novo cliente
+    for (;;)
+        try {
+            Socket nextClient = CliSocket.accept(); //Aceita um novo cliente
+            serverInfo.addClient(nextClient);
 
-               // infoServer.incrementConnections(); //Incrementa o número de ligações TCP
+            System.out.println("Received request from " + nextClient.getInetAddress() + ":" + nextClient.getPort());
 
+            new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
 
-                //Informação Debug
-                System.out.println("Received request from " + nextClient.getInetAddress() + ":" + nextClient.getPort());
-
-                new Thread(tcpServer, new HandleClient(nextClient)).start();
-            }
         }
         catch (Exception e)
         {
             System.err.println("Error: " + e);
         }
+
     }
 
 

@@ -1,21 +1,26 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
+
 import java.io.*;
 import java.net.Socket;
 
 public class HandleClient implements Runnable {
 
     private Socket socket;
-    public HandleClient(Socket sock) {
+    private ServerInfo serverInfo;
+
+    public HandleClient(Socket sock, ServerInfo serverInfo) {
         this.socket = sock;
+        this.serverInfo = serverInfo;
     }
 
     @Override
     public void run() {
 
-        try{
+        try {
             System.out.println("I started");
-            //recebe o username e password
+            /*//recebe o username e password
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String receivedData = in.readLine();
             System.out.println("Received data from client: " + receivedData);
@@ -24,19 +29,16 @@ public class HandleClient implements Runnable {
            /* OutputStream out = socket.getOutputStream();
             PrintStream pout = new PrintStream(out);
             */
-            PrintWriter writer = new PrintWriter((socket.getOutputStream()));
-            writer.println("Resposta ao pedido requesitado...");
-            writer.flush();
-
-            //faz o scanner!
-
-// CLOSE THE CONNECTION
-            socket.close();
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            Object o = ois.readObject();
+            if (o instanceof String)
+                serverInfo.updateDB((String) o);
 
 
-    }catch (IOException e){
-        System.err.println ("I/O error - " + e);
-    }
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
