@@ -21,7 +21,7 @@ public class ViewPresence extends ClientStateAdapter {
     }
 
     @Override
-    public boolean receiveMesage(String msg) {
+    public boolean onMessageReceived() {
         return false;
     }
 }

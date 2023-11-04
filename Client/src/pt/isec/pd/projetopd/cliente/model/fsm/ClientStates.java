@@ -1,7 +1,6 @@
 package pt.isec.pd.projetopd.cliente.model.fsm;
 
 import pt.isec.pd.projetopd.cliente.model.data.ClientData;
-import pt.isec.pa.projetopd.cliente.model.fsm.states.*;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.*;
 
 public enum ClientStates {

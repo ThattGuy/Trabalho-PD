@@ -24,7 +24,7 @@ public class SelectOption extends ClientStateAdapter {
     }
 
     @Override
-    public boolean receiveMesage(String msg) {
+    public boolean onMessageReceived() {
         return false;
     }
 
