@@ -8,7 +8,6 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 public class RegisterUser extends ClientStateAdapter {
     public RegisterUser(ClientContext context, ClientData data) {
         super(context, data);
-        createConnection();
     }
 
     @Override
@@ -25,7 +24,7 @@ public class RegisterUser extends ClientStateAdapter {
     }
 
     @Override
-    public boolean receiveMesage(String msg) {
+    public boolean onMessageReceived() {
         return false;
     }
 }
