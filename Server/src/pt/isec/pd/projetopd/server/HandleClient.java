@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
+import pt.isec.pd.projetopd.server.data.Authentication;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,8 +32,8 @@ public class HandleClient implements Runnable {
             */
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             Object o = ois.readObject();
-            if (o instanceof String)
-                serverInfo.updateDB((String) o);
+
+            serverInfo.updateDB((Object) o);
 
 
         } catch (IOException e) {
