@@ -1,14 +1,14 @@
 package pt.isec.pd.projetopd.cliente.model.fsm;
-import pt.isec.pd.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.Data;
 
 public class ClientContext {
 
-    private final ClientData data;
+    private final Data data;
     private transient IClientState state;
     protected ClientStates lastState;
 
     public ClientContext(String ip, int port){
-        data = new ClientData(ip,port);
+        data = new Data(ip,port);
         state = ClientStates.INITIAL.createState(this, data);
     }
 

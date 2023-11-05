@@ -1,12 +1,12 @@
 package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
-import pt.isec.pd.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
 public class ViewPresence extends ClientStateAdapter {
-    public ViewPresence(ClientContext context, ClientData data) {
+    public ViewPresence(ClientContext context, Data data) {
         super(context, data);
     }
 
@@ -14,6 +14,7 @@ public class ViewPresence extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+            case CSV -> data.sendToServer("CSV");
             case BACK -> changeState(context.getLastState());
         }
 

@@ -1,14 +1,14 @@
 package pt.isec.pd.projetopd.cliente.model.fsm;
 
-import pt.isec.pd.projetopd.cliente.model.data.ClientData;
+import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
 public class ClientStateAdapter implements IClientState {
 
     protected ClientContext context;
-    protected ClientData data;
+    protected Data data;
 
-    protected ClientStateAdapter(ClientContext context, ClientData data) {
+    protected ClientStateAdapter(ClientContext context, Data data) {
         this.context = context;
         this.data = data;
     }

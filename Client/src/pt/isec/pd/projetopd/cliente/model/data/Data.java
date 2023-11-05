@@ -4,14 +4,14 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;
 
-public class ClientData {
+public class Data {
     private static String ip = null;
     private static int port = 0;
     private TCPSend tcpSend;
 
-    public ClientData(String ip, int port) {
-        ClientData.ip = ip;
-        ClientData.port = port;
+    public Data(String ip, int port) {
+        Data.ip = ip;
+        Data.port = port;
     }
 
     public void startTcpSend() {
@@ -23,4 +23,7 @@ public class ClientData {
         tcpSend.setDataToSend(objectToSend);
     }
 
+    public void setClientInfo() {
+
+    }
 }
