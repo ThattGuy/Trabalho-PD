@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
+import pt.isec.pd.projetopd.server.data.Authentication;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -31,9 +32,17 @@ public class ServerInfo {
         this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
-    public void updateDB(String command) {
+    public void updateDB(Object o) {
         this.databaseVersion++;
         this.sendHBeat.SendHeartBeat(databaseVersion);
+
+        if(o instanceof Authentication) {
+            Authentication auth = (Authentication) o;
+            System.out.println("Received Authentication");
+            System.out.println( auth.getUsername() + ": " + auth.getPassword());
+
+        }
+
 
 
         //Atraves do comando enviar para uma classe que lide com ele e atualize a BD
