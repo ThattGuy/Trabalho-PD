@@ -6,6 +6,8 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.Presence;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
+import java.io.Serializable;
+
 public class RegisterPresence extends ClientStateAdapter {
     public RegisterPresence(ClientContext context, Data data) {
         super(context, data);
@@ -26,7 +28,7 @@ public class RegisterPresence extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived() {
+    public boolean onMessageReceived(Serializable message) {
         return false;
     }
 }

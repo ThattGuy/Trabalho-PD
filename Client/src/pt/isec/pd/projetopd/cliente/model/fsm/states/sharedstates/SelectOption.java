@@ -6,6 +6,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
+import java.io.Serializable;
+
 public class SelectOption extends ClientStateAdapter {
     public SelectOption(ClientContext context, Data data) {
         super(context, data);
@@ -25,7 +27,7 @@ public class SelectOption extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived() {
+    public boolean onMessageReceived(Serializable message) {
         return false;
     }
 

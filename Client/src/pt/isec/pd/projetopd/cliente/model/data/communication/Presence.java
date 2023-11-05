@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.server.data;
+package pt.isec.pd.projetopd.cliente.model.data.communication;
 
 import java.io.Serializable;
 

@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.cliente.model;
 
 
+import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPReceive;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 
@@ -19,7 +20,6 @@ public class Manager implements TCPReceive.MessageReceivedListener {
         fsm = new ClientContext(ip,port);
         receiveThread = new TCPReceive(ip,port,this);
     }
-
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
     }
@@ -28,6 +28,11 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     public void onMessageReceived(String message) {
         boolean res = fsm.onMessageReceived(message);
         pcs.firePropertyChange(null, null, res);
+    }
+
+    public void selectOption(OPTIONS options, String string) {
+        fsm.selOpt(options,string);
+        pcs.firePropertyChange(null,null,null);
     }
 
 }

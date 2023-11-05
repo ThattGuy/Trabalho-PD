@@ -6,6 +6,8 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.ClientInfo;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
+import java.io.Serializable;
+
 public class RegisterUser extends ClientStateAdapter {
     public RegisterUser(ClientContext context, Data data) {
         super(context, data);
@@ -23,7 +25,14 @@ public class RegisterUser extends ClientStateAdapter {
                         int studentNumber = Integer.parseInt(splitString[3]);
                         int nif = Integer.parseInt(splitString[4]);
 
-                        data.sendToServer(new ClientInfo(splitString[0], splitString[1], splitString[2], studentNumber, nif, splitString[5], splitString[6]));
+                        data.sendToServer(new ClientInfo(
+                                splitString[0],
+                                splitString[1],
+                                splitString[2],
+                                studentNumber,
+                                nif,
+                                splitString[5],
+                                splitString[6]));
                     } catch (NumberFormatException e) {
                         return false;
                     }
@@ -38,7 +47,7 @@ public class RegisterUser extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived() {
+    public boolean onMessageReceived(Serializable message) {
         return false;
     }
 }

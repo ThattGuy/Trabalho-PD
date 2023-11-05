@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.cliente.model.fsm;
 import pt.isec.pd.projetopd.cliente.model.data.Data;
+import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
 public class ClientContext {
 
@@ -19,6 +20,10 @@ public class ClientContext {
 
     public boolean onMessageReceived(String message) {
         return false;
+    }
+
+    public boolean selOpt(OPTIONS opt, String string){
+        return state.selOpt(opt,string);
     }
 
     public ClientStates getLastState() {
