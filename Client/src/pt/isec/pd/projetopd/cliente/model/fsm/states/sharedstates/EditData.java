@@ -1,7 +1,8 @@
-package pt.isec.pd.projetopd.cliente.model.fsm.states;
+package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.ClientData;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
+import pt.isec.pd.projetopd.cliente.model.data.communication.Authentication;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
@@ -16,6 +17,8 @@ public class EditData extends ClientStateAdapter {
         //todo edit user data
 
         switch (opt){
+            case SUBMIT -> data.sendToServer();
+
             case BACK -> changeState(context.getLastState());
         }
 

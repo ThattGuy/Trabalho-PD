@@ -3,21 +3,22 @@ package pt.isec.pd.projetopd.cliente.model.data.communication;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 
 public class TCPSend extends Thread {
     private String ip;
     private int port;
-    private Object dataToSend;
+    private Serializable objectToSend;
 
     public TCPSend(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    public void setDataToSend(Object dataToSend) {
-        this.dataToSend = dataToSend;
+    public void setDataToSend(Serializable dataToSend) {
+        this.objectToSend = dataToSend;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class TCPSend extends Thread {
             out = new ObjectOutputStream(socket.getOutputStream());
 
             // Send the data to the server
-            out.writeObject(dataToSend);
+            out.writeObject(objectToSend);
             out.flush();
         } catch (IOException e) {
             System.err.println("Error connecting to Server: " + e);

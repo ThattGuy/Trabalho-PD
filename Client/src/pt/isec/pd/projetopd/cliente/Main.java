@@ -12,6 +12,5 @@ public class Main {
             return;
         }
         manager = new Manager(args[0], Integer.parseInt(args[1]));
-
     }
 }
