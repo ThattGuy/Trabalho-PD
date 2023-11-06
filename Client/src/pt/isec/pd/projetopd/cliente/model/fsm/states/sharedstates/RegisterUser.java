@@ -2,7 +2,7 @@ package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
-import pt.isec.pd.projetopd.cliente.model.data.communication.ClientInfo;
+import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
@@ -25,7 +25,7 @@ public class RegisterUser extends ClientStateAdapter {
                         int studentNumber = Integer.parseInt(splitString[3]);
                         int nif = Integer.parseInt(splitString[4]);
 
-                        data.sendToServer(new ClientInfo(
+                        data.sendToServer(new User(
                                 splitString[0],
                                 splitString[1],
                                 splitString[2],

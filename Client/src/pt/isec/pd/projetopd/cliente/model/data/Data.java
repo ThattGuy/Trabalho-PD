@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.cliente.model.data;
 
-import pt.isec.pd.projetopd.cliente.model.data.communication.ClientInfo;
+import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;
@@ -9,9 +9,7 @@ public class Data {
     private static String ip = null;
     private static int port = 0;
     private TCPSend tcpSend;
-
-    private ClientInfo clientInfo;
-
+    private User clientInfo;
     private String lastMessage;
 
     public Data(String ip, int port) {
@@ -28,7 +26,7 @@ public class Data {
         tcpSend.setDataToSend(objectToSend);
     }
 
-    public void setClientInfo(ClientInfo clientInfo) {
+    public void setClientInfo(User clientInfo) {
         this.clientInfo = clientInfo;
     }
 

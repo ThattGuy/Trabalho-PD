@@ -2,8 +2,8 @@ package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
-import pt.isec.pd.projetopd.cliente.model.data.communication.ClientInfo;
-import pt.isec.pd.projetopd.cliente.model.data.communication.Presence;
+import pt.isec.pd.projetopd.cliente.model.data.communication.User;
+import pt.isec.pd.projetopd.cliente.model.data.communication.REQUESTS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class EditData extends ClientStateAdapter {
     public EditData(ClientContext context, Data data) {
         super(context, data);
-        data.sendToServer("PRESENCE");
+        data.sendToServer(REQUESTS.USER_DATA);
     }
 
 
@@ -29,12 +29,13 @@ public class EditData extends ClientStateAdapter {
         return true;
     }
 
-
     @Override
     public boolean onMessageReceived(Serializable message) {
-        if (message instanceof ClientInfo) {
+        //data.setLastMessage(message);
+        //todo show message
+        if (message instanceof User) {
             try {
-                ClientInfo clientInfo = (ClientInfo) message;
+                User clientInfo = (User) message;
                 data.setClientInfo(clientInfo);
                 return true;
             } catch (ClassCastException e) {

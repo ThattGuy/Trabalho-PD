@@ -6,7 +6,7 @@ import java.io.Serializable;
  * classe para Registo
  */
 
-public class ClientInfo implements Serializable {
+public class User implements Serializable {
 
     private String username;
     private String password;
@@ -15,8 +15,8 @@ public class ClientInfo implements Serializable {
     private int nif;
     private String id;
     private String address;
-
-    public ClientInfo(String username, String password, String name, int studentNumber, int nif, String id, String address) {
+    private boolean admin;
+    public User(String username, String password, String name, int studentNumber, int nif, String id, String address) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -53,4 +53,4 @@ public class ClientInfo implements Serializable {
     public String getAddress() {
         return address;
     }
-}
+}g
