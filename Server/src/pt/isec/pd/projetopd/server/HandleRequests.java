@@ -3,22 +3,50 @@ package pt.isec.pd.projetopd.server;
 import pt.isec.pd.projetopd.server.data.Authentication;
 import pt.isec.pd.projetopd.server.data.ClientInfo;
 import pt.isec.pd.projetopd.server.data.Presence;
+import pt.isec.pd.projetopd.server.data.REQUESTS;
 
+
+
+//nesta classe vou interpretar os pedidos do cliente
+
+//apos interpretar o pedido utilizando a db
+//tenho de enviar a resposta ao cliente:
+    //->para isso tenho de ir ao mapa de clientes e procurar o socket do cliente que fez o pedido
+//para isso tenho de criar um outputstream para o socket)
+//
 public class HandleRequests {
 
-    public void receive(Object o){
-        ObserveDatabase db = new ObserveDatabase();
-        if(o instanceof Authentication) {
-            Authentication auth = (Authentication) o;
-            System.out.println("Received Authentication");
-            if(db.CheckLogin(auth.getUsername(), auth.getPassword())) {
-                System.out.println("Login successful");
+    private ManageDatabase ManDB;
+
+    public HandleRequests(){
+        this.ManDB = new ManageDatabase();
+    }
+    public boolean receive(Object o){
 
 
+        if(o instanceof REQUESTS){
+            switch (o) {
+                case REQUESTS.PRESENCE:
+                    System.out.println("Received Presence");
+                    break;
+                case REQUESTS.USER_DATA:
+                    System.out.println("Received User Data");
+                    break;
+                default:
+                    System.out.println("Received unknown object");
+                    break;
             }
+        }
 
+        else if(o instanceof Authentication) {
+            Authentication auth = (Authentication) o;
 
-        } else
+            if(ManDB.CheckLogin(auth.getUsername(), auth.getPassword())) {
+                System.out.println("Login successful");
+                return true;
+            }
+        }
+        else
             if(o instanceof ClientInfo) {
                 ClientInfo clientInfo = (ClientInfo) o;
                 System.out.println("Received ClientInfo");
@@ -33,5 +61,7 @@ public class HandleRequests {
                 else {
                     System.out.println("Received unknown object");
                 }
+
+        return false;
     }
 }
