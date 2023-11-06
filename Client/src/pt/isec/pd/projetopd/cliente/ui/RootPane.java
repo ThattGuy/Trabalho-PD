@@ -8,6 +8,8 @@ import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.CSSManager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
 import pt.isec.pd.projetopd.cliente.ui.uistates.InitialUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.LoginUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.RegisterUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.SelectOptUI;
 
 public class RootPane extends BorderPane {
@@ -30,6 +32,8 @@ public class RootPane extends BorderPane {
 
         StackPane stackPane = new StackPane(
                 new InitialUI(manager),
+                new LoginUI(manager),
+                //new RegisterUI(manager),
                 new SelectOptUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");

@@ -27,6 +27,7 @@ public class InitialUI extends BorderPane {
 
         createViews();
         registerHandlers();
+        update();
     }
 
     /**
@@ -36,21 +37,15 @@ public class InitialUI extends BorderPane {
 
         btnLogin = new Button("Login");
         btnLogin.setMinWidth(200);
-        btnLogin.setMinHeight(30);
+        btnLogin.setMinHeight(50);
 
-        ImageView topFV = new ImageView(ImageManager.getImage("topfive.png"));
-        topFV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
-        topFV.setPreserveRatio(true);
         btnRegister = new Button("Register");
         btnRegister.setMinWidth(200);
-        btnRegister.setMinHeight(30);
+        btnRegister.setMinHeight(50);
 
-        ImageView exitV = new ImageView(ImageManager.getImage("exit.png"));
-        exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
-        exitV.setPreserveRatio(true);
         btnExit = new Button("Exit");
         btnExit.setMinWidth(200);
-        btnExit.setMinHeight(30);
+        btnExit.setMinHeight(50);
 
         VBox vbox = new VBox(btnLogin, btnRegister, btnExit);
         vbox.setAlignment(Pos.CENTER);
@@ -76,6 +71,8 @@ public class InitialUI extends BorderPane {
      * regista os handlers
      */
     private void registerHandlers() {
+
+        manager.addPropertyChangeListener(evt -> { update(); });
 
         btnLogin.setOnAction(event -> {
             manager.selectOption(OPTIONS.LOGIN, null);

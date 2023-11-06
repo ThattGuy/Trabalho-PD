@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class SelectOption extends ClientStateAdapter {
     public SelectOption(ClientContext context, Data data) {
         super(context, data);
+        System.out.println("SELECT_OPT STATE");
     }
 
     @Override
@@ -31,4 +32,8 @@ public class SelectOption extends ClientStateAdapter {
         return false;
     }
 
+    @Override
+    public ClientStates getState() {
+        return ClientStates.SELECT_OPT;
+    }
 }

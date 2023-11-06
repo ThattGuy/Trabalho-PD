@@ -5,13 +5,15 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.data.communication.Authentication;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 import java.io.Serializable;
 
 public class Login extends ClientStateAdapter {
     public Login(ClientContext context, Data data) {
         super(context, data);
-        data.startTcpSend();
+        //data.startTcpSend();
+        System.out.println("LOGIN STATE");
     }
 
     @Override
@@ -36,5 +38,10 @@ public class Login extends ClientStateAdapter {
     public boolean onMessageReceived(Serializable message) {
 
         return false;
+    }
+
+    @Override
+    public ClientStates getState() {
+        return ClientStates.LOGIN;
     }
 }
