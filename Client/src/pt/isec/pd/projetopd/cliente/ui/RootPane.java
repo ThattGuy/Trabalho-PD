@@ -8,6 +8,7 @@ import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.CSSManager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
 import pt.isec.pd.projetopd.cliente.ui.uistates.InitialUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.SelectOptUI;
 
 public class RootPane extends BorderPane {
     Manager manager;
@@ -28,7 +29,8 @@ public class RootPane extends BorderPane {
         //CSSManager.applyCSS(this,"styles.css");
 
         StackPane stackPane = new StackPane(
-                new InitialUI(manager)
+                new InitialUI(manager),
+                new SelectOptUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");

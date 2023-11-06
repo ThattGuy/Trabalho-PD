@@ -1,12 +1,8 @@
 package pt.isec.pd.projetopd.cliente.ui.uistates;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -15,14 +11,12 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
 
-import java.util.Optional;
-
-public class InitialUI extends BorderPane {
+public class SelectOptUI extends BorderPane {
 
     Manager manager;
     Button btnLogin, btnRegister, btnExit;
 
-    public InitialUI(Manager manager) {
+    public SelectOptUI(Manager manager) {
         this.manager = manager;
 
         createViews();

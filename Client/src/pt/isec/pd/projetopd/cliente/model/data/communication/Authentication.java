@@ -2,6 +2,9 @@ package pt.isec.pd.projetopd.cliente.model.data.communication;
 
 import java.io.Serializable;
 
+/**
+ * classe para Login
+ */
 public class Authentication implements Serializable {
 
     private String username;

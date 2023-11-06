@@ -2,6 +2,10 @@ package pt.isec.pd.projetopd.cliente.model.data.communication;
 
 import java.io.Serializable;
 
+/**
+ * classe para Registo
+ */
+
 public class ClientInfo implements Serializable {
 
     private String username;

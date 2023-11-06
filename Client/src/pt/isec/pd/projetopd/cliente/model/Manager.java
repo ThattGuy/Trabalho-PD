@@ -4,6 +4,7 @@ package pt.isec.pd.projetopd.cliente.model;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPReceive;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -35,4 +36,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
         pcs.firePropertyChange(null,null,null);
     }
 
+    public ClientStates getState() {
+        return fsm.getState();
+    }
 }
