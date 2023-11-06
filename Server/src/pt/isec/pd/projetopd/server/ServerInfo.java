@@ -11,12 +11,14 @@ public class ServerInfo {
     private int nTCPConnections;
     private int databaseVersion;
     private SendHBeat sendHBeat;
+    private HandleRequests handleRequests;
 
 
     public ServerInfo(SendHBeat sendHBeat) {
         this.clientsList = new ArrayList<>();
         this.nTCPConnections = 0;
         this.sendHBeat = sendHBeat;
+        this.handleRequests = new HandleRequests();
     }
 
     public int getnTCPConnections() {
@@ -35,6 +37,8 @@ public class ServerInfo {
     public void updateDB(Object o) {
         this.databaseVersion++;
         this.sendHBeat.SendHeartBeat(databaseVersion);
+
+        handleRequests.receive(o);
 
         if(o instanceof Authentication) {
             Authentication auth = (Authentication) o;

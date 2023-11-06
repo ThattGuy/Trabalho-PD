@@ -18,28 +18,22 @@ public class HandleClient implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("I started");
+        do{
+            try {
 
-        try {
-            System.out.println("I started");
-            /*//recebe o username e password
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String receivedData = in.readLine();
-            System.out.println("Received data from client: " + receivedData);
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                Object o = ois.readObject();
 
-            //este codigo serve apenas para enviar uma cena para o cliente. Nos temos de aceitar e receber!
-           /* OutputStream out = socket.getOutputStream();
-            PrintStream pout = new PrintStream(out);
-            */
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            Object o = ois.readObject();
-
-            serverInfo.updateDB((Object) o);
+                serverInfo.updateDB((Object) o);
 
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } while (true);
     }
 }
