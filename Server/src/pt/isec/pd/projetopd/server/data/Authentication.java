@@ -20,4 +20,3 @@ public class Authentication implements Serializable {
         return password;
     }
 }
-

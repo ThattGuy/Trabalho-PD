@@ -31,23 +31,14 @@ public class InitialUI extends BorderPane {
      */
     private void createViews() {
 
-        /*ImageView imageView = new ImageView(ImageManager.getImage("logo.png"));
-        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.5));
-        imageView.setPreserveRatio(true);
-
-        ImageView starV = new ImageView(ImageManager.getImage("start.png"));
-        starV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
-        starV.setPreserveRatio(true);*/
-
-        btnLogin = new Button();
-        //btnLogin.setGraphic(starV);
+        btnLogin = new Button("Login");
         btnLogin.setMinWidth(200);
         btnLogin.setMinHeight(30);
 
         ImageView topFV = new ImageView(ImageManager.getImage("topfive.png"));
         topFV.fitWidthProperty().bind(this.widthProperty().multiply(0.1));
         topFV.setPreserveRatio(true);
-        btnRegister = new Button();
+        btnRegister = new Button("Register");
         btnRegister.setGraphic(topFV);
         btnRegister.setMinWidth(200);
         btnRegister.setMinHeight(30);
@@ -55,7 +46,7 @@ public class InitialUI extends BorderPane {
         ImageView exitV = new ImageView(ImageManager.getImage("exit.png"));
         exitV.fitWidthProperty().bind(this.widthProperty().multiply(0.05));
         exitV.setPreserveRatio(true);
-        btnExit = new Button();
+        btnExit = new Button("Exit");
         btnExit.setGraphic(exitV);
         btnExit.setMinWidth(200);
         btnExit.setMinHeight(30);
