@@ -6,6 +6,7 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.data.communication.REQUESTS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 import java.io.Serializable;
 
@@ -46,4 +47,8 @@ public class EditData extends ClientStateAdapter {
         return false;
     }
 
+    @Override
+    public ClientStates getState() {
+        return ClientStates.EDIT_USER_DATA;
+    }
 }

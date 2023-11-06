@@ -5,6 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
+import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 import java.io.Serializable;
 
@@ -49,5 +50,10 @@ public class RegisterUser extends ClientStateAdapter {
     @Override
     public boolean onMessageReceived(Serializable message) {
         return false;
+    }
+
+    @Override
+    public ClientStates getState() {
+        return ClientStates.REG_USER;
     }
 }

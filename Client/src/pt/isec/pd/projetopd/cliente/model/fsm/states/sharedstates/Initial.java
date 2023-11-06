@@ -9,6 +9,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 public class Initial extends ClientStateAdapter {
     public Initial(ClientContext context, Data data) {
         super(context, data);
+        System.out.println("INITIAL STATE");
     }
 
     @Override
@@ -22,4 +23,8 @@ public class Initial extends ClientStateAdapter {
         return true;
     }
 
+    @Override
+    public ClientStates getState() {
+        return ClientStates.INITIAL;
+    }
 }
