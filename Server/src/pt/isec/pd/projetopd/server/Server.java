@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.server.DataBase.TestSQLite;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
 
@@ -33,7 +34,6 @@ public class Server
         this.DATABASE_PATH = path;
         this.RMI = name;
         this.REGISTRY_PORT = regPort;
-
         try
         {
             this.ipGroup = InetAddress.getByName("230.44.44.44");//e.g., 127.0.0.1, 192.168.10.1, ...
@@ -85,13 +85,14 @@ public class Server
     public static void main(String[] args)
     {
 
-        if (args.length != 4)
+       if (args.length != 4)
             System.err.println("Syntax <portUDP>");
 
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
         ServerInfo serverInfo = new ServerInfo(sendHBeat);
+        TestSQLite newdatabase=new TestSQLite();
 
 
 
