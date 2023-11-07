@@ -33,7 +33,7 @@ public class RootPane extends BorderPane {
         StackPane stackPane = new StackPane(
                 new InitialUI(manager),
                 new LoginUI(manager),
-                //new RegisterUI(manager),
+                new RegisterUI(manager),
                 new SelectOptUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");

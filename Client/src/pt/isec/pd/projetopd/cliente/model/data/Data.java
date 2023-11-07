@@ -10,15 +10,14 @@ public class Data {
     private static int port = 0;
     private TCPSend tcpSend;
     private User clientInfo;
-    private String lastMessage;
-
+    private String lastMessage = null;
     public Data(String ip, int port) {
         Data.ip = ip;
         Data.port = port;
     }
 
     public void startTcpSend() {
-        this.tcpSend = new TCPSend(ip, port);
+        this.tcpSend = new TCPSend(ip, port, this);
         tcpSend.start();
     }
 
@@ -32,6 +31,10 @@ public class Data {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public String getLastMessage() {
+        return lastMessage + "|" + lastMessage;
     }
 
 }

@@ -34,4 +34,10 @@ public class ClientContext {
         return state.getState();
     }
 
+    public String getLastMessage() {
+        String msg = data.getLastMessage();
+        data.setLastMessage(null);
+        return data.getLastMessage();
+    }
+
 }

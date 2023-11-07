@@ -13,6 +13,7 @@ public class ViewPresence extends ClientStateAdapter {
     public ViewPresence(ClientContext context, Data data) {
         super(context, data);
         data.sendToServer(REQUESTS.USER_DATA);
+        System.out.println("VIEW_PRESENCE STATE");
     }
 
     @Override
