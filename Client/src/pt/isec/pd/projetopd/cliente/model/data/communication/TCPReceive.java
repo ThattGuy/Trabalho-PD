@@ -18,7 +18,7 @@ public class TCPReceive extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         Socket socket = null;
 
         try {

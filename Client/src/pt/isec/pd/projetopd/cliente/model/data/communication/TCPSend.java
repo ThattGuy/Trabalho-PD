@@ -1,7 +1,8 @@
 package pt.isec.pd.projetopd.cliente.model.data.communication;
 
+import pt.isec.pd.projetopd.cliente.model.data.Data;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -12,9 +13,12 @@ public class TCPSend extends Thread {
     private int port;
     private Serializable objectToSend;
 
-    public TCPSend(String ip, int port) {
+    private Data data;
+
+    public TCPSend(String ip, int port, Data data) {
         this.ip = ip;
         this.port = port;
+        this.data = data;
     }
 
     public void setDataToSend(Serializable dataToSend) {
@@ -22,7 +26,7 @@ public class TCPSend extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         Socket socket = null;
         ObjectOutputStream out = null;
 
@@ -34,7 +38,7 @@ public class TCPSend extends Thread {
             out.writeObject(objectToSend);
             out.flush();
         } catch (IOException e) {
-            System.err.println("Error connecting to Server: " + e);
+            data.setLastMessage("Error connecting to Server: " + e);
         } finally {
             try {
                 if (out != null) {
@@ -44,7 +48,7 @@ public class TCPSend extends Thread {
                     socket.close();
                 }
             } catch (IOException e) {
-                System.err.println("Error closing resources: " + e);
+                data.setLastMessage("Error connecting to Server: " + e);
             }
         }
     }

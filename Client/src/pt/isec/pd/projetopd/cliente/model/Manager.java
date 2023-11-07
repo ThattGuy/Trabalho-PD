@@ -32,8 +32,13 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     }
 
     public void selectOption(OPTIONS options, String string) {
-        fsm.selOpt(options,string);
-        pcs.firePropertyChange(null,null,null);
+        boolean res = fsm.selOpt(options,string);
+        pcs.firePropertyChange(null,null,res);
+    }
+
+    public String getLastMessage(){
+        String msg = fsm.getLastMessage();
+        return msg;
     }
 
     public ClientStates getState() {

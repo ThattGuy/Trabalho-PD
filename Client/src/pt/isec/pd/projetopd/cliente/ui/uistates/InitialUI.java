@@ -19,8 +19,8 @@ import java.util.Optional;
 
 public class InitialUI extends BorderPane {
 
-    Manager manager;
-    Button btnLogin, btnRegister, btnExit;
+    private Manager manager;
+    private Button btnLogin, btnRegister, btnExit;
 
     public InitialUI(Manager manager) {
         this.manager = manager;

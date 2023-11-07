@@ -3,12 +3,15 @@ package pt.isec.pd.projetopd.cliente.ui.uistates;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
@@ -17,9 +20,12 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 public class LoginUI extends BorderPane {
 
     Manager manager;
-    Button btnLogin,btnExit;
+    Button btnLogin, btnBack;
     TextField usernameField;
     PasswordField passwordField;
+
+    private VBox vbox;
+    private Label messageLabel;
 
     public LoginUI(Manager manager) {
         this.manager = manager;
@@ -38,21 +44,26 @@ public class LoginUI extends BorderPane {
         btnLogin.setMinHeight(50);
 
 
-        btnExit = new Button("Exit");
-        btnExit.setMinWidth(200);
-        btnExit.setMinHeight(50);
+        btnBack = new Button("Back");
+        btnBack.setMinWidth(200);
+        btnBack.setMinHeight(50);
 
-        usernameField = new TextField("Username");
+        usernameField = new TextField();
         usernameField.setPromptText("Enter Username");
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Enter Password");
 
-        HBox hBox = new HBox(btnExit,btnLogin);
+        messageLabel = new Label();
+        messageLabel.getStyleClass().add("info");
+        messageLabel.setTextFill(Color.RED);
+        messageLabel.setStyle("-fx-font-size: 20px;");
+
+        HBox hBox = new HBox(btnBack,btnLogin);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
 
-        VBox vbox = new VBox(usernameField, passwordField,hBox);
+        vbox = new VBox(usernameField, passwordField, messageLabel, hBox);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(25);
         vbox.setPadding(new Insets(10));
@@ -88,8 +99,9 @@ public class LoginUI extends BorderPane {
             }
         });
 
-        btnExit.setOnAction(event -> {
-            System.exit(0);
+        btnBack.setOnAction(event -> {
+            manager.selectOption(OPTIONS.BACK, usernameField.getText() + "\n" + passwordField.getText());
+            update();
         });
     }
 
@@ -99,5 +111,10 @@ public class LoginUI extends BorderPane {
             return;
         }
         this.setVisible(true);
+
+        String msg = manager.getLastMessage();
+        if (msg != null) {
+            messageLabel.setText(msg);
+        }
     }
 }

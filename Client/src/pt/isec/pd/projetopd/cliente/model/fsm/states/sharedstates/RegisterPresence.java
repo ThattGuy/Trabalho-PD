@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class RegisterPresence extends ClientStateAdapter {
     public RegisterPresence(ClientContext context, Data data) {
         super(context, data);
+        System.out.println("REGISTER_PRESENCE STATE");
     }
 
 

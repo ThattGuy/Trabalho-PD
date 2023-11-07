@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class RegisterUser extends ClientStateAdapter {
     public RegisterUser(ClientContext context, Data data) {
         super(context, data);
+        System.out.println("REGISTER_USER STATE");
     }
 
     @Override
@@ -35,6 +36,7 @@ public class RegisterUser extends ClientStateAdapter {
                                 splitString[5],
                                 splitString[6]));
                     } catch (NumberFormatException e) {
+                        data.setLastMessage("Student Number and ID need to be numbers");//todo FIX CONCURRENCE
                         return false;
                     }
                 } else {
@@ -43,7 +45,6 @@ public class RegisterUser extends ClientStateAdapter {
             }
             case BACK -> changeState(context.getLastState());
         }
-
         return true;
     }
 
