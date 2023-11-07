@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Login extends ClientStateAdapter {
     public Login(ClientContext context, Data data) {
         super(context, data);
-        //data.startTcpSend();
+        data.startTcpSend();
         System.out.println("LOGIN STATE");
     }
 
@@ -20,7 +20,7 @@ public class Login extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case SUBMIT -> {
+            case LOGIN -> {
                 String[] splitString = string.split("\n");
                 if (splitString.length >= 2) {
                     data.sendToServer(new Authentication(splitString[0], splitString[1]));
