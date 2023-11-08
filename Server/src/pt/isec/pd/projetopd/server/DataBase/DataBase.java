@@ -11,6 +11,7 @@ public class DataBase {
             con = DriverManager.getConnection(url);
             criarTabelas(con);
             System.out.println("Conexão com o banco de dados SQLite estabelecida.");
+            register("admin@isec.pt","123","Admin",0,123,"21312","awdfawdaw",true);
         } catch (SQLException e) {
             System.err.println("Erro ao interagir com o banco de dados SQLite: " + e.getMessage());
         }
@@ -65,10 +66,45 @@ public class DataBase {
     }
 
     public boolean CheckLogin(String user, String pass){
-        return true;
+        String query = "SELECT * FROM User WHERE username = ? AND password = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, user);
+            preparedStatement.setString(2, pass);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Se houver pelo menos uma linha correspondente, o login é válido
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar o login: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
+
+        String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
+        int existingIDCount = 0;
+
+        try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
+            checkStatement.setString(1, id);
+            try (ResultSet resultSet = checkStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    existingIDCount = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar o ID: " + e.getMessage());
+            return false;
+        }
+
+        // Se o ID já existe, retorne false (não permita a inserção)
+        if (existingIDCount > 0) {
+            System.err.println("ID já existe.");
+            return false;
+        }
+
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
