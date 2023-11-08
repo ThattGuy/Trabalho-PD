@@ -24,9 +24,7 @@ public class HandleClient implements Runnable {
             try(ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())){
 
-
                 Object o = in.readObject();
-
                 o = serverInfo.updateDB(o);
                 out.writeObject(o);
 
@@ -35,6 +33,7 @@ public class HandleClient implements Runnable {
 
             }catch(ClassNotFoundException | IOException e){
                 System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
+                break;
             }finally{
                 try{
                     if(socket != null) socket.close();
