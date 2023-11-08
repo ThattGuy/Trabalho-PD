@@ -20,8 +20,8 @@ public class HandleRequests {
 
     private DataBase ManDB;
 
-    public HandleRequests(){
-        this.ManDB = new DataBase();
+    public HandleRequests(String path){
+        this.ManDB = new DataBase(path);
     }
     public boolean receive(Object o){
 
