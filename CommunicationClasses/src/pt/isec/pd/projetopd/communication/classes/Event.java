@@ -1,7 +1,6 @@
-package pt.isec.pd.projetopd.cliente.model.data.communication;
+package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class Event implements Serializable {

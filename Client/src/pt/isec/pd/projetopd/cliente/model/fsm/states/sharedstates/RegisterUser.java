@@ -2,6 +2,7 @@ package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
+import pt.isec.pd.projetopd.cliente.model.data.communication.RESPONSE;
 import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
@@ -48,6 +49,17 @@ public class RegisterUser extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
+
+        if(message instanceof RESPONSE response){
+            if(response == RESPONSE.ACCEPTED){
+                changeState(ClientStates.SELECT_OPT);
+                return true;
+            }
+            if(response == RESPONSE.PROBLEM_WTIH_NAME){
+                data.setErrorMessage("Username already in use");
+            }
+        }
+
         return false;
     }
 

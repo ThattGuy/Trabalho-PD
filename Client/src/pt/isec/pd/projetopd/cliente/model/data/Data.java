@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.cliente.model.data;
 
-import pt.isec.pd.projetopd.cliente.model.data.communication.User;
+import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;
@@ -26,6 +26,9 @@ public class Data {
     public void setClientInfo(User clientInfo) {
         this.clientInfo = clientInfo;
     }
+    public boolean isUserAdmin() {
+        return clientInfo.isAdmin();
+    }
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
@@ -34,5 +37,4 @@ public class Data {
     public String getErrorMessage() {
         return errorMessage;
     }
-
 }

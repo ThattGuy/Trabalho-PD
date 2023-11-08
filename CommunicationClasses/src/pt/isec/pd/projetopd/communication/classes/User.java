@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.model.data.communication;
+package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
 
@@ -52,5 +52,9 @@ public class  User implements Serializable {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

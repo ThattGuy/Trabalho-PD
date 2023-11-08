@@ -34,7 +34,6 @@ public class TCPSend {
     }
 
     public void sendObject(Serializable objectToSend) {
-
         try {
             if(this.out != null){
                 out.writeObject(objectToSend);
@@ -43,7 +42,6 @@ public class TCPSend {
         } catch (IOException e) {
             data.setErrorMessage("Error sending object to Server: " + e);
         }
-
     }
 }
 

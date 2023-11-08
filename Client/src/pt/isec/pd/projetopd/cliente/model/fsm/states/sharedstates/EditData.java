@@ -2,8 +2,7 @@ package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
-import pt.isec.pd.projetopd.cliente.model.data.communication.User;
-import pt.isec.pd.projetopd.cliente.model.data.communication.REQUESTS;
+import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
@@ -31,15 +30,13 @@ public class EditData extends ClientStateAdapter {
     @Override
     public boolean onMessageReceived(Object message) {
 
-        if(message instanceof User){
-            data.setClientInfo((User) message);
+        if(message instanceof User user){
+            data.setClientInfo(user);
         }
 
-        //TODO show message
-        if (message instanceof User) {
+        if (message instanceof User user) {
             try {
-                User clientInfo = (User) message;
-                data.setClientInfo(clientInfo);
+                data.setClientInfo(user);
                 return true;
             } catch (ClassCastException e) {
                 System.err.println("Error deserializing the ClientInfo object: " + e);
