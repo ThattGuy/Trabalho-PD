@@ -33,7 +33,7 @@ public class EditData extends ClientStateAdapter {
     @Override
     public boolean onMessageReceived(Serializable message) {
         //data.setLastMessage(message);
-        //todo show message
+        //TODO show message
         if (message instanceof User) {
             try {
                 User clientInfo = (User) message;

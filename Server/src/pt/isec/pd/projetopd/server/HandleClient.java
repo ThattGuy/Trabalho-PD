@@ -20,26 +20,25 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
         System.out.println("I started");
-
-            try(ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())){
-
-
-
+        while(true) {
+            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 Object o = in.readObject();
-
                 o = serverInfo.updateDB(o);
                 out.writeObject(o);
 
                 out.flush();
                 out.reset();
 
-            }catch(ClassNotFoundException | IOException e){
+            } catch (ClassNotFoundException | IOException e) {
                 System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
-            }finally{
-                try{
-                    if(socket != null) socket.close();
-                }catch(IOException e){}
+                break;
+            } finally {
+                try {
+                    if (socket != null) socket.close();
+                } catch (IOException e) {
+                }
             }
+        }
     }
 }

@@ -4,14 +4,15 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;
-import java.net.ConnectException;
 
 public class Data {
     private static String ip = null;
     private static int port = 0;
     private TCPSend tcpSend;
     private User clientInfo;
-    private String lastMessage = null;
+
+
+    private String errorMessage = null;
     public Data(String ip, int port) {
         Data.ip = ip;
         Data.port = port;
@@ -26,12 +27,12 @@ public class Data {
         this.clientInfo = clientInfo;
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
 }

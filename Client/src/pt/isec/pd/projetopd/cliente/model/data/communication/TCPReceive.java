@@ -32,14 +32,22 @@ public class TCPReceive extends Thread {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error connecting to Server: " + e);
+            String s = "Error connecting to Server TCPReceive: ";
+            System.err.println(s + e);
+            if (listener != null) {
+                listener.onMessageReceived(s);
+            }
         } finally {
             try {
                 if (socket != null) {
                     socket.close();
                 }
             } catch (IOException e) {
-                System.err.println("Error closing the socket: " + e);
+                String s = "Error closing the socket, TCPReceive: ";
+                System.err.println(s + e);
+                if (listener != null) {
+                    listener.onMessageReceived(s);
+                }
             }
         }
     }
