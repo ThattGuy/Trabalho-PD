@@ -1,9 +1,5 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
-import pt.isec.pd.projetopd.server.data.Authentication;
-import pt.isec.pd.projetopd.server.data.RESPONSE;
-
 import java.io.*;
 import java.net.Socket;
 
