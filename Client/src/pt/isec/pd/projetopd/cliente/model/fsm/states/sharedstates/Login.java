@@ -7,8 +7,6 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-import java.io.Serializable;
-
 public class Login extends ClientStateAdapter {
     public Login(ClientContext context, Data data) {
         super(context, data);
@@ -34,7 +32,7 @@ public class Login extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Serializable message) {
+    public boolean onMessageReceived(Object message) {
 
 
 

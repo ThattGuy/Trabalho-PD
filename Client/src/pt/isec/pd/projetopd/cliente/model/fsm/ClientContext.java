@@ -18,7 +18,7 @@ public class ClientContext {
         this.state = newState;
     }
 
-    public boolean onMessageReceived(String message) {
+    public boolean onMessageReceived(Object message) {
         return false;
     }
 

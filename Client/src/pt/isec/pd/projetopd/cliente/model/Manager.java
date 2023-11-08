@@ -26,7 +26,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     }
 
     @Override
-    public void onMessageReceived(String message) {
+    public void onMessageReceived(Object message) {
         boolean res = fsm.onMessageReceived(message);
         pcs.firePropertyChange(null, null, res);
     }

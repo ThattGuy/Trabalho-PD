@@ -2,12 +2,9 @@ package pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
-import pt.isec.pd.projetopd.cliente.model.data.communication.Presence;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
-
-import java.io.Serializable;
 
 public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
@@ -28,7 +25,7 @@ public class ViewEvents extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Serializable message) {
+    public boolean onMessageReceived(Object message) {
         return false;
     }
 

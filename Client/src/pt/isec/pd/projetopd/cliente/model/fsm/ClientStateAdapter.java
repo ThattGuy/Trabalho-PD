@@ -3,8 +3,6 @@ package pt.isec.pd.projetopd.cliente.model.fsm;
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
-import java.io.Serializable;
-
 public class ClientStateAdapter implements IClientState {
 
     protected ClientContext context;
@@ -25,7 +23,7 @@ public class ClientStateAdapter implements IClientState {
     }
 
     @Override
-    public boolean onMessageReceived(Serializable message) {
+    public boolean onMessageReceived(Object message) {
         return false;
     }
 

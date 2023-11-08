@@ -8,8 +8,6 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-import java.io.Serializable;
-
 public class EditData extends ClientStateAdapter {
     public EditData(ClientContext context, Data data) {
         super(context, data);
@@ -31,8 +29,12 @@ public class EditData extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Serializable message) {
-        //data.setLastMessage(message);
+    public boolean onMessageReceived(Object message) {
+
+        if(message instanceof User){
+            data.setClientInfo((User) message);
+        }
+
         //TODO show message
         if (message instanceof User) {
             try {

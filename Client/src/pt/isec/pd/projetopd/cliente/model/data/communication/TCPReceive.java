@@ -20,39 +20,45 @@ public class TCPReceive extends Thread {
     @Override
     public void run() {
         Socket socket = null;
+        ObjectInputStream objectInputStream = null;
 
         try {
             socket = new Socket(InetAddress.getByName(ip), port);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String response;
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
 
-            while ((response = reader.readLine()) != null) {
+            while (true) {
+                Object receivedObject = objectInputStream.readObject();
+
                 if (listener != null) {
-                    listener.onMessageReceived(response);
+                    listener.onMessageReceived(receivedObject);
                 }
             }
-        } catch (IOException e) {
-            String s = "Error connecting to Server TCPReceive: ";
-            System.err.println(s + e);
+        } catch (IOException | ClassNotFoundException e) {
+            String errorMessage = "Error receiving serializable object: " + e.getMessage();
+            System.err.println(errorMessage);
             if (listener != null) {
-                listener.onMessageReceived(s);
+                listener.onMessageReceived(errorMessage);
             }
         } finally {
             try {
+                if (objectInputStream != null) {
+                    objectInputStream.close();
+                }
                 if (socket != null) {
                     socket.close();
                 }
             } catch (IOException e) {
-                String s = "Error closing the socket, TCPReceive: ";
-                System.err.println(s + e);
+                String errorMessage = "Error closing the socket: " + e.getMessage();
+                System.err.println(errorMessage);
                 if (listener != null) {
-                    listener.onMessageReceived(s);
+                    listener.onMessageReceived(errorMessage);
                 }
             }
         }
     }
 
+
     public interface MessageReceivedListener {
-        void onMessageReceived(String message);
+        void onMessageReceived(Object message);
     }
 }
