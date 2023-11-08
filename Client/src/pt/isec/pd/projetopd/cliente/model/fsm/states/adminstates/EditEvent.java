@@ -10,7 +10,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import java.io.Serializable;
 
 public class EditEvent extends ClientStateAdapter {
-    protected EditEvent(ClientContext context, Data data) {
+    public EditEvent(ClientContext context, Data data) {
         super(context, data);
     }
 

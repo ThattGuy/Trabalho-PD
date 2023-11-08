@@ -10,7 +10,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import java.io.Serializable;
 
 public class ViewEventPresences extends ClientStateAdapter {
-    protected ViewEventPresences(ClientContext context, Data data) {
+    public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
     }
 

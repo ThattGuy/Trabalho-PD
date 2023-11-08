@@ -1,6 +1,10 @@
 package pt.isec.pd.projetopd.cliente.model.fsm;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.CreateEvent;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.EditEvent;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.ViewEventPresences;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.ViewEvents;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates.*;
 
 public enum ClientStates {
@@ -15,6 +19,10 @@ public enum ClientStates {
             case EDIT_USER_DATA -> new EditData(context,game);
             case REG_PRESENCE -> new RegisterPresence(context,game);
             case VIEW_PRESENCE -> new ViewPresence(context,game);
+            case EDIT_EVENT -> new EditEvent(context,game);
+            case CREATE_EVENT -> new CreateEvent(context,game);
+            case VIEW_EVENT_PRESENCE_ -> new ViewEventPresences(context,game);;
+            case VIEW_EVENTS -> new ViewEvents(context,game);;
         };
     }
 }
