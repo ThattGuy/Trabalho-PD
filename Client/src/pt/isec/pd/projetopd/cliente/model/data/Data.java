@@ -34,7 +34,7 @@ public class Data {
     }
 
     public String getLastMessage() {
-        return lastMessage + "|" + lastMessage;
+        return lastMessage;
     }
 
 }

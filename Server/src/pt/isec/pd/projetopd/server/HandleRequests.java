@@ -23,18 +23,13 @@ public class HandleRequests {
     }
     public boolean receive(Object o){
 
-
         if(o instanceof REQUESTS){
-            switch (o) {
-                case REQUESTS.PRESENCE:
-                    System.out.println("Received Presence");
-                    break;
-                case REQUESTS.USER_DATA:
-                    System.out.println("Received User Data");
-                    break;
-                default:
-                    System.out.println("Received unknown object");
-                    break;
+            if (o.equals(REQUESTS.PRESENCE)) {
+                System.out.println("Received Presence");
+            } else if (o.equals(REQUESTS.USER_DATA)) {
+                System.out.println("Received User Data");
+            } else {
+                System.out.println("Received unknown object");
             }
         }
 

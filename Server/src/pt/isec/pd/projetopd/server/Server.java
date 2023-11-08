@@ -106,7 +106,6 @@ public class Server
         ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
 
         new Thread(recvClient).start();
-
     }
 
 
