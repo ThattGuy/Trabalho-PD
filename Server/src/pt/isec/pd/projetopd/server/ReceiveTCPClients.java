@@ -28,6 +28,7 @@ public class ReceiveTCPClients extends Thread {
     for (;;)
         try {
             Socket nextClient = CliSocket.accept(); //Aceita um novo cliente
+
             serverInfo.addClient(nextClient);
 
             System.out.println("Received request from " + nextClient.getInetAddress() + ":" + nextClient.getPort());
