@@ -65,6 +65,25 @@ public class DataBase {
         }
     }
 
+    public boolean verifyAdmin(int userId) {
+        String query = "SELECT admin FROM User WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Obtém o valor da coluna "admin" (true se for admin, false se não for)
+                    boolean isAdmin = resultSet.getBoolean("admin");
+                    return isAdmin;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar o status de admin: " + e.getMessage());
+        }
+        return false;
+    }
+
     public boolean CheckLogin(String user, String pass){
         String query = "SELECT * FROM User WHERE username = ? AND password = ?";
 
@@ -73,7 +92,6 @@ public class DataBase {
             preparedStatement.setString(2, pass);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                // Se houver pelo menos uma linha correspondente, o login é válido
                 return resultSet.next();
             }
         } catch (SQLException e) {
@@ -99,7 +117,6 @@ public class DataBase {
             return false;
         }
 
-        // Se o ID já existe, retorne false (não permita a inserção)
         if (existingIDCount > 0) {
             System.err.println("ID já existe.");
             return false;
@@ -119,12 +136,119 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            // Se a inserção for bem-sucedida (uma linha afetada), retorna true
             return rowsAffected > 0;
         } catch (SQLException e) {
             System.err.println("Erro ao registrar o usuário: " + e.getMessage());
             return false;
         }
     }
+
+    public boolean editDataUser(String username, String name, int studentnumber, int nif, String id, String address) {
+        String query = "UPDATE User SET username = ?, name = ?, studentNumber = ?, nif = ?, address = ?, admin = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, name);
+            preparedStatement.setInt(3, studentnumber);
+            preparedStatement.setInt(4, nif);
+            preparedStatement.setString(5, address);
+            preparedStatement.setString(7, id);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao editar os dados do usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteUser(String id) {
+        String query = "DELETE FROM User WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, id);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao remover o usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteEvent(int eventId) {
+        String query = "DELETE FROM Event WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir o evento: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addEvent(String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
+        String query = "INSERT INTO Event (Designacao, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, designacao);
+            preparedStatement.setString(2, local);
+            preparedStatement.setString(3, data);
+            preparedStatement.setString(4, horaInicio);
+            preparedStatement.setString(5, horaFim);
+            preparedStatement.setInt(6, userId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao inserir o evento: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean editEvent(int eventId, String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
+        String query = "UPDATE Event SET Designacao = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, designacao);
+            preparedStatement.setString(2, local);
+            preparedStatement.setString(3, data);
+            preparedStatement.setString(4, horaInicio);
+            preparedStatement.setString(5, horaFim);
+            preparedStatement.setInt(6, userId);
+            preparedStatement.setInt(7, eventId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao editar o evento: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addCodeRegister(String codigo, int eventId) {
+        String query = "INSERT INTO CodigoRegisto (codigo, event_id) VALUES (?, ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, codigo);
+            preparedStatement.setInt(2, eventId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao adicionar o código de registro: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 

@@ -1,10 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.DataBase.DataBase;
-import pt.isec.pd.projetopd.server.data.Authentication;
-import pt.isec.pd.projetopd.server.data.ClientInfo;
-import pt.isec.pd.projetopd.server.data.Presence;
-import pt.isec.pd.projetopd.server.data.REQUESTS;
+import pt.isec.pd.projetopd.server.data.*;
 
 import java.sql.Connection;
 
@@ -23,7 +20,7 @@ public class HandleRequests {
     public HandleRequests(String path){
         this.ManDB = new DataBase(path);
     }
-    public boolean receive(Object o){
+    public Object receive(Object o){
 
         if(o instanceof REQUESTS){
             if (o.equals(REQUESTS.PRESENCE)) {
@@ -40,7 +37,7 @@ public class HandleRequests {
 
             if(ManDB.CheckLogin(auth.getUsername(), auth.getPassword())) {
                 System.out.println("Login successful");
-                return true;
+                return RESPONSE.ACCEPTED;
             }
         }
         else
@@ -59,6 +56,6 @@ public class HandleRequests {
                     System.out.println("Received unknown object");
                 }
 
-        return false;
+        return RESPONSE.DECLINED;
     }
 }

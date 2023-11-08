@@ -36,14 +36,11 @@ public class ServerInfo {
         //this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
-    public boolean updateDB(Object o) {
-        if(handleRequests.receive(o)){
-            this.databaseVersion++;
+    public Object updateDB(Object o) {
+        return handleRequests.receive(o);
+            //this.databaseVersion++;
            // this.sendHBeat.SendHeartBeat(databaseVersion);
 
-            return true;
-        }
-        return false;
     }
 
 }
