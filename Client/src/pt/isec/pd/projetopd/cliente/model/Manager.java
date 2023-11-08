@@ -19,7 +19,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     public Manager(String ip, int port) {
         pcs = new PropertyChangeSupport(this);
         fsm = new ClientContext(ip,port);
-        receiveThread = new TCPReceive(ip,port,this);
+        receiveThread = new TCPReceive(fsm.getSocket(),this);
     }
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);

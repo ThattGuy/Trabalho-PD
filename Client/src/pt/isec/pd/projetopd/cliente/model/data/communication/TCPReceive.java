@@ -8,12 +8,10 @@ import java.net.Socket;
 
 public class TCPReceive extends Thread {
     private MessageReceivedListener listener;
-    private final String ip;
-    private final int port;
+    private Socket socket;
 
-    public TCPReceive(String ip, int port, MessageReceivedListener listener) {
-        this.ip = ip;
-        this.port = port;
+    public TCPReceive(Socket socket, MessageReceivedListener listener) {
+        this.socket = socket;
         this.listener = listener;
     }
 
@@ -23,7 +21,6 @@ public class TCPReceive extends Thread {
         ObjectInputStream objectInputStream = null;
 
         try {
-            socket = new Socket(InetAddress.getByName(ip), port);
             objectInputStream = new ObjectInputStream(socket.getInputStream());
 
             while (true) {
@@ -56,7 +53,6 @@ public class TCPReceive extends Thread {
             }
         }
     }
-
 
     public interface MessageReceivedListener {
         void onMessageReceived(Object message);

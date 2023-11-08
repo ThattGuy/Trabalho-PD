@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.data.*;
 
@@ -39,8 +40,8 @@ public class HandleRequests {
             }
         }
         else
-            if(o instanceof ClientInfo) {
-                ClientInfo clientInfo = (ClientInfo) o;
+            if(o instanceof User) {
+                User clientInfo = (User) o;
                 System.out.println("Received ClientInfo");
                 System.out.println( clientInfo.getUsername() + ": " + clientInfo.getId() + ": " + clientInfo.getStudentNumber());
             }

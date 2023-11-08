@@ -29,6 +29,13 @@ public class RegisterPresence extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
+
+        if(message instanceof RESPONSE response){
+            switch (response){
+                case ACCEPTED -> data.setMessage("Presence submited");
+                case DECLINED -> data.setMessage("Presence not submited.\n Verify code and make sure you're not registered in another class");
+            }
+        }
         return false;
     }
 

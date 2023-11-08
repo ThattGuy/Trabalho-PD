@@ -2,6 +2,8 @@ package pt.isec.pd.projetopd.cliente.model.fsm;
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
+import java.net.Socket;
+
 public class ClientContext {
 
     private final Data data;
@@ -35,9 +37,12 @@ public class ClientContext {
     }
 
     public String getLastMessage() {
-        String msg = data.getErrorMessage();
-        data.setErrorMessage(null);
+        String msg = data.getMessage();
+        data.setMessage(null);
         return msg;
     }
 
+    public Socket getSocket() {
+        return data.getSocket();
+    }
 }

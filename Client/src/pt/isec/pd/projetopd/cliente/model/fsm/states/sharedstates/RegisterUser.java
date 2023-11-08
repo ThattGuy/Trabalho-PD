@@ -34,7 +34,7 @@ public class RegisterUser extends ClientStateAdapter {
                                 splitString[5],
                                 splitString[6]));
                     } catch (NumberFormatException e) {
-                        data.setErrorMessage("Student Number and ID need to be numbers");//todo FIX CONCURRENCE
+                        data.setMessage("Student Number and ID need to be numbers");//todo FIX CONCURRENCE
                         return false;
                     }
                 } else {
@@ -54,8 +54,8 @@ public class RegisterUser extends ClientStateAdapter {
                 changeState(ClientStates.SELECT_OPT);
                 return true;
             }
-            if(response == RESPONSE.PROBLEM_WTIH_NAME){
-                data.setErrorMessage("Username already in use");
+            if(response == RESPONSE.PROBLEM_WITH_NAME){
+                data.setMessage("Username already in use");
             }
         }
 
