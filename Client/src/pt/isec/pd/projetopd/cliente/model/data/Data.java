@@ -4,6 +4,7 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.User;
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;
+import java.net.ConnectException;
 
 public class Data {
     private static String ip = null;
@@ -14,7 +15,7 @@ public class Data {
     public Data(String ip, int port) {
         Data.ip = ip;
         Data.port = port;
-        this.tcpSend = new TCPSend(ip, port, this);
+        tcpSend = new TCPSend(ip, port, this);
     }
 
     public void sendToServer(Serializable objectToSend){

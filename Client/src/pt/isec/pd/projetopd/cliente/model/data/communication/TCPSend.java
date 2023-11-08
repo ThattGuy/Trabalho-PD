@@ -5,6 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.data.Data;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.Socket;
 
 public class TCPSend {
@@ -21,11 +22,14 @@ public class TCPSend {
         this.data = data;
 
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
             this.socket = new Socket(ip, port);
+            out = new ObjectOutputStream(socket.getOutputStream());
+        } catch (ConnectException e) {
+            String errorMessage = "Error connecting to Server: " + e.getMessage();
+            data.setLastMessage(errorMessage);
         } catch (IOException e) {
-            data.setLastMessage("Error connecting to Server: " + e);
-            throw new RuntimeException(e);
+            String errorMessage = "Error connecting to Server: " + e.getMessage();
+            data.setLastMessage(errorMessage);
         }
     }
 
