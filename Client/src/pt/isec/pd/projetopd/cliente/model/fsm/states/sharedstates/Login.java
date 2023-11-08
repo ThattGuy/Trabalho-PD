@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class Login extends ClientStateAdapter {
     public Login(ClientContext context, Data data) {
         super(context, data);
-        data.startTcpSend();
         System.out.println("LOGIN STATE");
     }
 

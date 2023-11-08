@@ -17,12 +17,8 @@ public class Data {
         this.tcpSend = new TCPSend(ip, port, this);
     }
 
-    public void startTcpSend() {
-        tcpSend.start();
-    }
-
     public void sendToServer(Serializable objectToSend){
-        tcpSend.setDataToSend(objectToSend);
+        tcpSend.sendObject(objectToSend);
     }
 
     public void setClientInfo(User clientInfo) {
