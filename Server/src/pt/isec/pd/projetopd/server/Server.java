@@ -1,6 +1,5 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
 

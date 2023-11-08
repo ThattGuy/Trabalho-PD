@@ -4,7 +4,7 @@ import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates.*;
 
 public enum ClientStates {
-    INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE;
+    INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE, EDIT_EVENT, CREATE_EVENT, VIEW_EVENT_PRESENCE_, VIEW_EVENTS;
 
     IClientState createState(ClientContext context, Data game) {
         return switch (this) {

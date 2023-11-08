@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.server.DataBase;
+package pt.isec.pd.projetopd.server.data.DataBase;
 
 import java.sql.*;
 

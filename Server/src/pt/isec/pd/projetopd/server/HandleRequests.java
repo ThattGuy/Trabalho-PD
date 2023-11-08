@@ -1,9 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.DataBase.DataBase;
+import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.data.*;
-
-import java.sql.Connection;
 
 
 //nesta classe vou interpretar os pedidos do cliente
