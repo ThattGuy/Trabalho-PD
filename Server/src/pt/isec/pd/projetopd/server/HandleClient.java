@@ -20,9 +20,10 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
         System.out.println("I started");
-        do{
+
             try(ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())){
+
 
 
                 Object o = in.readObject();
@@ -40,6 +41,5 @@ public class HandleClient implements Runnable {
                     if(socket != null) socket.close();
                 }catch(IOException e){}
             }
-        } while (true);
     }
 }
