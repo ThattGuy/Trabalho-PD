@@ -1,10 +1,12 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.server.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.data.Authentication;
 import pt.isec.pd.projetopd.server.data.ClientInfo;
 import pt.isec.pd.projetopd.server.data.Presence;
 import pt.isec.pd.projetopd.server.data.REQUESTS;
 
+import java.sql.Connection;
 
 
 //nesta classe vou interpretar os pedidos do cliente
@@ -16,10 +18,10 @@ import pt.isec.pd.projetopd.server.data.REQUESTS;
 //
 public class HandleRequests {
 
-    private ManageDatabase ManDB;
+    private DataBase ManDB;
 
     public HandleRequests(){
-        this.ManDB = new ManageDatabase();
+        this.ManDB = new DataBase();
     }
     public boolean receive(Object o){
 

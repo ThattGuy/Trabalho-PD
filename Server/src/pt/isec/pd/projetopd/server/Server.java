@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.DataBase.TestSQLite;
+import pt.isec.pd.projetopd.server.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
 
@@ -92,7 +92,6 @@ public class Server
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
         ServerInfo serverInfo = new ServerInfo(sendHBeat);
-        TestSQLite newdatabase=new TestSQLite();
 
 
 

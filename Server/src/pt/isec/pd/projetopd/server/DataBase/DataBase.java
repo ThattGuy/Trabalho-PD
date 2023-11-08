@@ -1,14 +1,11 @@
 package pt.isec.pd.projetopd.server.DataBase;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class TestSQLite {
-    public TestSQLite() {
+public class DataBase {
+    Connection con;
+    public DataBase() {
         String url = "jdbc:sqlite:database.db";
-        Connection con;
 
         try {
             con = DriverManager.getConnection(url);
@@ -64,6 +61,33 @@ public class TestSQLite {
                     ");");
         } catch (SQLException e) {
             System.err.println("Erro ao criar tabelas: " + e.getMessage());
+        }
+    }
+
+    public boolean CheckLogin(String user, String pass){
+        return true;
+    }
+
+    public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
+        String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, psswd);
+            preparedStatement.setString(3, name);
+            preparedStatement.setInt(4, studentnumber);
+            preparedStatement.setInt(5, nif);
+            preparedStatement.setString(6, id);
+            preparedStatement.setString(7, address);
+            preparedStatement.setBoolean(8, admin);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Se a inserção for bem-sucedida (uma linha afetada), retorna true
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao registrar o usuário: " + e.getMessage());
+            return false;
         }
     }
 }
