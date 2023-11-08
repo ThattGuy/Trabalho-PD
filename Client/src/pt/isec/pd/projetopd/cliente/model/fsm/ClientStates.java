@@ -22,7 +22,7 @@ public enum ClientStates {
             case EDIT_EVENT -> new EditEvent(context,game);
             case CREATE_EVENT -> new CreateEvent(context,game);
             case VIEW_EVENT_PRESENCE_ -> new ViewEventPresences(context,game);
-            case VIEW_EVENTS -> new ViewEvents(context,game);;
+            case VIEW_EVENTS -> new ViewEvents(context,game);
         };
     }
 }
