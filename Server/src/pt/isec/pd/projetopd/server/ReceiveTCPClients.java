@@ -37,6 +37,7 @@ public class ReceiveTCPClients extends Thread {
         }
         catch (Exception e)
         {
+            System.out.println("O cliente nao entrou!");
             System.err.println("Error: " + e);
         }
 

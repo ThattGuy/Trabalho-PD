@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.server.DataBase.TestSQLite;
+import pt.isec.pd.projetopd.server.DataBase.DataBase;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
 
@@ -91,8 +91,7 @@ public class Server
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
-        ServerInfo serverInfo = new ServerInfo(sendHBeat);
-        TestSQLite newdatabase=new TestSQLite();
+        ServerInfo serverInfo = new ServerInfo(args[1],sendHBeat);
 
 
 
@@ -102,7 +101,7 @@ public class Server
 
 
         //Start
-        sendHBeat.start();
+       sendHBeat.start();
         ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
 
         new Thread(recvClient).start();

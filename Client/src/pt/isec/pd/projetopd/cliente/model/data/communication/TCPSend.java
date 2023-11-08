@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class TCPSend extends Thread {
     private String ip;
@@ -14,11 +15,19 @@ public class TCPSend extends Thread {
     private Serializable objectToSend;
 
     private Data data;
+    private Socket socket;
 
     public TCPSend(String ip, int port, Data data) {
         this.ip = ip;
         this.port = port;
         this.data = data;
+        try{
+            this.socket = new Socket(ip, port);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setDataToSend(Serializable dataToSend) {
@@ -27,11 +36,11 @@ public class TCPSend extends Thread {
 
     @Override
     public synchronized void run() {
-        Socket socket = null;
+        //Socket socket = null;
         ObjectOutputStream out = null;
 
         try {
-            socket = new Socket(InetAddress.getByName(ip), port);
+           // socket = new Socket(InetAddress.getByName(ip), port);
             out = new ObjectOutputStream(socket.getOutputStream());
 
             // Send the data to the server
