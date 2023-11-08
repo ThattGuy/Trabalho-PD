@@ -35,8 +35,8 @@ public class ClientContext {
     }
 
     public String getLastMessage() {
-        String msg = data.getLastMessage();
-        data.setLastMessage(null);
+        String msg = data.getErrorMessage();
+        data.setErrorMessage(null);
         return msg;
     }
 

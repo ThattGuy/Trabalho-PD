@@ -25,22 +25,23 @@ public class TCPSend {
             this.socket = new Socket(ip, port);
             out = new ObjectOutputStream(socket.getOutputStream());
         } catch (ConnectException e) {
-            String errorMessage = "Error connecting to Server: " + e.getMessage();
-            data.setLastMessage(errorMessage);
+            String errorMessage = "Error connecting to Server, TCPSend: " + e.getMessage();
+            data.setErrorMessage(errorMessage);
         } catch (IOException e) {
-            String errorMessage = "Error connecting to Server: " + e.getMessage();
-            data.setLastMessage(errorMessage);
+            String errorMessage = "Error connecting to Server, TCPSend: " + e.getMessage();
+            data.setErrorMessage(errorMessage);
         }
     }
 
     public void sendObject(Serializable objectToSend) {
 
         try {
-            out.writeObject(objectToSend);
-            out.flush();
+            if(this.out != null){
+                out.writeObject(objectToSend);
+                out.flush();
+            }
         } catch (IOException e) {
-            data.setLastMessage("Error sending object to Server: " + e);
-            throw new RuntimeException(e);
+            data.setErrorMessage("Error sending object to Server: " + e);
         }
 
     }

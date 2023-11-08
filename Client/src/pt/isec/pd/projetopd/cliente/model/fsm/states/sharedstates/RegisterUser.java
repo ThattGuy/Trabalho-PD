@@ -36,7 +36,7 @@ public class RegisterUser extends ClientStateAdapter {
                                 splitString[5],
                                 splitString[6]));
                     } catch (NumberFormatException e) {
-                        data.setLastMessage("Student Number and ID need to be numbers");//todo FIX CONCURRENCE
+                        data.setErrorMessage("Student Number and ID need to be numbers");//todo FIX CONCURRENCE
                         return false;
                     }
                 } else {
