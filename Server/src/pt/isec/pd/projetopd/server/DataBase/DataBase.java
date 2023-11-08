@@ -4,8 +4,8 @@ import java.sql.*;
 
 public class DataBase {
     Connection con;
-    public DataBase() {
-        String url = "jdbc:sqlite:database.db";
+    public DataBase(String path) {
+        String url = path;
 
         try {
             con = DriverManager.getConnection(url);

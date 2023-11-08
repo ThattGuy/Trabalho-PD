@@ -16,11 +16,11 @@ public class ServerInfo {
     private HandleRequests handleRequests;
 
 
-    public ServerInfo(SendHBeat sendHBeat) {
+    public ServerInfo(String path,SendHBeat sendHBeat) {
         this.clientsList = new ArrayList<>();
         this.nTCPConnections = 0;
         this.sendHBeat = sendHBeat;
-        this.handleRequests = new HandleRequests();
+        this.handleRequests = new HandleRequests(path);
     }
 
     public int getnTCPConnections() {

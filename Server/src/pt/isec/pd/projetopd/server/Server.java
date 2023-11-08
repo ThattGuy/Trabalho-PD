@@ -91,7 +91,7 @@ public class Server
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
-        ServerInfo serverInfo = new ServerInfo(sendHBeat);
+        ServerInfo serverInfo = new ServerInfo(args[1],sendHBeat);
 
 
 
