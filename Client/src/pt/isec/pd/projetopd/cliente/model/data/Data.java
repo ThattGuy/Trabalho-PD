@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.cliente.model.data;
 
 import pt.isec.pd.projetopd.communication.classes.*;
+
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
 import java.io.Serializable;

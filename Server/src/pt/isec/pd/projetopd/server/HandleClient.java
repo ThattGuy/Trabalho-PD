@@ -23,6 +23,8 @@ public class HandleClient implements Runnable {
         while(true) {
             try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+
+
                 Object o = in.readObject();
                 o = serverInfo.updateDB(o);
                 out.writeObject(o);
