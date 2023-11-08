@@ -27,10 +27,8 @@ public class HandleClient implements Runnable {
 
                 Object o = in.readObject();
 
-                if(serverInfo.updateDB(o))
-                    out.writeObject(RESPONSE.ACCEPTED);
-                 else
-                    out.writeObject(RESPONSE.DECLINED);
+                o = serverInfo.updateDB(o);
+                out.writeObject(o);
 
                 out.flush();
                 out.reset();
