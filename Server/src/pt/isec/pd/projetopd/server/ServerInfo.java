@@ -33,13 +33,13 @@ public class ServerInfo {
     public void addClient(Socket client) {
         this.clientsList.add(client);
         this.nTCPConnections++;
-        this.sendHBeat.SendHeartBeat(databaseVersion);
+        //this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
     public boolean updateDB(Object o) {
         if(handleRequests.receive(o)){
             this.databaseVersion++;
-            this.sendHBeat.SendHeartBeat(databaseVersion);
+           // this.sendHBeat.SendHeartBeat(databaseVersion);
 
             return true;
         }

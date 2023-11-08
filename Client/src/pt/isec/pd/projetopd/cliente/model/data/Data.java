@@ -14,10 +14,10 @@ public class Data {
     public Data(String ip, int port) {
         Data.ip = ip;
         Data.port = port;
+        this.tcpSend = new TCPSend(ip, port, this);
     }
 
     public void startTcpSend() {
-        this.tcpSend = new TCPSend(ip, port, this);
         tcpSend.start();
     }
 
