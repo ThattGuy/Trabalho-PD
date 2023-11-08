@@ -4,9 +4,11 @@ import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ServerInfo {
 
+    private Map<Socket, Integer> clientsLists;
     private ArrayList<Socket> clientsList;
     private int nTCPConnections;
     private int databaseVersion;
