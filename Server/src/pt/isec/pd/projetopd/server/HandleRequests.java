@@ -2,7 +2,6 @@ package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
-import pt.isec.pd.projetopd.server.data.*;
 
 
 //nesta classe vou interpretar os pedidos do cliente

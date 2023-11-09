@@ -13,7 +13,7 @@ public enum ClientStates {
             case REG_USER -> new RegisterUser(context,data);
             case LOGIN -> new Login(context,data);
             case SELECT_OPT -> new SelectOptionUser(context,data);
-            case EDIT_USER_DATA -> new EditData(context,data);
+            case EDIT_USER_DATA -> new EditInfo(context,data);
             case REG_PRESENCE -> new RegisterPresence(context,data);
             case VIEW_PRESENCE -> new ViewPresence(context,data);
             case EDIT_EVENT -> new EditEvent(context,data);

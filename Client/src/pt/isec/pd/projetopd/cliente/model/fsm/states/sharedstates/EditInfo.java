@@ -7,8 +7,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-public class EditData extends ClientStateAdapter {
-    public EditData(ClientContext context, Data data) {
+public class EditInfo extends ClientStateAdapter {
+    public EditInfo(ClientContext context, Data data) {
         super(context, data);
         data.sendToServer(REQUESTS.USER_DATA);
     }
@@ -29,21 +29,13 @@ public class EditData extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
-
-        if(message instanceof User user){
-            data.setClientInfo(user);
+        if (message instanceof User) {
+            data.setClientInfo((User) message);
+            return true;
+        } else {
+            data.setMessage("Error deserializing the User object");
+            return false;
         }
-
-        if (message instanceof User user) {
-            try {
-                data.setClientInfo(user);
-                return true;
-            } catch (ClassCastException e) {
-                System.err.println("Error deserializing the ClientInfo object: " + e);
-                return false;
-            }
-        }
-        return false;
     }
 
     @Override

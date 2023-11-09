@@ -5,6 +5,8 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
+import pt.isec.pd.projetopd.communication.classes.Event;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
@@ -26,7 +28,13 @@ public class EditEvent extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
-        return false;
+        if (message instanceof Event event) {
+            data.setEvents(event);
+            return true;
+        } else {
+            data.setMessage("Error deserializing the Event object");
+            return false;
+        }
     }
 
     @Override

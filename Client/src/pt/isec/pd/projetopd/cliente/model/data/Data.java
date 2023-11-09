@@ -7,6 +7,8 @@ import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Data {
     private static String ip = null;
@@ -15,9 +17,11 @@ public class Data {
     private User clientInfo;
     private Socket socket;
     private String message = null;
+    private List<Event> events;
     public Data(String ip, int port) {
         Data.ip = ip;
         Data.port = port;
+        events = new ArrayList<>();
 
         try {
             this.socket = new Socket(ip, port);
@@ -29,26 +33,42 @@ public class Data {
         tcpSend = new TCPSend(this);
     }
 
+    public Socket getSocket() {
+        return this.socket;
+    }
+
     public void sendToServer(Serializable objectToSend){
         tcpSend.sendObject(objectToSend);
     }
 
-    public void setClientInfo(User clientInfo) {
+    public synchronized void setClientInfo(User clientInfo) {
         this.clientInfo = clientInfo;
     }
     public boolean isUserAdmin() {
         return clientInfo.isAdmin();
     }
 
-    public void setMessage(String errorMessage) {
+    public synchronized void setMessage(String errorMessage) {
         this.message = errorMessage;
     }
 
-    public String getMessage() {
+    public synchronized String getMessage() {
         return message;
     }
 
-    public Socket getSocket() {
-        return this.socket;
+    public synchronized void setEvents(Event event) {
+        events.add(event);
+    }
+
+    public synchronized String getEventsString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Event event : events) {
+            sb.append(event.toString());
+            sb.append("\n");
+        }
+        //todo fix get null
+
+        return sb.toString();
     }
 }
