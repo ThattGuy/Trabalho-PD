@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates;
+package pt.isec.pd.projetopd.cliente.ui.uistates.admin;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

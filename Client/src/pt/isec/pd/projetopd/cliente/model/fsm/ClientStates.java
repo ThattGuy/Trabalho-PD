@@ -5,7 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.*;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates.*;
 
 public enum ClientStates {
-    INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE, EDIT_EVENT, CREATE_EVENT, VIEW_EVENT_PRESENCE_, VIEW_EVENTS, SELECT_OPT_ADMIN;
+    INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE, EDIT_EVENT, CREATE_EVENT, VIEW_EVENT_PRESENCE, VIEW_EVENTS, SELECT_OPT_ADMIN;
 
     IClientState createState(ClientContext context, Data data) {
         return switch (this) {
@@ -18,7 +18,7 @@ public enum ClientStates {
             case VIEW_PRESENCE -> new ViewPresence(context,data);
             case EDIT_EVENT -> new EditEvent(context,data);
             case CREATE_EVENT -> new CreateEvent(context,data);
-            case VIEW_EVENT_PRESENCE_ -> new ViewEventPresences(context,data);
+            case VIEW_EVENT_PRESENCE -> new ViewEventPresences(context,data);
             case VIEW_EVENTS -> new ViewEvents(context,data);
             case SELECT_OPT_ADMIN -> new SelectOptionAdmin(context,data);
         };

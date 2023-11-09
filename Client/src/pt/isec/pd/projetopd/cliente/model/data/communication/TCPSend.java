@@ -19,7 +19,9 @@ public class TCPSend {
         socket = data.getSocket();
 
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
+            if(out != null){
+                out = new ObjectOutputStream(socket.getOutputStream());
+            }
         } catch (ConnectException e) {
             String errorMessage = "Error connecting to Server, TCPSend: " + e.getMessage();
             data.setMessage(errorMessage);
@@ -31,8 +33,10 @@ public class TCPSend {
 
     public void sendObject(Serializable objectToSend) {
         try {
-            out.writeObject(objectToSend);
-            out.flush();
+            if(out != null){
+                out.writeObject(objectToSend);
+                out.flush();
+            }
         } catch (IOException e) {
             data.setMessage("Error sending object to Server: " + e);
         }

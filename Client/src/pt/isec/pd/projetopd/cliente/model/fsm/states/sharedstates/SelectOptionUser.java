@@ -5,6 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 public class SelectOptionUser extends ClientStateAdapter {
     public SelectOptionUser(ClientContext context, Data data) {
@@ -27,11 +28,17 @@ public class SelectOptionUser extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
+
+        if(message instanceof User user){
+            data.setClientInfo(user);
+        }
+
         return false;
     }
 
     @Override
     public ClientStates getState() {
+
         return ClientStates.SELECT_OPT;
     }
 }

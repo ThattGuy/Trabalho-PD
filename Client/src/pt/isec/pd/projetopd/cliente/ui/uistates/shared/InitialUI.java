@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates;
+package pt.isec.pd.projetopd.cliente.ui.uistates.shared;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

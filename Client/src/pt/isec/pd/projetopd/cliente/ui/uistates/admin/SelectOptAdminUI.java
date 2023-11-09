@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates;
+package pt.isec.pd.projetopd.cliente.ui.uistates.admin;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,12 +9,12 @@ import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-public class SelectOptUI extends BorderPane {
+public class SelectOptAdminUI extends BorderPane {
 
     Manager manager;
-    Button btnRegisterPresence, btnViewPresence, btnEditInfo, btnLogout;
+    Button btnCreateEvent, btnViewEvents, btnEditInfo, btnLogout;
 
-    public SelectOptUI(Manager manager) {
+    public SelectOptAdminUI(Manager manager) {
         this.manager = manager;
         createViews();
         registerHandlers();
@@ -26,14 +26,14 @@ public class SelectOptUI extends BorderPane {
      */
     private void createViews() {
 
-        btnRegisterPresence = new Button("Register Presence");
-        btnRegisterPresence.setMinWidth(200);
-        btnRegisterPresence.setMinHeight(50);
+        btnCreateEvent = new Button("Create Event");
+        btnCreateEvent.setMinWidth(200);
+        btnCreateEvent.setMinHeight(50);
 
 
-        btnViewPresence = new Button("View Presences");
-        btnViewPresence.setMinWidth(200);
-        btnViewPresence.setMinHeight(50);
+        btnViewEvents = new Button("View Events");
+        btnViewEvents.setMinWidth(200);
+        btnViewEvents.setMinHeight(50);
 
 
         btnEditInfo = new Button("Edit My Info");
@@ -44,24 +44,24 @@ public class SelectOptUI extends BorderPane {
         btnLogout.setMinWidth(200);
         btnLogout.setMinHeight(50);
 
-        VBox vbox = new VBox(btnRegisterPresence, btnViewPresence, btnEditInfo, btnLogout);
+        VBox vbox = new VBox(btnCreateEvent, btnViewEvents, btnEditInfo, btnLogout);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
-        vbox.setMargin(btnRegisterPresence, new Insets(10, 0, 0, 0));
+        vbox.setMargin(btnCreateEvent, new Insets(10, 0, 0, 0));
         vbox.setMargin(btnEditInfo, new Insets(10, 0, 0, 0));
         vbox.setMargin(btnLogout, new Insets(10, 0, 0, 0));
 
         double buttonHeightPercentage = 0.05; // Adjust this value to control the button height
-        btnRegisterPresence.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+        btnCreateEvent.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
         btnEditInfo.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
         btnLogout.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
-        btnViewPresence.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
+        btnViewEvents.prefHeightProperty().bind(this.heightProperty().multiply(buttonHeightPercentage));
 
         double buttonWidthPercentage = 0.25;
-        btnRegisterPresence.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        btnCreateEvent.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnEditInfo.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnLogout.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
-        btnViewPresence.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        btnViewEvents.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
 
         this.setCenter(vbox);
     }
@@ -73,12 +73,12 @@ public class SelectOptUI extends BorderPane {
 
         manager.addPropertyChangeListener(evt -> { update(); });
 
-        btnRegisterPresence.setOnAction(event -> {
-            manager.selectOption(OPTIONS.REG_PRESENCE, null);
+        btnCreateEvent.setOnAction(event -> {
+            manager.selectOption(OPTIONS.CREATE_EVENT, null);
             update();
         });
-        btnViewPresence.setOnAction(event -> {
-            manager.selectOption(OPTIONS.VIEW_PRESENCE, null);
+        btnViewEvents.setOnAction(event -> {
+            manager.selectOption(OPTIONS.VIEW_EVENTS, null);
             update();
         });
         btnEditInfo.setOnAction(event -> {

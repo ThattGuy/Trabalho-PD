@@ -16,9 +16,9 @@ public class SelectOptionAdmin extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+            case CREATE_EVENT -> changeState(ClientStates.CREATE_EVENT);
             case EDIT_DATA -> changeState(ClientStates.EDIT_USER_DATA);
-            case REG_PRESENCE -> changeState(ClientStates.REG_PRESENCE);
-            case VIEW_PRESENCE -> changeState(ClientStates.VIEW_PRESENCE);
+            case VIEW_EVENTS -> changeState(ClientStates.VIEW_EVENTS);
             case LOGOUT -> changeState(ClientStates.INITIAL);//TODO
         }
 
@@ -32,6 +32,6 @@ public class SelectOptionAdmin extends ClientStateAdapter {
 
     @Override
     public ClientStates getState() {
-        return ClientStates.SELECT_OPT;
+        return ClientStates.SELECT_OPT_ADMIN;
     }
 }

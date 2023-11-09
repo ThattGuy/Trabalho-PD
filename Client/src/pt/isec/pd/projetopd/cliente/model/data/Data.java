@@ -11,18 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-    private static String ip = null;
-    private static int port = 0;
     private TCPSend tcpSend;
     private User clientInfo;
     private Socket socket;
     private String message = null;
     private List<Event> events;
-    public Data(String ip, int port) {
-        Data.ip = ip;
-        Data.port = port;
+    private List<Presence> presences;
+    public Data(String ip, int port) {;
         events = new ArrayList<>();
-
         try {
             this.socket = new Socket(ip, port);
             this.tcpSend = new TCPSend(this);
@@ -56,7 +52,7 @@ public class Data {
         return message;
     }
 
-    public synchronized void setEvents(Event event) {
+    public synchronized void addEvents(Event event) {
         events.add(event);
     }
 
@@ -65,6 +61,22 @@ public class Data {
 
         for (Event event : events) {
             sb.append(event.toString());
+            sb.append("\n");
+        }
+        //todo fix get null
+
+        return sb.toString();
+    }
+
+    public synchronized void addPresence(Presence presence) {
+        presences.add(presence);
+    }
+
+    public synchronized String getPresenceString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Presence presence : presences) {
+            sb.append(presence.toString());
             sb.append("\n");
         }
         //todo fix get null

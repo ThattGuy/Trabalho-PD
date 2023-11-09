@@ -31,6 +31,6 @@ public class ViewEventPresences extends ClientStateAdapter {
 
     @Override
     public ClientStates getState() {
-        return ClientStates.VIEW_EVENT_PRESENCE_;
+        return ClientStates.VIEW_EVENT_PRESENCE;
     }
 }

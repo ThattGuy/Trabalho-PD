@@ -28,7 +28,11 @@ public class ViewPresence extends ClientStateAdapter {
 
     @Override
     public boolean onMessageReceived(Object message) {
-        //todo null message. Array or presence?
+
+        if(message instanceof Presence presence){
+            data.addPresence(presence);
+            //todo remover presenças já não existentes
+        }
 
         return false;
     }
@@ -37,4 +41,5 @@ public class ViewPresence extends ClientStateAdapter {
     public ClientStates getState() {
         return ClientStates.VIEW_PRESENCE;
     }
+
 }

@@ -1,13 +1,15 @@
 package pt.isec.pd.projetopd.cliente.ui;
-import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pt.isec.pd.projetopd.cliente.model.Manager;
-import pt.isec.pd.projetopd.cliente.ui.resources.CSSManager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
-import pt.isec.pd.projetopd.cliente.ui.uistates.*;
+import pt.isec.pd.projetopd.cliente.ui.uistates.admin.CreateEventUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.shared.InitialUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.shared.LoginUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.shared.RegisterUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.shared.SelectOptUI;
 
 public class RootPane extends BorderPane {
     Manager manager;
