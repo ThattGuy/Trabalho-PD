@@ -1,16 +1,17 @@
 package pt.isec.pd.projetopd.cliente.model.data.communication;
 
-import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
+import pt.isec.pd.projetopd.communication.classes.ServerPort;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class TCPReceive extends Thread {
+    private static boolean hasServerSocket = false;
     private MessageReceivedListener listener;
     private Socket socket;
+    private String serverIP;
 
-    public TCPReceive(Socket socket, MessageReceivedListener listener) {
+    public TCPReceive(Socket socket, String serverIP, MessageReceivedListener listener) {
         this.socket = socket;
         this.listener = listener;
     }
@@ -24,6 +25,19 @@ public class TCPReceive extends Thread {
 
             while (true) {
                 Object receivedObject = objectInputStream.readObject();
+
+                if(!TCPReceive.hasServerSocket){
+                    if(receivedObject instanceof ServerPort serverPort){
+                        try {
+                            Socket serverSocket = new Socket(this.serverIP, serverPort.getPortNumber());
+                            new TCPReceive(serverSocket, this.serverIP, this.listener);
+                            hasServerSocket = true;
+                        } catch (IOException e) {
+                            String errorMessage =  "Error creating socket: " + e.getMessage();
+                            System.err.println(errorMessage);
+                        }
+                    }
+                }
 
                 if (listener != null) {
                     listener.onMessageReceived(receivedObject);

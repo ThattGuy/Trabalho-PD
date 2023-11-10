@@ -14,12 +14,10 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     private ClientContext fsm;
     private PropertyChangeSupport pcs;
 
-    private TCPReceive receiveThread;
-
     public Manager(String ip, int port) {
         pcs = new PropertyChangeSupport(this);
         fsm = new ClientContext(ip,port);
-        receiveThread = new TCPReceive(fsm.getSocket(),this);
+        new TCPReceive(fsm.getSocket(),fsm.getServerIP() ,this);
     }
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);

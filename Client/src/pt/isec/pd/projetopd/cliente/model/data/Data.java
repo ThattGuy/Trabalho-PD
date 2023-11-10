@@ -15,9 +15,11 @@ public class Data {
     private User clientInfo;
     private Socket socket;
     private String message = null;
+    private String serverIP;
     private List<Event> events = new ArrayList<>();
     private List<Presence> presences = new ArrayList<>();
     public Data(String ip, int port) {;
+        this.serverIP = ip;
         try {
             this.socket = new Socket(ip, port);
             this.tcpSend = new TCPSend(this);
@@ -79,5 +81,9 @@ public class Data {
         //todo fix get null
 
         return sb.toString();
+    }
+
+    public String getServerIP() {
+        return this.serverIP;
     }
 }

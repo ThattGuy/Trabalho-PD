@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.communication.classes.Port;
+import pt.isec.pd.projetopd.communication.classes.ServerPort;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -27,7 +27,7 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
         System.out.println("I started");
-        sendPort(new Port("7001"));
+        sendPort(new ServerPort(7001));//todo indicar porto nos argumentos do main
 
         while(true) {
             try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

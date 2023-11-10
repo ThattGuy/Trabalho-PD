@@ -45,4 +45,8 @@ public class ClientContext {
     public Socket getSocket() {
         return data.getSocket();
     }
+
+    public String getServerIP() {
+        return data.getServerIP();
+    }
 }
