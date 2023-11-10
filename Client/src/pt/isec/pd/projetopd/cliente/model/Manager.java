@@ -35,8 +35,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     }
 
     public String getLastMessage(){
-        String msg = fsm.getLastMessage();
-        return msg;
+        return fsm.getLastMessage();
     }
 
     public ClientStates getState() {

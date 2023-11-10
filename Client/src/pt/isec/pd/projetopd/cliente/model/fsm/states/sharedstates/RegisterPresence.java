@@ -32,8 +32,8 @@ public class RegisterPresence extends ClientStateAdapter {
 
         if(message instanceof RESPONSE response){
             switch (response){
-                case ACCEPTED -> data.setMessage("Presence submited");
-                case DECLINED -> data.setMessage("Presence not submited.\n Verify code and make sure you're not registered in another class");
+                case ACCEPTED -> data.setMessage("Presence submitted");
+                case DECLINED -> data.setMessage("Presence not submitted.\n Verify code and make sure you're not registered in another class");
             }
         }
         return false;
