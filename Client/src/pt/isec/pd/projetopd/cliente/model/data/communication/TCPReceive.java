@@ -14,6 +14,7 @@ public class TCPReceive extends Thread {
     public TCPReceive(Socket socket, String serverIP, MessageReceivedListener listener) {
         this.socket = socket;
         this.listener = listener;
+        this.serverIP = serverIP;
     }
 
     @Override
@@ -26,18 +27,7 @@ public class TCPReceive extends Thread {
             while (true) {
                 Object receivedObject = objectInputStream.readObject();
 
-                if(!TCPReceive.hasServerSocket){
-                    if(receivedObject instanceof ServerPort serverPort){
-                        try {
-                            Socket serverSocket = new Socket(this.serverIP, serverPort.getPortNumber());
-                            new TCPReceive(serverSocket, this.serverIP, this.listener);
-                            hasServerSocket = true;
-                        } catch (IOException e) {
-                            String errorMessage =  "Error creating socket: " + e.getMessage();
-                            System.err.println(errorMessage);
-                        }
-                    }
-                }
+                createNotificationThread(receivedObject);
 
                 if (listener != null) {
                     listener.onMessageReceived(receivedObject);
@@ -62,6 +52,21 @@ public class TCPReceive extends Thread {
                 System.err.println(errorMessage);
                 if (listener != null) {
                     listener.onMessageReceived(errorMessage);
+                }
+            }
+        }
+    }
+
+    private void createNotificationThread(Object receivedObject) {
+        if(!TCPReceive.hasServerSocket){
+            if(receivedObject instanceof ServerPort serverPort){
+                try {
+                    Socket serverSocket = new Socket(this.serverIP, serverPort.getPortNumber());
+                    new TCPReceive(serverSocket, this.serverIP, this.listener);
+                    hasServerSocket = true;
+                } catch (IOException e) {
+                    String errorMessage =  "Error creating notificationThread: " + e.getMessage();
+                    System.err.println(errorMessage);
                 }
             }
         }
