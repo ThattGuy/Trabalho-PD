@@ -18,8 +18,8 @@ public class HandleRequests {
     public HandleRequests(String path){
         this.ManDB = new DataBase(path);
     }
-    public Object receive(Object o){
 
+    private RESPONSE handleResponse(Object o){
         if(o instanceof REQUESTS){
             if (o.equals(REQUESTS.PRESENCE)) {
                 System.out.println("Received Presence");
@@ -39,21 +39,24 @@ public class HandleRequests {
             }
         }
         else
-            if(o instanceof User) {
-                User clientInfo = (User) o;
-                System.out.println("Received ClientInfo");
-                System.out.println( clientInfo.getUsername() + ": " + clientInfo.getId() + ": " + clientInfo.getStudentNumber());
-            }
-            else
-                if(o instanceof Presence){
-                    Presence presence = (Presence) o;
-                    System.out.println("Received Presence");
-                    System.out.println( "Code: " + presence.getcode());
-                }
-                else {
-                    System.out.println("Received unknown object");
-                }
-
+        if(o instanceof User) {
+            User clientInfo = (User) o;
+            System.out.println("Received ClientInfo");
+            System.out.println( clientInfo.getUsername() + ": " + clientInfo.getId() + ": " + clientInfo.getStudentNumber());
+        }
+        else
+        if(o instanceof Presence){
+            Presence presence = (Presence) o;
+            System.out.println("Received Presence");
+            System.out.println( "Code: " + presence.getcode());
+        }
+        else {
+            System.out.println("Received unknown object");
+        }
         return RESPONSE.DECLINED;
+    }
+
+    public Object receive(Object o){
+        return handleResponse(o);
     }
 }
