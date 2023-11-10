@@ -2,14 +2,15 @@ package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class ServerInfo {
 
-    private Map<Socket, Integer> clientsLists;
-    private ArrayList<Socket> clientsList;
+    private Map<ObjectOutputStream, String> clientsLists;
+    private ArrayList<ObjectOutputStream> clientsList;
     private int nTCPConnections;
     private int databaseVersion;
     private SendHBeat sendHBeat;
@@ -30,8 +31,9 @@ public class ServerInfo {
         return this.databaseVersion;
     }
 
-    public void addClient(Socket client) {
+    public void addClient(ObjectOutputStream client) {
         this.clientsList.add(client);
+        //this.clientsLists.put(client, email);
         this.nTCPConnections++;
         //this.sendHBeat.SendHeartBeat(databaseVersion);
     }

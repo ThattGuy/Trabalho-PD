@@ -2,6 +2,7 @@ package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -29,11 +30,14 @@ public class ReceiveTCPClients extends Thread {
         try {
             Socket nextClient = CliSocket.accept(); //Aceita um novo cliente
 
-            serverInfo.addClient(nextClient);
+            ObjectOutputStream out = new ObjectOutputStream(nextClient.getOutputStream());
+            serverInfo.addClient(out);
 
             System.out.println("Received request from " + nextClient.getInetAddress() + ":" + nextClient.getPort());
 
-            new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
+
+           new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
+
 
         }
         catch (Exception e)
