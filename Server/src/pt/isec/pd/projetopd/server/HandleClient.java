@@ -1,5 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.communication.classes.Port;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,13 +27,15 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
         System.out.println("I started");
-        sendNotifications("7001");
+        sendPort(new Port("7001"));
+
         while(true) {
             try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
 
                 Object o = in.readObject();
+                System.out.println("I Have received the info");
                 o = serverInfo.updateDB(o);
                 out.writeObject(o);
 
@@ -50,7 +54,9 @@ public class HandleClient implements Runnable {
         }
     }
 
-    private void sendNotifications(Object o) {
+    private void sendPort(Object o) {
+
+        //Criar objeto para enviar o Port
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())
         ) {
             out.writeObject(o);
@@ -59,6 +65,5 @@ public class HandleClient implements Runnable {
         } catch (IOException e) {
             System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
         }
-
     }
 }
