@@ -27,7 +27,7 @@ public class SelectOptionUser extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
 
         if(message instanceof User user){
             data.setClientInfo(user);

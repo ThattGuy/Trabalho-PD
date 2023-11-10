@@ -44,7 +44,7 @@ public class CreateEvent extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         //todo handle repsonse
 
         return false;

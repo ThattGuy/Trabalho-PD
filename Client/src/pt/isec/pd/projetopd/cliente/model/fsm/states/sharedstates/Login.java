@@ -23,6 +23,7 @@ public class Login extends ClientStateAdapter {
                 String[] splitString = string.split("\n");
                 if (splitString.length >= 2) {
                     data.sendToServer(new Authentication(splitString[0], splitString[1]));
+                    changeState(ClientStates.SELECT_OPT);
                 } else {
                     return false;
                 }
@@ -34,7 +35,7 @@ public class Login extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         if(message instanceof RESPONSE response){
             switch (response){
                 case PROBLEM_WITH_NAME -> data.setMessage("Username incorrect");

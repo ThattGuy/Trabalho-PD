@@ -26,7 +26,7 @@ public class SelectOptionAdmin extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         return false;
     }
 

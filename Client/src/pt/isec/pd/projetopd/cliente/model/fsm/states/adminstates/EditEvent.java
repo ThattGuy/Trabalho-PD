@@ -26,7 +26,7 @@ public class EditEvent extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         if (message instanceof Event event) {
             data.addEvents(event);
             return true;

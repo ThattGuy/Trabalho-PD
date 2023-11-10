@@ -15,18 +15,15 @@ public class Data {
     private User clientInfo;
     private Socket socket;
     private String message = null;
-    private List<Event> events;
-    private List<Presence> presences;
+    private List<Event> events = new ArrayList<>();
+    private List<Presence> presences = new ArrayList<>();
     public Data(String ip, int port) {;
-        events = new ArrayList<>();
         try {
             this.socket = new Socket(ip, port);
             this.tcpSend = new TCPSend(this);
         } catch (IOException e) {
             this.message = "Error creating socket: " + e.getMessage();
         }
-
-        tcpSend = new TCPSend(this);
     }
 
     public Socket getSocket() {

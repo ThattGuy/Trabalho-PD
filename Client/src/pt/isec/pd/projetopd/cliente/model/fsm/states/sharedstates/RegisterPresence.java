@@ -28,7 +28,7 @@ public class RegisterPresence extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
 
         if(message instanceof RESPONSE response){
             switch (response){

@@ -28,7 +28,7 @@ public class EditInfo extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         if (message instanceof User) {
             data.setClientInfo((User) message);
             return true;

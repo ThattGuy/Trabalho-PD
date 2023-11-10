@@ -25,7 +25,7 @@ public class ViewEventPresences extends ClientStateAdapter {
     }
 
     @Override
-    public boolean onMessageReceived(Object message) {
+    public synchronized boolean onMessageReceived(Object message) {
         return false;
     }
 

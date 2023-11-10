@@ -13,7 +13,7 @@ public class Initial extends ClientStateAdapter {
     }
 
     @Override
-    public boolean selOpt(OPTIONS opt, String string) {
+    public synchronized boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
             case REG_USER -> changeState(ClientStates.REG_USER);
