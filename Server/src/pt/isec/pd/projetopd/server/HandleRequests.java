@@ -42,6 +42,7 @@ public class HandleRequests {
         else
         if(o instanceof User) {
             User clientInfo = (User) o;
+            ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNif(), clientInfo.getId(), clientInfo.getAddress(), false);
             System.out.println("Received ClientInfo");
             System.out.println( clientInfo.getUsername() + ": " + clientInfo.getId() + ": " + clientInfo.getStudentNumber());
         }

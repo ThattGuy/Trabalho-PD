@@ -24,7 +24,6 @@ public class TCPReceive extends Thread {
 
             while (true) {
                 Object receivedObject = objectInputStream.readObject();
-
                 createNotificationThread(receivedObject);
 
                 if (listener != null) {
