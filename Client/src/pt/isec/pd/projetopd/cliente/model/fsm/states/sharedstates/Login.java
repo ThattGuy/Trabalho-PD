@@ -23,7 +23,7 @@ public class Login extends ClientStateAdapter {
                 String[] splitString = string.split("\n");
                 if (splitString.length >= 2) {
                     data.sendToServer(new Authentication(splitString[0], splitString[1]));
-                    changeState(ClientStates.SELECT_OPT);
+                    changeState(ClientStates.REG_PRESENCE);
                 } else {
                     return false;
                 }
@@ -44,7 +44,7 @@ public class Login extends ClientStateAdapter {
         }
 
         if(message instanceof User user){
-            data.setClientInfo(user);
+            data.setUserInfo(user);
             if(data.isUserAdmin()){
                 changeState(ClientStates.SELECT_OPT_ADMIN);
                 return true;

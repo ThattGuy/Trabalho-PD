@@ -17,7 +17,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     public Manager(String ip, int port) {
         pcs = new PropertyChangeSupport(this);
         fsm = new ClientContext(ip,port);
-        new TCPReceive(fsm.getSocket(),fsm.getServerIP() ,this);
+        new TCPReceive(fsm.getSocket() ,this);
     }
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
@@ -41,4 +41,9 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     public ClientStates getState() {
         return fsm.getState();
     }
+
+    public String getUserName() {
+        return fsm.getUserName();
+    }
+
 }

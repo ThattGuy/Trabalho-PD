@@ -30,7 +30,7 @@ public class SelectOptionUser extends ClientStateAdapter {
     public synchronized boolean onMessageReceived(Object message) {
 
         if(message instanceof User user){
-            data.setClientInfo(user);
+            data.setUserInfo(user);
         }
 
         return false;

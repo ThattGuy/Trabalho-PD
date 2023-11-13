@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -17,7 +16,7 @@ import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-public class RegisterUI extends BorderPane {
+public class RegisterUserUI extends BorderPane {
     private Manager manager;
     private Button btnRegister, btnBack;
     private TextField usernameField, passwordField, name, studentNumber, nif, id, address;
@@ -27,7 +26,7 @@ public class RegisterUI extends BorderPane {
     private HBox hBox;
     private Label messageLabel;
 
-    public RegisterUI(Manager manager) {
+    public RegisterUserUI(Manager manager) {
         this.manager = manager;
         createViews();
         registerHandlers();

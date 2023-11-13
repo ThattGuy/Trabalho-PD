@@ -20,6 +20,7 @@ public class HandleRequests {
     }
 
     private RESPONSE handleResponse(Object o){
+        System.out.println(o.toString());
         if(o instanceof REQUESTS){
             if (o.equals(REQUESTS.PRESENCE)) {
                 System.out.println("Received Presence");
