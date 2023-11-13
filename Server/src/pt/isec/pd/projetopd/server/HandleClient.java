@@ -19,17 +19,11 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
         System.out.println("I started on handle");
-        try {
-            System.out.println("Im in the try");
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            sendPort(new ServerPort(7001),out);
+        try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            System.out.println("I have the input stream");
-/*
+            sendPort(new ServerPort(7001), out);
             do{
-                System.out.println("I tryed and cant read");
-
                 Object o = in.readObject();
                 System.out.println("I Have received the info");
                 o = serverInfo.updateDB(o);
@@ -41,10 +35,12 @@ public class HandleClient implements Runnable {
             }while(true);
 
 
- */
+
 
         }catch(IOException e){
             System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (socket != null) socket.close();
