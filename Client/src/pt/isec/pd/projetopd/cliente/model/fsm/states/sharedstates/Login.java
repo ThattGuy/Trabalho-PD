@@ -23,7 +23,6 @@ public class Login extends ClientStateAdapter {
                 String[] splitString = string.split("\n");
                 if (splitString.length >= 2) {
                     data.sendToServer(new Authentication(splitString[0], splitString[1]));
-                    changeState(ClientStates.REG_PRESENCE);
                 } else {
                     return false;
                 }
