@@ -3,6 +3,8 @@ package pt.isec.pd.projetopd.server;
 import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 
+import java.io.Serializable;
+
 
 //nesta classe vou interpretar os pedidos do cliente
 
@@ -19,7 +21,7 @@ public class HandleRequests {
         this.ManDB = new DataBase(path);
     }
 
-    private RESPONSE handleResponse(Object o){
+    private Serializable handleResponse(Object o){
         System.out.println(o.toString());
         if(o instanceof REQUESTS){
             if (o.equals(REQUESTS.PRESENCE)) {
@@ -34,10 +36,8 @@ public class HandleRequests {
         else if(o instanceof Authentication) {
             Authentication auth = (Authentication) o;
 
-            if(ManDB.CheckLogin(auth.getUsername(), auth.getPassword())) {
-                System.out.println("Login successful");
-                return RESPONSE.ACCEPTED;
-            }
+            return ManDB.CheckLogin(auth.getUsername(), auth.getPassword());
+
         }
         else
         if(o instanceof User) {
@@ -57,7 +57,7 @@ public class HandleRequests {
         return RESPONSE.DECLINED;
     }
 
-    public Object receive(Object o){
+    public Serializable receive(Object o){
         return handleResponse(o);
     }
 }

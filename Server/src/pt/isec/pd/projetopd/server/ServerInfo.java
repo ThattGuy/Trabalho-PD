@@ -3,6 +3,7 @@ package pt.isec.pd.projetopd.server;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ServerInfo {
         //this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
-    public Object updateDB(Object o) {
+    public Serializable updateDB(Object o) {
         return handleRequests.receive(o);
             //this.databaseVersion++;
            // this.sendHBeat.SendHeartBeat(databaseVersion);

@@ -1,5 +1,9 @@
 package pt.isec.pd.projetopd.server.data.DataBase;
 
+import pt.isec.pd.projetopd.communication.classes.RESPONSE;
+import pt.isec.pd.projetopd.communication.classes.User;
+
+import java.io.Serializable;
 import java.sql.*;
 
 public class DataBase {
@@ -80,7 +84,7 @@ public class DataBase {
         return false;
     }
 
-    public boolean CheckLogin(String user, String pass){
+    public Serializable CheckLogin(String user, String pass){
         String query = "SELECT * FROM User WHERE username = ? AND password = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -88,11 +92,11 @@ public class DataBase {
             preparedStatement.setString(2, pass);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.next();
+                return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
             }
         } catch (SQLException e) {
             System.err.println("Error verifying login: " + e.getMessage());
-            return false;
+            return RESPONSE.DECLINED;
         }
     }
 
