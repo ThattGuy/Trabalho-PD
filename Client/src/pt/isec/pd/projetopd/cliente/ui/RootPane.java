@@ -6,6 +6,7 @@ import javafx.scene.layout.*;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
 import pt.isec.pd.projetopd.cliente.ui.uistates.admin.CreateEventUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.admin.SelectOptAdminUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.shared.*;
 
 public class RootPane extends BorderPane {
@@ -31,6 +32,7 @@ public class RootPane extends BorderPane {
                 new LoginUI(manager),
                 new RegisterUserUI(manager),
                 new SelectOptUI(manager),
+                new SelectOptAdminUI(manager),
                 new CreateEventUI(manager),
                 new RegisterPresenceUI(manager)
         );

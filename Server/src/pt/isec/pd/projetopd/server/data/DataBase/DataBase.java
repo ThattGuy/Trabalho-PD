@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.server.data.DataBase;
 
+import pt.isec.pd.projetopd.communication.classes.Admin;
 import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.User;
 
@@ -25,12 +26,12 @@ public class DataBase {
     public void createTables(Connection connection) {
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS User ( " +
-                    "id INTEGER PRIMARY KEY, " +
                     "username TEXT NOT NULL, " +
                     "password TEXT NOT NULL, " +
                     "name TEXT NOT NULL, " +
                     "studentNumber INTEGER NOT NULL, " +
                     "nif INTEGER, " +
+                    "id INTEGER PRIMARY KEY, "+
                     "address TEXT, " +
                     "admin BOOLEAN NOT NULL " +
                     ");");
@@ -93,8 +94,16 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    // User credentials are correct
-                    return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                    // Check if the user is an admin
+                    boolean isAdmin = resultSet.getBoolean("admin");
+
+                    if (isAdmin) {
+                        // User is an admin
+                        return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                    } else {
+                        // User is not an admin
+                        return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                    }
                 } else {
                     // No matching username and password
                     return RESPONSE.DECLINED;
@@ -105,6 +114,7 @@ public class DataBase {
             return RESPONSE.DECLINED;
         }
     }
+
 
 
     public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
