@@ -30,7 +30,7 @@ public class EditInfo extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
         if (message instanceof User) {
-            data.setClientInfo((User) message);
+            data.setUserInfo((User) message);
             return true;
         } else {
             data.setMessage("Error deserializing the User object");

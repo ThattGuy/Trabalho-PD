@@ -35,9 +35,7 @@ public class ReceiveTCPClients extends Thread {
 
             System.out.println("Received client on receivetcpClients " + nextClient.getInetAddress() + ":" + nextClient.getPort());
 
-
            new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
-
 
         }
         catch (Exception e)
@@ -45,7 +43,6 @@ public class ReceiveTCPClients extends Thread {
             System.out.println("O cliente nao entrou!");
             System.err.println("Error: " + e);
         }
-
     }
 
 }

@@ -12,14 +12,12 @@ import java.util.List;
 
 public class Data {
     private TCPSend tcpSend;
-    private User clientInfo;
+    private User userInfo;
     private Socket socket;
     private String message = null;
-    private String serverIP;
     private List<Event> events = new ArrayList<>();
     private List<Presence> presences = new ArrayList<>();
     public Data(String ip, int port) {;
-        this.serverIP = ip;
         try {
             this.socket = new Socket(ip, port);
             this.tcpSend = new TCPSend(this);
@@ -36,11 +34,11 @@ public class Data {
         tcpSend.sendObject(objectToSend);
     }
 
-    public synchronized void setClientInfo(User clientInfo) {
-        this.clientInfo = clientInfo;
+    public synchronized void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
     public boolean isUserAdmin() {
-        return clientInfo.isAdmin();
+        return userInfo.isAdmin();
     }
 
     public synchronized void setMessage(String errorMessage) {
@@ -83,7 +81,10 @@ public class Data {
         return sb.toString();
     }
 
-    public String getServerIP() {
-        return this.serverIP;
+    public String getUserName() {
+        if(userInfo != null){
+            return userInfo.getName();
+        }
+        return null;
     }
 }

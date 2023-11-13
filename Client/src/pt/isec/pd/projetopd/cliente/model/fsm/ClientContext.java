@@ -46,7 +46,7 @@ public class ClientContext {
         return data.getSocket();
     }
 
-    public String getServerIP() {
-        return data.getServerIP();
+    public String getUserName() {
+        return data.getUserName();
     }
 }
