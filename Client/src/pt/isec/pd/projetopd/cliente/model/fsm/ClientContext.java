@@ -21,7 +21,7 @@ public class ClientContext {
     }
 
     public boolean onMessageReceived(Object message) {
-        return false;
+        return state.onMessageReceived(message);
     }
 
     public boolean selOpt(OPTIONS opt, String string){
