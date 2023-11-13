@@ -15,13 +15,15 @@ public class ServerInfo {
     private int databaseVersion;
     private SendHBeat sendHBeat;
     private HandleRequests handleRequests;
+    private NotificationThread notifications;
 
 
-    public ServerInfo(String path,SendHBeat sendHBeat) {
+    public ServerInfo(String path,SendHBeat sendHBeat, NotificationThread notificationThread){
         this.clientsList = new ArrayList<>();
         this.nTCPConnections = 0;
         this.sendHBeat = sendHBeat;
         this.handleRequests = new HandleRequests(path);
+        this.notifications = notificationThread;
     }
 
     public int getnTCPConnections() {

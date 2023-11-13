@@ -10,29 +10,31 @@ public class HandleClient implements Runnable {
 
     private Socket socket;
     private ServerInfo serverInfo;
-    private ServerSocket NotifSocket = null;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     public HandleClient(Socket sock, ServerInfo serverInfo) {
         this.socket = sock;
         this.serverInfo = serverInfo;
 
-        try{
-            this.NotifSocket = new ServerSocket(7001);
+        try {
+            this.in = new ObjectInputStream(socket.getInputStream());
+            this.out = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Unable to connect to socket to communicate with client!");
         }
 
     }
 
     @Override
     public void run() {
-        System.out.println("I started");
+        System.out.println("I started on handle");
         sendPort(new ServerPort(7001));//todo indicar porto nos argumentos do main
 
         while(true) {
-            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-
+            System.out.println("I am waiting for info");
+            try {
+                System.out.println("I tryed and cant read");
 
                 Object o = in.readObject();
                 System.out.println("I Have received the info");
@@ -57,9 +59,9 @@ public class HandleClient implements Runnable {
     private void sendPort(Object o) {
 
         //Criar objeto para enviar o Port
-        try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())
-        ) {
+        try {
             out.writeObject(o);
+            System.out.println("I sent the port");
             out.flush();
             out.reset();
         } catch (IOException e) {

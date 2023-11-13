@@ -90,7 +90,9 @@ public class Server
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
-        ServerInfo serverInfo = new ServerInfo(args[1],sendHBeat);
+        NotificationThread notificationThread = new NotificationThread(7001);
+        ServerInfo serverInfo = new ServerInfo(args[1],sendHBeat, notificationThread);
+        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
 
 
 
@@ -100,10 +102,9 @@ public class Server
 
 
         //Start
-       sendHBeat.start();
-        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
-
+        sendHBeat.start();
         new Thread(recvClient).start();
+        new Thread(notificationThread).start();
     }
 
 

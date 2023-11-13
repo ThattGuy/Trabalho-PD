@@ -30,10 +30,10 @@ public class ReceiveTCPClients extends Thread {
         try {
             Socket nextClient = CliSocket.accept(); //Aceita um novo cliente
 
-            ObjectOutputStream out = new ObjectOutputStream(nextClient.getOutputStream());
-            serverInfo.addClient(out);
+            //ObjectOutputStream out = new ObjectOutputStream(nextClient.getOutputStream());
+            //serverInfo.addClient(out);
 
-            System.out.println("Received request from " + nextClient.getInetAddress() + ":" + nextClient.getPort());
+            System.out.println("Received client on receivetcpClients " + nextClient.getInetAddress() + ":" + nextClient.getPort());
 
 
            new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
