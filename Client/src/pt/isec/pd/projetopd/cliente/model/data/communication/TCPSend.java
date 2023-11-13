@@ -19,7 +19,7 @@ public class TCPSend {
         socket = data.getSocket();
 
         try {
-            if(out != null){
+            if(out == null){
                 out = new ObjectOutputStream(socket.getOutputStream());
             }
         } catch (ConnectException e) {
