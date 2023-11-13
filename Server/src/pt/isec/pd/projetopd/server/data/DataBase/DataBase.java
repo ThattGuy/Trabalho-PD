@@ -85,7 +85,10 @@ public class DataBase {
         return false;
     }
 
+
+
     public Serializable CheckLogin(String user, String pass) {
+
         String query = "SELECT * FROM User WHERE username = ? AND password = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -93,7 +96,11 @@ public class DataBase {
             preparedStatement.setString(2, pass);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
+
                 if (resultSet.next()) {
+<<<<<<< HEAD
                     // Check if the user is an admin
                     boolean isAdmin = resultSet.getBoolean("admin");
 
@@ -104,6 +111,11 @@ public class DataBase {
                         // User is not an admin
                         return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     }
+=======
+                    // User credentials are correct
+
+                    return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+>>>>>>> 41fe666ce4f1de9a4eb34f68f78d591e27f321a1
                 } else {
                     // No matching username and password
                     return RESPONSE.DECLINED;
@@ -113,6 +125,7 @@ public class DataBase {
             System.err.println("Error verifying login: " + e.getMessage());
             return RESPONSE.DECLINED;
         }
+        return RESPONSE.DECLINED;
     }
 
 
