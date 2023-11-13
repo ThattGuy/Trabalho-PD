@@ -84,6 +84,7 @@ public class DataBase {
         return false;
     }
 
+
     public Serializable CheckLogin(String user, String pass){
         String query = "SELECT * FROM User WHERE username = ? AND password = ?";
 
@@ -92,7 +93,7 @@ public class DataBase {
             preparedStatement.setString(2, pass);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if(resultSet.getString("username") != null)
+                if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
                     return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                 else
                     return RESPONSE.DECLINED;
