@@ -38,7 +38,10 @@ public class Data {
         this.userInfo = userInfo;
     }
     public boolean isUserAdmin() {
-        return userInfo.isAdmin();
+        if(userInfo instanceof Admin){
+            return true;
+        }
+        return false;
     }
 
     public synchronized void setMessage(String errorMessage) {

@@ -9,10 +9,12 @@ public class TCPReceive extends Thread {
     private static boolean hasServerSocket = false;
     private MessageReceivedListener listener;
     private Socket socket;
+    private static String ip;
 
-    public TCPReceive(Socket socket, MessageReceivedListener listener) {
+    public TCPReceive(String ip, Socket socket, MessageReceivedListener listener) {
         this.socket = socket;
         this.listener = listener;
+        TCPReceive.ip = ip;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class TCPReceive extends Thread {
                 Object receivedObject = objectInputStream.readObject();
                 createNotificationThread(receivedObject);
 
-                if (listener != null) {
+                if (listener != null && receivedObject != null) {
                     listener.onMessageReceived(receivedObject);
                 }
             }
@@ -58,8 +60,8 @@ public class TCPReceive extends Thread {
         if (!TCPReceive.hasServerSocket) {
             if (receivedObject instanceof ServerPort serverPort) {
                 try {
-                    Socket serverSocket = new Socket(socket.getRemoteSocketAddress().toString(), serverPort.getPortNumber());
-                    new TCPReceive(serverSocket, this.listener);
+                    Socket serverSocket = new Socket(ip, serverPort.getPortNumber());
+                    new TCPReceive(ip, serverSocket, this.listener);
                     hasServerSocket = true;
                 } catch (IOException e) {
                     String errorMessage = "Error creating notificationThread: " + e.getMessage();

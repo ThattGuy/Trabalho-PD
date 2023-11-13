@@ -85,7 +85,9 @@ public class DataBase {
     }
 
 
-    public Serializable CheckLogin(String user, String pass){
+
+    public Serializable CheckLogin(String user, String pass) {
+
         String query = "SELECT * FROM User WHERE username = ? AND password = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -93,16 +95,25 @@ public class DataBase {
             preparedStatement.setString(2, pass);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
                 if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
+
+                if (resultSet.next()) {
+                    // User credentials are correct
+
                     return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
-                else
+                } else {
+                    // No matching username and password
                     return RESPONSE.DECLINED;
+                }
             }
         } catch (SQLException e) {
             System.err.println("Error verifying login: " + e.getMessage());
             return RESPONSE.DECLINED;
         }
+        return RESPONSE.DECLINED;
     }
+
 
     public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
         String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
