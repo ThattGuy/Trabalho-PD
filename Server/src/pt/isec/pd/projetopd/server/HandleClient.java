@@ -10,30 +10,24 @@ public class HandleClient implements Runnable {
 
     private Socket socket;
     private ServerInfo serverInfo;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
 
     public HandleClient(Socket sock, ServerInfo serverInfo) {
         this.socket = sock;
         this.serverInfo = serverInfo;
-
-        try {
-            this.in = new ObjectInputStream(socket.getInputStream());
-            this.out = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            System.out.println("Unable to connect to socket to communicate with client!");
-        }
-
     }
 
     @Override
     public void run() {
         System.out.println("I started on handle");
-        sendPort(new ServerPort(7001));//todo indicar porto nos argumentos do main
+        try {
+            System.out.println("Im in the try");
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            sendPort(new ServerPort(7001),out);
 
-        while(true) {
-            System.out.println("I am waiting for info");
-            try {
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("I have the input stream");
+/*
+            do{
                 System.out.println("I tryed and cant read");
 
                 Object o = in.readObject();
@@ -44,28 +38,36 @@ public class HandleClient implements Runnable {
                 out.flush();
                 out.reset();
 
-            } catch (ClassNotFoundException | IOException e) {
-                System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
-                break;
-            } finally {
-                try {
-                    if (socket != null) socket.close();
-                } catch (IOException e) {
-                }
+            }while(true);
+
+
+ */
+
+        }catch(IOException e){
+            System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
+        } finally {
+            try {
+                if (socket != null) socket.close();
+            } catch (IOException e) {
             }
         }
+
     }
 
-    private void sendPort(Object o) {
+
+    private void sendPort(Object o, ObjectOutputStream out) {
 
         //Criar objeto para enviar o Port
         try {
-            out.writeObject(o);
-            System.out.println("I sent the port");
+            out.writeObject(new ServerPort(7001));
+            System.out.println("I wrote");
+
             out.flush();
             out.reset();
         } catch (IOException e) {
             System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + e);
         }
     }
+
+
 }
