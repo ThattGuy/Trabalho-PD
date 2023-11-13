@@ -15,7 +15,6 @@ public class  User implements Serializable {
     private int nif;
     private String id;
     private String address;
-    private boolean admin;
     public User(String username, String password, String name, int studentNumber, int nif, String id, String address) {
         this.username = username;
         this.password = password;
@@ -52,9 +51,5 @@ public class  User implements Serializable {
 
     public String getAddress() {
         return address;
-    }
-
-    public boolean isAdmin() {
-        return admin;
     }
 }
