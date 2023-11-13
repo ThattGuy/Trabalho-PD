@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.communication.classes.ServerPort;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -27,6 +28,9 @@ public class HandleClient implements Runnable {
                 Object o = in.readObject();
                 System.out.println("I Have received the info");
                 o = serverInfo.updateDB(o);
+                if(o instanceof User){
+                    System.out.println("Its being sent");
+                }
                 out.writeObject(o);
 
                 out.flush();
