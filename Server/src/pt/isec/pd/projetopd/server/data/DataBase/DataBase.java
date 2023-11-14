@@ -6,6 +6,8 @@ import pt.isec.pd.projetopd.communication.classes.User;
 
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBase {
     Connection con;
@@ -275,18 +277,58 @@ public class DataBase {
         }
     }
 
-    //TODO: Implementar estes metodos
-    public Boolean registerPresence(int getcode, String clientMail)
-    {
-        return true;
+    public boolean registerPresence(int code, String clientMail) {
+        String query = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, clientMail);
+            preparedStatement.setInt(2, code);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error registering presence: " + e.getMessage());
+            return false;
+        }
     }
 
     public Serializable getPresence() {
         return "presence";
     }
 
-    public Serializable getCSV() {
-        return "csv";
+    public Serializable getCSV(int userId) {
+        List<String> csvLines = new ArrayList<>();
+
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", UserEvent.user_id, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
+                "FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.user_id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                csvLines.add("\"Nome\";\"Número identificação\";\"Email\"");
+                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "\";\"" + resultSet.getString("user_id") + "\"");
+
+                csvLines.add("\"Designação\";\"Local\";\"Data\";\"Horainício\"");
+
+                while (resultSet.next()) {
+                    String designacao = resultSet.getString("Designacao");
+                    String local = resultSet.getString("Local");
+                    String data = resultSet.getString("Data");
+                    String horaInicio = resultSet.getString("HoraInicio");
+
+                    csvLines.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence CSV: " + e.getMessage());
+        }
+
+        return String.join("\n", csvLines);
     }
 
     public Serializable getUserData() {
