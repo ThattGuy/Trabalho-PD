@@ -9,12 +9,12 @@ import java.net.Socket;
 public class ReceiveTCPClients extends Thread {
 
     private ServerSocket CliSocket = null;
-    private ServerInfo serverInfo;
+    private HandleRequests handleRequests;
     private ThreadGroup threadsClients;
-      public ReceiveTCPClients(int port,ServerInfo serverInfo)
+      public ReceiveTCPClients(int port, HandleRequests handleRequests)
       {
           try {
-              this.serverInfo = serverInfo;
+              this.handleRequests = handleRequests;
               CliSocket = new ServerSocket(port);
               this.threadsClients = new ThreadGroup("TCP Clients");
           }catch (Exception e)
@@ -35,7 +35,7 @@ public class ReceiveTCPClients extends Thread {
 
             System.out.println("Received client on receivetcpClients " + nextClient.getInetAddress() + ":" + nextClient.getPort());
 
-           new Thread(this.threadsClients, new HandleClient(nextClient, serverInfo)).start();
+           new Thread(this.threadsClients, new HandleClient(nextClient, handleRequests)).start();
 
         }
         catch (Exception e)

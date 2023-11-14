@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.server;
 
+import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.ServerPort;
 import pt.isec.pd.projetopd.communication.classes.User;
 
@@ -10,27 +11,25 @@ import java.net.Socket;
 public class HandleClient implements Runnable {
 
     private Socket socket;
-    private ServerInfo serverInfo;
+    private HandleRequests handleRequests;
+    //private ServerInfo serverInfo;
 
-    public HandleClient(Socket sock, ServerInfo serverInfo) {
+    public HandleClient(Socket sock, HandleRequests handle) {
         this.socket = sock;
-        this.serverInfo = serverInfo;
+        this.handleRequests = handle;
     }
 
     @Override
     public void run() {
-        System.out.println("I started on handle");
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
             sendPort(new ServerPort(7001), out);
             do{
                 Object o = in.readObject();
-                System.out.println("I Have received the info");
-                o = serverInfo.updateDB(o);
-                if(o instanceof User){
-                    System.out.println("Its being sent");
-                }
+                o = handleRequests.receive(o, out);
+                //o = serverInfo.updateDB(o,out);
+
                 out.writeObject(o);
 
                 out.flush();
@@ -60,7 +59,6 @@ public class HandleClient implements Runnable {
         //Criar objeto para enviar o Port
         try {
             out.writeObject(new ServerPort(7001));
-            System.out.println("I wrote");
 
             out.flush();
             out.reset();

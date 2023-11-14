@@ -3,6 +3,7 @@ package pt.isec.pd.projetopd.server;
 import pt.isec.pd.projetopd.communication.classes.*;
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 
@@ -16,49 +17,81 @@ import java.io.Serializable;
 public class HandleRequests {
 
     private DataBase ManDB;
+    private ServerInfo serverInfo;
 
-    public HandleRequests(String path){
+    public HandleRequests(String path, ServerInfo serverInfo){
         this.ManDB = new DataBase(path);
+        this.serverInfo = serverInfo;
     }
 
-    private Serializable handleResponse(Object o){
-        System.out.println(o.toString());
-        if(o instanceof REQUESTS){
-            if (o.equals(REQUESTS.PRESENCE)) {
-                System.out.println("Received Presence");
-            } else if (o.equals(REQUESTS.USER_DATA)) {
-                System.out.println("Received User Data");
-            } else {
-                System.out.println("Received unknown object");
+    private Serializable InterpretClientMessage(Object request, String ClientMail) {
+        System.out.println(request.toString());
+
+        Boolean isReturn = null;
+        switch (request) {
+            case REQUESTS requests -> {
+                return this.InterpretRequest(requests, ClientMail);
+            }
+            case Authentication auth -> {
+                return ManDB.CheckLogin(auth.getUsername(), auth.getPassword());
+            }
+            case User clientInfo -> {
+                isReturn = ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNif(), clientInfo.getId(), clientInfo.getAddress(), false);
+            }
+            case Presence presence -> {
+                isReturn = ManDB.registerPresence(presence.getcode(), ClientMail);
+            }
+            case Event event -> {
+                isReturn = ManDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
+                if(isReturn) return event;
+            }
+            default -> {
+                return RESPONSE.DECLINED;
             }
         }
 
-        else if(o instanceof Authentication) {
-            Authentication auth = (Authentication) o;
-
-            return ManDB.CheckLogin(auth.getUsername(), auth.getPassword());
-
-        }
+        if(isReturn == null || !isReturn)
+            return RESPONSE.DECLINED;
         else
-        if(o instanceof User) {
-            User clientInfo = (User) o;
-            ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNif(), clientInfo.getId(), clientInfo.getAddress(), false);
-            System.out.println("Received ClientInfo");
-            System.out.println( clientInfo.getUsername() + ": " + clientInfo.getId() + ": " + clientInfo.getStudentNumber());
-        }
-        else
-        if(o instanceof Presence){
-            Presence presence = (Presence) o;
-            System.out.println("Received Presence");
-            System.out.println( "Code: " + presence.getcode());
-        }
-        else {
-            System.out.println("Received unknown object");
-        }
-        return RESPONSE.DECLINED;
+            return RESPONSE.ACCEPTED;
+
     }
 
-    public Serializable receive(Object o){
-        return handleResponse(o);
+    public Serializable receive(Object request, ObjectOutputStream Clientout){
+        String mail =this.serverInfo.getClientMail(Clientout);
+        Serializable dbResponse = this.InterpretClientMessage(request, mail);
+
+        if(request instanceof Authentication && dbResponse instanceof User ) //Check if new client connecting
+        {
+            this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
+        }
+        else
+            if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
+                return dbResponse;
+
+            else  if(dbResponse instanceof Event)       //TODO: Perceber em que casos é que se deve enviar notificações
+            {
+                this.serverInfo.sendNotification(dbResponse, Clientout);
+            }
+
+        return dbResponse;
+    }
+
+
+    private Serializable InterpretRequest(REQUESTS request, String ClientMail)
+    {
+        switch (request){
+            case PRESENCE -> {
+                return ManDB.getPresence();
+            }
+            case CSV -> {
+                return ManDB.getCSV();
+            }
+            case USER_DATA -> {
+                return ManDB.getUserData();
+            }
+        }
+
+        return RESPONSE.DECLINED;
     }
 }

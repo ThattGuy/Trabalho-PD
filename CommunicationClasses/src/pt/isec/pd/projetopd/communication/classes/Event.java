@@ -20,6 +20,13 @@ public class Event implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getName() {return name;}
+    public String getLocation() {return location;}
+    public String getDate() {return date;}
+    public String getBeginning() {return beginning;}
+    public String getEndTime() {return endTime;}
+    public List<User> getUsers() {return users;}
+
     @Override
     public String toString() {
         return String.format("\"%s\";\"%s\";\"%s\";\"%s - %s\"", name, location, date, beginning, endTime);

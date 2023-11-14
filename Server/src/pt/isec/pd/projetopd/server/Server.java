@@ -91,8 +91,9 @@ public class Server
         ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
         SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
         NotificationThread notificationThread = new NotificationThread(7001);
-        ServerInfo serverInfo = new ServerInfo(args[1],sendHBeat, notificationThread);
-        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, serverInfo);
+        ServerInfo serverInfo = new ServerInfo(sendHBeat, notificationThread);
+        HandleRequests handleRequests = new HandleRequests(args[1], serverInfo);
+        ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, handleRequests);
 
 
 

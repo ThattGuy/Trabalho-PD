@@ -100,7 +100,7 @@ public class DataBase {
                 if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
 
                 if (resultSet.next()) {
-<<<<<<< HEAD
+
                     // Check if the user is an admin
                     boolean isAdmin = resultSet.getBoolean("admin");
 
@@ -111,11 +111,11 @@ public class DataBase {
                         // User is not an admin
                         return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     }
-=======
+
                     // User credentials are correct
 
-                    return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
->>>>>>> 41fe666ce4f1de9a4eb34f68f78d591e27f321a1
+                    //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+
                 } else {
                     // No matching username and password
                     return RESPONSE.DECLINED;
@@ -218,7 +218,7 @@ public class DataBase {
         }
     }
 
-    public boolean addEvent(String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
+    public boolean registerEvent(String designacao, String local, String data, String horaInicio, String horaFim, String userId) {
         String query = "INSERT INTO Event (Designacao, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -227,7 +227,7 @@ public class DataBase {
             preparedStatement.setString(3, data);
             preparedStatement.setString(4, horaInicio);
             preparedStatement.setString(5, horaFim);
-            preparedStatement.setInt(6, userId);
+            preparedStatement.setString(6, userId);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -275,5 +275,23 @@ public class DataBase {
         }
     }
 
+    //TODO: Implementar estes metodos
+    public Boolean registerPresence(int getcode, String clientMail)
+    {
+        return true;
+    }
+
+    public Serializable getPresence() {
+        return "presence";
+    }
+
+    public Serializable getCSV() {
+        return "csv";
+    }
+
+    public Serializable getUserData() {
+
+        return "user";
+    }
 }
 
