@@ -146,9 +146,13 @@ public class DataBase {
             System.err.println("Error verifying ID:" + e.getMessage());
             return false;
         }
-        if (existingIDCount > 0) {
+        if (existingIDCount > 0 && admin!=true) {
             System.err.println("ID already exists.");
             return false;
+        }else{
+            if(admin==true){
+                return false;
+            }
         }
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
