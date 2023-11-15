@@ -14,6 +14,7 @@ public class SendHBeat{
     public HbeatMessage InfoHbeatSend;
     private static String MULTICAST_ADDRES;
     private static int MULTICAST_PORT;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public SendHBeat(MulticastSocket socket, HbeatMessage InfoHbeatSend, String MULTICAST_ADDRESS, int MULTICAST_PORT) {
         this.socket = socket;
@@ -22,7 +23,6 @@ public class SendHBeat{
         this.MULTICAST_PORT = MULTICAST_PORT;
     }
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public void start() {
         scheduler.scheduleAtFixedRate(this::HeartBeat, 0, 10, TimeUnit.SECONDS);

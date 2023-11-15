@@ -7,9 +7,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ReceiveHbeat extends Thread{
     private final MulticastSocket ms;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ReceiveHbeat(MulticastSocket ms) {
         this.ms = ms;
@@ -22,6 +26,7 @@ public class ReceiveHbeat extends Thread{
     public void run() {
         try {
             while (true) {
+                ms.setSoTimeout(30000);
                 DatagramPacket dp = new DatagramPacket(new byte[256],256);
                 ms.receive(dp);
 
@@ -41,6 +46,7 @@ public class ReceiveHbeat extends Thread{
             }
         }
         catch ( IOException e ) {
+            System.out.println("[ERROR]: TIMEOUT: No heartbeat received");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

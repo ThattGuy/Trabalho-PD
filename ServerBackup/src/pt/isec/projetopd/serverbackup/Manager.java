@@ -30,11 +30,11 @@ public class Manager {
     public void start(){
         try
         {
-            MulticastSocket socket = new MulticastSocket(MULTICAST_PORT);
+            this.multicast = new MulticastSocket(MULTICAST_PORT);
             InetAddress ipGroup = InetAddress.getByName(MULTICAST_ADDRESS);
             NetworkInterface nif = NetworkInterface.getByInetAddress(ipGroup);
-            socket.joinGroup(new InetSocketAddress(ipGroup, MULTICAST_PORT), nif);
-            ReceiveHbeat receiveHbeat = new ReceiveHbeat(socket);
+            this.multicast.joinGroup(new InetSocketAddress(ipGroup, MULTICAST_PORT), nif);
+            ReceiveHbeat receiveHbeat = new ReceiveHbeat(this.multicast);
             receiveHbeat.start();
 
 
