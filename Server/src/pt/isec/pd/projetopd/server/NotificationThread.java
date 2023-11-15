@@ -14,26 +14,29 @@ import java.util.Objects;
 
 public class NotificationThread  extends Thread {
 
-    Map<String,ObjectOutputStream> clients;
+    private ArrayList<Socket> clients;
+   // Map<String,ObjectOutputStream> clients;
     private ServerSocket CliSocket = null;
     public NotificationThread(int port)
     {
+
         try {
             CliSocket = new ServerSocket(port);
         }catch (Exception e)
         {
             System.err.println("Error: " + e);
         }
-        clients = new HashMap<>();
+        clients = new ArrayList<>();
     }
 
-    public void sendNotifications(String mail, Object o) //send notifications to all clients except the one that sent the request
+    public void sendNotifications(Object o) //send notifications to all clients except the one that sent the request
     {
-        for (Map.Entry<String, ObjectOutputStream> entry : clients.entrySet()) {
+        /*for (Map.Entry<String, ObjectOutputStream> entry : clients.entrySet()) {
 
             if(!Objects.equals(entry.getKey(), mail)) {
 
                 ObjectOutputStream out = entry.getValue();
+
                 try {
                     out.writeObject(o);
                     out.flush();
@@ -44,6 +47,17 @@ public class NotificationThread  extends Thread {
 
             }
         }
+
+         */
+        for(Socket sock : clients){
+            try (ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream())){
+                out.writeObject(o);
+                out.flush();
+                out.reset();
+            } catch (Exception e) {
+                clients.remove(sock);
+            }
+        }
     }
 
     @Override
@@ -51,23 +65,12 @@ public class NotificationThread  extends Thread {
         for (; ; ) {
             try {
                 Socket client = CliSocket.accept(); //Aceita um novo cliente
-                ObjectOutputStream nextClient = new ObjectOutputStream(client.getOutputStream());
+                clients.add(client);
 
-                System.out.println("Received client on notification " + nextClient.toString());
-
-                client.setSoTimeout(500);
-
-                ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-                Object o = in.readObject();
-
-                if(o instanceof String) {
-                    clients.put((String) o, nextClient);
-                }
-                else{
-                    client.close();
-                }
+                System.out.println("Received client on notification ");
 
             }catch(SocketTimeoutException e) {
+
                 System.out.println("No client entered!");
             }
             catch (Exception e) {

@@ -38,8 +38,7 @@ public class ServerInfo {
         //this.sendHBeat.SendHeartBeat(databaseVersion);
     }
     public void sendNotification(Object data, ObjectOutputStream out){
-        String mail = this.getClientMail(out);
-        this.notifications.sendNotifications(mail, data);
+        this.notifications.sendNotifications(data);
     }
 
   /*  public Serializable updateDB(Object o, ObjectOutputStream out) {
@@ -56,7 +55,7 @@ public class ServerInfo {
         else if(aux instanceof RESPONSE)
             if(aux.equals(RESPONSE.DECLINED))
                 return aux;
-        else  //TODO: Perceber em que casos é que se deve enviar notificações
+        else
         {
             String mail = getClientMail(out);
             this.notifications.sendNotifications(mail, aux);

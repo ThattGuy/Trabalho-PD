@@ -1,11 +1,10 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.communication.classes.RESPONSE;
+
+import pt.isec.pd.projetopd.communication.classes.Authentication;
 import pt.isec.pd.projetopd.communication.classes.ServerPort;
-import pt.isec.pd.projetopd.communication.classes.User;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HandleClient implements Runnable {
@@ -21,23 +20,23 @@ public class HandleClient implements Runnable {
 
     @Override
     public void run() {
+
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-
             sendPort(new ServerPort(7001), out);
+
             do{
                 Object o = in.readObject();
+                if(o == null) { socket.close(); return;}
+
+                if(o instanceof Authentication) socket.setSoTimeout(10000);
+
                 o = handleRequests.receive(o, out);
-                //o = serverInfo.updateDB(o,out);
 
                 out.writeObject(o);
-
                 out.flush();
                 out.reset();
-
             }while(true);
-
-
 
 
         }catch(IOException e){
@@ -50,7 +49,6 @@ public class HandleClient implements Runnable {
             } catch (IOException e) {
             }
         }
-
     }
 
 

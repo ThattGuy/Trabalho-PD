@@ -7,7 +7,9 @@ import pt.isec.pd.projetopd.communication.classes.User;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataBase {
     Connection con;
@@ -67,6 +69,54 @@ public class DataBase {
             System.err.println("Error creating tables: " + e.getMessage());
         }
     }
+
+    public List<Map<String, Object>> getDatabaseCopy() throws SQLException {
+
+        List<Map<String, Object>> databaseCopy = new ArrayList<>();
+
+        try  {
+            DatabaseMetaData metaData = con.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
+
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                databaseCopy.addAll(getDataFromTable(con, tableName));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions appropriately based on your application's needs
+        }
+
+        return databaseCopy;
+    }
+
+    private List<Map<String, Object>> getDataFromTable(Connection connection, String tableName) throws SQLException {
+        List<Map<String, Object>> tableData = new ArrayList<>();
+
+        String sql = "SELECT * FROM " + tableName;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            while (resultSet.next()) {
+                Map<String, Object> record = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    Object value = resultSet.getObject(i);
+                    record.put(columnName, value);
+                }
+
+                tableData.add(record);
+            }
+        }
+
+        return tableData;
+    }
+
+
 
     public boolean verifyAdmin(int userId) {
         String query = "SELECT admin FROM User WHERE id = ?";
@@ -324,7 +374,8 @@ public class DataBase {
         return String.join("\n", presenceList);
     }
 
-    public Serializable getCSV(int userId) {
+    //TODO: xico mudei aqui para string mas faz mais mudancas que sejam precisas! so mudei onde tava a dar erro (ja te mando o mail do user)
+    public Serializable getCSV(String mail) {
         List<String> csvLines = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", UserEvent.user_id, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
@@ -334,7 +385,7 @@ public class DataBase {
                 "WHERE UserEvent.user_id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(1, mail);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 csvLines.add("\"Nome\";\"Número identificação\";\"Email\"");

@@ -1,5 +1,7 @@
 package pt.isec.pd.projetopd.server.HeartBeat;
 
+import pt.isec.pd.projetopd.communication.classes.HbeatMessage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,9 +25,9 @@ public class ReceiveHBeat implements Runnable{
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(packet.getData(), 0, packet.getLength()));
             Object o = ois.readObject();
 
-            if(o instanceof ServerInfoHBeat)
+            if(o instanceof HbeatMessage)
             {
-                ServerInfoHBeat info = (ServerInfoHBeat) o;
+                HbeatMessage info = (HbeatMessage) o;
                 //Update databse version
             }
 

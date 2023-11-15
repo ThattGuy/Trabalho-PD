@@ -1,7 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
-import pt.isec.pd.projetopd.server.HeartBeat.ServerInfoHBeat;
+import pt.isec.pd.projetopd.communication.classes.HbeatMessage;
 
 import java.net.*;
 import java.io.*;
@@ -88,8 +88,8 @@ public class Server
             System.err.println("Syntax <portUDP>");
 
         Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
-        ServerInfoHBeat serverInfoHBeat = new ServerInfoHBeat(server.RMI, server.REGISTRY_PORT, server.DATABASE_PATH);
-        SendHBeat sendHBeat = new SendHBeat(server.socket, serverInfoHBeat, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
+        HbeatMessage hbeatMessage = new HbeatMessage(server.RMI, server.REGISTRY_PORT);
+        SendHBeat sendHBeat = new SendHBeat(server.socket, hbeatMessage, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
         NotificationThread notificationThread = new NotificationThread(7001);
         ServerInfo serverInfo = new ServerInfo(sendHBeat, notificationThread);
         HandleRequests handleRequests = new HandleRequests(args[1], serverInfo);
