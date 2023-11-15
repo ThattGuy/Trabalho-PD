@@ -374,7 +374,7 @@ public class DataBase {
         return String.join("\n", presenceList);
     }
 
-    //TODO: xico mudei aqui para string mas faz mais mudancas que sejam precisas! so mudei onde tava a dar erro (ja te mando o mail do user)
+
     public Serializable getCSV(String mail) {
         List<String> csvLines = new ArrayList<>();
 
@@ -409,9 +409,30 @@ public class DataBase {
         return String.join("\n", csvLines);
     }
 
-    public Serializable getUserData() {
+    public User getUserData(String email) {
+        String query = "SELECT * FROM User WHERE email = ?";
 
-        return "user";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, email);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String username = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+                    String name = resultSet.getString("name");
+                    int studentNumber = resultSet.getInt("studentNumber");
+                    int nif = resultSet.getInt("nif");
+                    String id = resultSet.getString("id");
+                    String address = resultSet.getString("address");
+
+                    return new User(username, password, name, studentNumber, nif, id, address);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting user data: " + e.getMessage());
+        }
+
+        return null;
     }
 }
 
