@@ -107,10 +107,8 @@ public class DataBase {
                     boolean isAdmin = resultSet.getBoolean("admin");
 
                     if (isAdmin) {
-                        // User is an admin
                         return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     } else {
-                        // User is not an admin
                         return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     }
 
@@ -297,8 +295,33 @@ public class DataBase {
         }
     }
 
-    public Serializable getPresence() {
-        return "presence";
+    public Serializable getPresence(int eventId) {
+        List<String> presenceList = new ArrayList<>();
+
+        String query = "SELECT User.username, User.name, User.studentNumber, User.email " +
+                "FROM UserEvent " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.event_id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+
+                while (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    int studentNumber = resultSet.getInt("studentNumber");
+                    String email = resultSet.getString("email");
+
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";\"" + email + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence: " + e.getMessage());
+        }
+
+        return String.join("\n", presenceList);
     }
 
     public Serializable getCSV(int userId) {
