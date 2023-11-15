@@ -301,7 +301,8 @@ public class DataBase {
         return "presence";
     }
 
-    public Serializable getCSV(int userId) {
+    //TODO: xico mudei aqui para string mas faz mais mudancas que sejam precisas! so mudei onde tava a dar erro (ja te mando o mail do user)
+    public Serializable getCSV(String mail) {
         List<String> csvLines = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", UserEvent.user_id, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
@@ -311,7 +312,7 @@ public class DataBase {
                 "WHERE UserEvent.user_id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(1, mail);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 csvLines.add("\"Nome\";\"Número identificação\";\"Email\"");

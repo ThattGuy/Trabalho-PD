@@ -85,7 +85,7 @@ public class HandleRequests {
                 return ManDB.getPresence();
             }
             case CSV -> {
-                return ManDB.getCSV(2);//Enviar id do user com o qual quer imprimir as presenças em csv
+                return ManDB.getCSV(ClientMail);//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             case USER_DATA -> {
                 return ManDB.getUserData();

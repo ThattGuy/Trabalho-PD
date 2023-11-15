@@ -1,5 +1,7 @@
 package pt.isec.pd.projetopd.server.HeartBeat;
 
+import pt.isec.pd.projetopd.communication.classes.HbeatMessage;
+
 import java.net.*;
 import java.io.*;
 import java.util.concurrent.Executors;
@@ -9,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 public class SendHBeat{
 
     public MulticastSocket socket;
-    public ServerInfoHBeat InfoHbeatSend;
+    public HbeatMessage InfoHbeatSend;
     private static String MULTICAST_ADDRES;
     private static int MULTICAST_PORT;
 
-    public SendHBeat(MulticastSocket socket, ServerInfoHBeat InfoHbeatSend, String MULTICAST_ADDRESS, int MULTICAST_PORT) {
+    public SendHBeat(MulticastSocket socket, HbeatMessage InfoHbeatSend, String MULTICAST_ADDRESS, int MULTICAST_PORT) {
         this.socket = socket;
         this.InfoHbeatSend = InfoHbeatSend;
         this.MULTICAST_ADDRES = MULTICAST_ADDRESS;
@@ -44,6 +46,7 @@ public class SendHBeat{
                 ous.flush();
                 var packet = new DatagramPacket(bout.toByteArray(), bout.size(), InetAddress.getByName(MULTICAST_ADDRES), MULTICAST_PORT);
                 socket.send(packet);
+                System.out.println("Heartbeat sent");
             } catch (Exception e) {
                 //e.printStackTrace();
                 System.err.println("Error: " + e);
