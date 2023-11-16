@@ -331,6 +331,7 @@ public class DataBase {
     }
 
     public boolean registerPresence(int code, String clientMail) {
+        //todo verificar se o user já não tem uma presença registada na mesma hora
         String query = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {

@@ -34,7 +34,8 @@ public class RootPane extends BorderPane {
                 new SelectOptUI(manager),
                 new SelectOptAdminUI(manager),
                 new CreateEventUI(manager),
-                new RegisterPresenceUI(manager)
+                new RegisterPresenceUI(manager),
+                new EditInfoUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");

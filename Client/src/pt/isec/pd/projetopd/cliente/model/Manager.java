@@ -46,4 +46,27 @@ public class Manager implements TCPReceive.MessageReceivedListener {
         return fsm.getUserName();
     }
 
+    public String getName() {
+        return fsm.getName();
+    }
+
+    public int getStudentNumber() {
+        return fsm.getStudentNumber();
+    }
+
+    public int getNIF() {
+        return fsm.getNIF();
+    }
+
+    public String getID() {
+        return fsm.getID();
+    }
+
+    public String getAddress() {
+        return fsm.getAdress();
+    }
+
+    public boolean isUserAdmin() {
+        return fsm.isUserAdmin();
+    }
 }
