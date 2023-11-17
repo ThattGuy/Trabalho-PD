@@ -18,7 +18,7 @@ public class ViewEventPresences extends ClientStateAdapter {
             case SUBMIT -> {
 
             }
-            case BACK -> changeState(context.getLastState());
+            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
         }
 
         return true;

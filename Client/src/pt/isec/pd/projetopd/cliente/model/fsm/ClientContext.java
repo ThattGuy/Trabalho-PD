@@ -74,5 +74,4 @@ public class ClientContext {
         return data.isUserAdmin();
     }
 
-
 }

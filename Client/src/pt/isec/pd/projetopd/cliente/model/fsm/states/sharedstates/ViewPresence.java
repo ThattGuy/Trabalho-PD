@@ -20,7 +20,7 @@ public class ViewPresence extends ClientStateAdapter {
 
         switch (opt){
             case CSV -> data.sendToServer(REQUESTS.CSV);
-            case BACK -> changeState(context.getLastState());
+            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
         }
 
         return true;

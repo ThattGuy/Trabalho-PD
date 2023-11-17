@@ -5,9 +5,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
+import pt.isec.pd.projetopd.cliente.ui.uistates.UserInfoUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.admin.CreateEventUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.admin.SelectOptAdminUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.shared.*;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 public class RootPane extends BorderPane {
     Manager manager;
@@ -37,6 +39,9 @@ public class RootPane extends BorderPane {
                 new RegisterPresenceUI(manager),
                 new EditInfoUI(manager)
         );
+        UserInfoUI userInfoUI = new UserInfoUI(manager);
+        userInfoUI.setPrefWidth(200); // Adjust the width as needed
+        this.setLeft(userInfoUI);
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");
         StackPane.setAlignment(watermark, Pos.BOTTOM_RIGHT);
@@ -50,19 +55,6 @@ public class RootPane extends BorderPane {
 
         this.setCenter(stackPane);
     }
-
-    /**
-     * regista o handler START
-     */
-    /*private void registerHandlers() {
-        manager.addPropertyChangeListener(Manager.START, evt -> {
-            update();
-        });
-    }*/
-
-    /**
-     * assim que o evento START acontece é criado a InfoUI
-     */
 
 }
 
