@@ -17,7 +17,10 @@ public class ReceiveTCPClients extends Thread {
               this.handleRequests = handleRequests;
               CliSocket = new ServerSocket(port);
               this.threadsClients = new ThreadGroup("TCP Clients");
-          }catch (Exception e)
+          }catch(RuntimeException s){
+
+          }
+          catch (Exception e)
           {
               System.err.println("Error: " + e);
           }
