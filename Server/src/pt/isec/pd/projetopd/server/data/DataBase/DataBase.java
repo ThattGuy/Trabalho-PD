@@ -405,7 +405,6 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence CSV: " + e.getMessage());
         }
-
         return String.join("\n", csvLines);
     }
 
