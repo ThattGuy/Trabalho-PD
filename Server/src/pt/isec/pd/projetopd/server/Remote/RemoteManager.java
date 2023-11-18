@@ -13,15 +13,16 @@ public class RemoteManager {
     Registry registry;
     GetRemote getRemote;
     int port_registry;
-    DataBaseCopy dbRemote;
-    public RemoteManager(DataBase db, int port) throws RemoteException {
+    public RemoteManager(DataBase db, int port) {
         super();
         try{
-            this.dbRemote= new DataBaseCopy(db.getDatabaseCopy()) ;
-            this.getRemote = new GetRemote(db);
-            this.start();
+            DataBaseCopy copy = new DataBaseCopy(db.getDatabaseCopy()) ;
+            this.getRemote = new GetRemote(copy);
             this.port_registry = port;
-        }catch (Exception e){}
+            this.start();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
 
     }
     private void start()
@@ -29,7 +30,7 @@ public class RemoteManager {
         try {
             this.registry = LocateRegistry.createRegistry(port_registry);
             //this.registry.rebind("GetDB", this.updateDB);
-            this.dbRemote = (DataBaseCopy) UnicastRemoteObject.exportObject(this.getRemote, 0);
+            this.getRemote = (GetRemote) UnicastRemoteObject.exportObject(this.getRemote, 0);
 
         } catch (RemoteException e) {
             e.printStackTrace();

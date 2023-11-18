@@ -2,6 +2,7 @@ package pt.isec.projetopd.serverbackup;
 
 import pt.isec.projetopd.serverbackup.HeartBeat.ReceiveHbeat;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -18,13 +19,21 @@ public class Manager {
     public Manager(String path)
     {
         try {
-        DBpath = path;
-        this.multicast = new MulticastSocket(MULTICAST_PORT);
-        this.start();
+            if(!checkPath(path)); //TODO: TIRAR DE COMENTARIO! ESTA EM DEBUG ASSIM
+               // throw new RuntimeException("Path is not valid");
+            this.DBpath = path;
+            this.multicast = new MulticastSocket(MULTICAST_PORT);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("EXIT: The directory is not valid.");
         }
+    }
+
+
+    public boolean checkPath(String path)  {
+        File directory = new File(path);
+
+        return directory.exists() && directory.isDirectory() && directory.length() == 0;
     }
 
     public void start(){
@@ -39,9 +48,8 @@ public class Manager {
 
 
         }
-        catch (Exception e)
-        {
-            System.err.println("Error: " + e);
+        catch(RuntimeException | IOException e){
+            throw new RuntimeException(e);
         }
     }
 }

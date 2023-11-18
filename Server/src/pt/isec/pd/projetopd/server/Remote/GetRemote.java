@@ -4,17 +4,19 @@ import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+import java.util.Map;
 
 public class GetRemote extends UnicastRemoteObject implements UpdateDB{
 
-    private DataBase dbManager;
+    private List<Map<String, Object>> database;
 
-    protected GetRemote(DataBase db) throws RemoteException {
-        this.dbManager = db;
+    protected GetRemote(DataBaseCopy db) throws RemoteException {
+        this.database = db.getDatabase();
     }
 
     @Override
-    public void getDB() throws RemoteException {
-
+    public List<Map<String, Object>> getDB() throws RemoteException {
+        return this.database;
     }
 }

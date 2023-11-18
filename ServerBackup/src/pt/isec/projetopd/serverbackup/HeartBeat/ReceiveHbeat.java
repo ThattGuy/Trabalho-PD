@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ReceiveHbeat extends Thread{
     private final MulticastSocket ms;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ReceiveHbeat(MulticastSocket ms) {
         this.ms = ms;
@@ -25,7 +24,8 @@ public class ReceiveHbeat extends Thread{
     @Override
     public void run() {
         try {
-            while (true) {
+            for(;;) {
+
                 ms.setSoTimeout(30000);
                 DatagramPacket dp = new DatagramPacket(new byte[256],256);
                 ms.receive(dp);
@@ -34,9 +34,10 @@ public class ReceiveHbeat extends Thread{
                 ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(dp.getData(), 0, dp.getLength()));
                 Object o = ois.readObject();
 
-                if(o instanceof HbeatMessage)
+                if(o instanceof HbeatMessage info)
                 {
-                    HbeatMessage info = (HbeatMessage) o;
+                    if(((HbeatMessage) o).getDatabaseVersion() == 0)//TODO: Verifcar se versao BD local igual a que vem no hbeat
+                        throw new IOException("Database version is 0");
                     System.out.println("Received heartbeat from " + info.getRMI() + " " + info.getRegistryPort());
                     //TODO: Update databse version
                 }
@@ -46,9 +47,9 @@ public class ReceiveHbeat extends Thread{
             }
         }
         catch ( IOException e ) {
-            System.out.println("[ERROR]: TIMEOUT: No heartbeat received");
+            throw new IllegalStateException("EXIT: TIMEOUT: No heartbeat received");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("EXIT : Local database is not up to date");
         }
     }
 }

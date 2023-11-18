@@ -6,7 +6,7 @@ import java.io.Serializable;
  * classe para Registo
  */
 
-public class  User implements Serializable {
+public class User implements Serializable {
 
     private String username;
     private String password;
@@ -15,6 +15,7 @@ public class  User implements Serializable {
     private int nif;
     private String id;
     private String address;
+
     public User(String username, String password, String name, int studentNumber, int nif, String id, String address) {
         this.username = username;
         this.password = password;
@@ -41,7 +42,7 @@ public class  User implements Serializable {
         return studentNumber;
     }
 
-    public int getNif() {
+    public int getNIF() {
         return nif;
     }
 
@@ -52,4 +53,6 @@ public class  User implements Serializable {
     public String getAddress() {
         return address;
     }
+
+
 }

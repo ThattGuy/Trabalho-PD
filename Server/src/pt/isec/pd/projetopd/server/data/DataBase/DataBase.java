@@ -4,6 +4,7 @@ import pt.isec.pd.projetopd.communication.classes.Admin;
 import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.User;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class DataBase {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error getting database copy: ");
             // Handle exceptions appropriately based on your application's needs
         }
 
@@ -330,6 +331,7 @@ public class DataBase {
     }
 
     public boolean registerPresence(int code, String clientMail) {
+        //todo verificar se o user já não tem uma presença registada na mesma hora
         String query = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {

@@ -49,4 +49,29 @@ public class ClientContext {
     public String getUserName() {
         return data.getUserName();
     }
+
+    public String getName() {
+        return data.getName();
+    }
+
+    public int getStudentNumber() {
+        return data.getStudentNumber();
+    }
+
+    public int getNIF() {
+        return data.getNIF();
+    }
+
+    public String getID() {
+        return data.getID();
+    }
+
+    public String getAdress() {
+        return data.getAddress();
+    }
+
+    public boolean isUserAdmin() {
+        return data.isUserAdmin();
+    }
+
 }

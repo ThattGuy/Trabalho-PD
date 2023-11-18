@@ -41,7 +41,7 @@ public class RegisterUser extends ClientStateAdapter {
                     return false;
                 }
             }
-            case BACK -> changeState(context.getLastState());
+            case BACK -> changeState(ClientStates.INITIAL);
         }
         return true;
     }

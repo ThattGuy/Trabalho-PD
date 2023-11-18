@@ -24,12 +24,11 @@ public class HandleClient implements Runnable {
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             sendPort(new ServerPort(7001), out);
-
+            socket.setSoTimeout(10000);
             do{
                 Object o = in.readObject();
                 if(o == null) { socket.close(); return;}
 
-                if(o instanceof Authentication) socket.setSoTimeout(10000);
 
                 o = handleRequests.receive(o, out);
 

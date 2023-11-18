@@ -19,7 +19,7 @@ public class SelectOptionAdmin extends ClientStateAdapter {
             case CREATE_EVENT -> changeState(ClientStates.CREATE_EVENT);
             case EDIT_DATA -> changeState(ClientStates.EDIT_USER_DATA);
             case VIEW_EVENTS -> changeState(ClientStates.VIEW_EVENTS);
-            case LOGOUT -> changeState(ClientStates.INITIAL);//TODO
+            case LOGOUT -> changeState(ClientStates.INITIAL);
         }
 
         return true;

@@ -9,5 +9,9 @@ public class DataBaseCopy {
     public DataBaseCopy(List<Map<String, Object>> database) {
         this.database = database;
     }
+
+    public List<Map<String, Object>> getDatabase() {
+        return database;
+    }
 }
 

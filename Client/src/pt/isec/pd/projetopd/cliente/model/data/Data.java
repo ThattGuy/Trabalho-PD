@@ -86,7 +86,42 @@ public class Data {
 
     public String getUserName() {
         if(userInfo != null){
+            return userInfo.getUsername();
+        }
+        return null;
+    }
+
+    public String getName() {
+        if(userInfo != null){
             return userInfo.getName();
+        }
+        return null;
+    }
+
+    public int getStudentNumber() {
+        if(userInfo != null){
+            return userInfo.getStudentNumber();
+        }
+        return 0;
+    }
+
+    public int getNIF() {
+        if(userInfo != null){
+            return userInfo.getNIF();
+        }
+        return 0;
+    }
+
+    public String getID() {
+        if(userInfo != null){
+            return userInfo.getId();
+        }
+        return null;
+    }
+
+    public String getAddress() {
+        if(userInfo != null){
+            return userInfo.getAddress();
         }
         return null;
     }

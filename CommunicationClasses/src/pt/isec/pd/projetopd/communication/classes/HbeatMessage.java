@@ -19,6 +19,7 @@ public class HbeatMessage implements Serializable {
     public int getRegistryPort() {
         return REGISTRY_PORT;
     }
+    public int getDatabaseVersion(){return this.databaseVersion;}
 
 
     public void updateDBVersion(int version){
