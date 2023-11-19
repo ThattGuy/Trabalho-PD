@@ -332,10 +332,35 @@ public class DataBase {
     }
 
     public boolean registerPresence(int code, String clientMail) {
-        //todo verificar se o user já não tem uma presença registada na mesma hora
-        String query = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
+        String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
+                "AND Event.id = ?";
 
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+        int existingPresenceCount = 0;
+
+        try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
+            checkStatement.setString(1, clientMail);
+            checkStatement.setInt(2, code);
+
+            try (ResultSet resultSet = checkStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    existingPresenceCount = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking existing presence: " + e.getMessage());
+            return false;
+        }
+
+        if (existingPresenceCount > 0) {
+            System.err.println("User already has a presence registered for the event.");
+            return false;
+        }
+
+        String insertQuery = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
             preparedStatement.setInt(2, code);
 
@@ -381,7 +406,6 @@ public class DataBase {
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
         List<String> presenceList = new ArrayList<>();
 
-        // Consulta SQL com filtro de intervalo de horas
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
@@ -544,7 +568,6 @@ public class DataBase {
     public List<String> getPresenceByEventName(String mail, String eventName) {
         List<String> presenceList = new ArrayList<>();
 
-        // Consulta SQL com filtro pelo nome do evento
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
