@@ -4,6 +4,7 @@ import pt.isec.pd.projetopd.communication.classes.Admin;
 import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.User;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
@@ -377,10 +378,45 @@ public class DataBase {
     }
 
 
-    public Serializable getCSV(String mail) {
+    public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
+        List<String> presenceList = new ArrayList<>();
+
+        // Consulta SQL com filtro de intervalo de horas
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+                "FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.user_id = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, mail);
+            preparedStatement.setString(2, startTime);
+            preparedStatement.setString(3, endTime);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+
+                while (resultSet.next()) {
+                    String designacao = resultSet.getString("Designacao");
+                    String local = resultSet.getString("Local");
+                    String data = resultSet.getString("Data");
+                    String horaInicio = resultSet.getString("HoraInicio");
+                    String horaFim = resultSet.getString("HoraFim");
+
+                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence within time range: " + e.getMessage());
+        }
+
+        return presenceList;
+    }
+
+    public void generateCSV(String mail, String filePath) {
         List<String> csvLines = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", UserEvent.user_id, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -391,7 +427,7 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 csvLines.add("\"Nome\";\"Número identificação\";\"Email\"");
-                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "\";\"" + resultSet.getString("user_id") + "\"");
+                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "\";\"" + resultSet.getString("email") + "\"");
 
                 csvLines.add("\"Designação\";\"Local\";\"Data\";\"Horainício\"");
 
@@ -407,7 +443,15 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence CSV: " + e.getMessage());
         }
-        return String.join("\n", csvLines);
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            for (String line : csvLines) {
+                writer.write(line + "\n");
+            }
+            System.out.println("CSV file generated successfully at: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error writing CSV file: " + e.getMessage());
+        }
     }
 
     public User getUserData(String email) {
@@ -435,5 +479,101 @@ public class DataBase {
 
         return null;
     }
+
+    public List<String> getPresenceForEvent(int eventId) {
+        List<String> presenceList = new ArrayList<>();
+
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email " +
+                "FROM UserEvent " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.event_id = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+
+                while (resultSet.next()) {
+                    String name = resultSet.getString("Nome");
+                    int studentNumber = resultSet.getInt("Número identificação");
+                    String email = resultSet.getString("email");
+
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";\"" + email + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence for event: " + e.getMessage());
+        }
+
+        return presenceList;
+    }
+
+    public List<String> getPresenceForUser(String userEmail) {
+        List<String> presenceList = new ArrayList<>();
+
+        String query = "SELECT Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+                "FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE User.email = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, userEmail);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                presenceList.add("\"Designação\";\"Local\";\"Data\";\"Horainício\";\"Horafim\"");
+
+                while (resultSet.next()) {
+                    String designacao = resultSet.getString("Designacao");
+                    String local = resultSet.getString("Local");
+                    String data = resultSet.getString("Data");
+                    String horaInicio = resultSet.getString("HoraInicio");
+                    String horaFim = resultSet.getString("HoraFim");
+
+                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence for user: " + e.getMessage());
+        }
+
+        return presenceList;
+    }
+
+    public List<String> getPresenceByEventName(String mail, String eventName) {
+        List<String> presenceList = new ArrayList<>();
+
+        // Consulta SQL com filtro pelo nome do evento
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+                "FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.user_id = ? AND Event.Designacao = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, mail);
+            preparedStatement.setString(2, eventName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+
+                while (resultSet.next()) {
+                    String designacao = resultSet.getString("Designacao");
+                    String local = resultSet.getString("Local");
+                    String data = resultSet.getString("Data");
+                    String horaInicio = resultSet.getString("HoraInicio");
+                    String horaFim = resultSet.getString("HoraFim");
+
+                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting presence by event name: " + e.getMessage());
+        }
+
+        return presenceList;
+    }
+
 }
 
