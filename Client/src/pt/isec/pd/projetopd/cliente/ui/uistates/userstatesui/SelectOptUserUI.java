@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -76,7 +77,7 @@ public class SelectOptUserUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> { update(); });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnRegisterPresence.setOnAction(event -> {
             manager.selectOption(OPTIONS.REG_PRESENCE, null);
@@ -101,14 +102,16 @@ public class SelectOptUserUI extends BorderPane {
             return;
         }
 
-        Label userName = new Label(manager.getUserName());
+        setVisible(true);
+
+       Label userName = new Label(manager.getUserName());
 
         userName.setStyle("-fx-font-size: 20;");
 
         userInfo.getChildren().clear();
         userInfo.getChildren().add(userName);
 
-        setVisible(true);
+
     }
 
 }
