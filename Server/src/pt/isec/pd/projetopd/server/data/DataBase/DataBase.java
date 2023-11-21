@@ -183,23 +183,38 @@ public class DataBase {
 
 
     public Serializable register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
-
-        String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
+        String checkIDQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
+        String checkUsernameQuery = "SELECT COUNT(*) FROM User WHERE username = ?";
         int existingIDCount = 0;
-        try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
-            checkStatement.setString(1, id);
-            try (ResultSet resultSet = checkStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    existingIDCount = resultSet.getInt(1);
+        int existingUsernameCount = 0;
+
+        try (PreparedStatement checkIDStatement = con.prepareStatement(checkIDQuery);
+             PreparedStatement checkUsernameStatement = con.prepareStatement(checkUsernameQuery)) {
+
+            checkIDStatement.setString(1, id);
+            try (ResultSet idResultSet = checkIDStatement.executeQuery()) {
+                if (idResultSet.next()) {
+                    existingIDCount = idResultSet.getInt(1);
                 }
             }
+
+            checkUsernameStatement.setString(1, username);
+            try (ResultSet usernameResultSet = checkUsernameStatement.executeQuery()) {
+                if (usernameResultSet.next()) {
+                    existingUsernameCount = usernameResultSet.getInt(1);
+                }
+            }
+
         } catch (SQLException e) {
-            return "Error verifying ID:" + e.getMessage();
+            return "Error verifying ID or email: " + e.getMessage();
         }
-        if (existingIDCount > 0 && admin!=true) {
+
+        if (existingIDCount > 0 && admin != true) {
             return "ID already exists.";
-        }else{
-            if(admin==true){
+        } else if (existingUsernameCount > 0) {
+            return "Email already exists.";
+        } else {
+            if (admin) {
                 return "Admin";
             }
         }
