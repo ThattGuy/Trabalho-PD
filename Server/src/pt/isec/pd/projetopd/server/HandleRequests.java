@@ -45,6 +45,9 @@ public class HandleRequests {
                 isReturn = ManDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
                 if(isReturn) return event;
             }
+            case EventPresence eventPresence -> {
+                return (Serializable) ManDB.getEventPresence(eventPresence.getEvent().getName().toString());
+            }
             default -> {
                 return RESPONSE.DECLINED;
             }

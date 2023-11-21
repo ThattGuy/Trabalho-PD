@@ -504,7 +504,7 @@ public class DataBase {
         return null;
     }
 
-    public List<String> getPresenceForEvent(int eventId) {
+    public List<String> getEventPresence(String eventName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
@@ -513,7 +513,8 @@ public class DataBase {
                 "WHERE UserEvent.event_id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, eventId);
+            // Assuming event_id is a string in your database, use setString
+            preparedStatement.setString(1, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 presenceList.add("\"Nome\";\"Número identificação\"");
@@ -531,6 +532,7 @@ public class DataBase {
 
         return presenceList;
     }
+
 
     public List<String> getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();

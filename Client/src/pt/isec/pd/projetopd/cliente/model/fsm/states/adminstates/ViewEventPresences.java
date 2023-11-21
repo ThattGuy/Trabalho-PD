@@ -9,6 +9,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
+        //todo enviar evento
     }
 
     @Override
