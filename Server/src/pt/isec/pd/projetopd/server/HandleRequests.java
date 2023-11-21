@@ -72,7 +72,7 @@ public class HandleRequests {
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-            else  if(dbResponse instanceof Event)       //TODO: Perceber em que casos é que se deve enviar notificações
+            else  if(dbResponse instanceof Event)//TODO: Perceber em que casos é que se deve enviar notificações
             {
                 this.serverInfo.sendNotification(dbResponse, Clientout);
             }
@@ -81,18 +81,18 @@ public class HandleRequests {
     }
 
 
-    private Serializable InterpretRequest(REQUESTS request, String ClientMail)
+    private Serializable InterpretRequest(REQUESTS request, String clientMail)
     {
         switch (request){
             case PRESENCE -> {
-                return ManDB.getPresenceForUser();//Enviar id do evento com o qual quer ver as presenças
+                return (Serializable) ManDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
-                ManDB.generateCSV(ClientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
+                ManDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
             case USER_DATA -> {
-                return ManDB.getUserData(ClientMail);
+                return ManDB.getUserData(clientMail);
             }
         }
 
