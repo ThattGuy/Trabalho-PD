@@ -48,12 +48,12 @@ public class BackupServer {
             args = new String[] {
                     //"10.65.151.234",
                     "10.204.129.94",
-                    "src/pt/isec/pd/ex18/files",
-                    "foto3.jpg"
+                    "../",
+                    "database.db"
             };
         }
 
-        objectUrl = "rmi://"+args[0]+"/servidor-ficheiros-pd";
+        objectUrl = "rmi://localhost/servidor-ficheiros-pd";
         localDirectory = new File(args[1].trim());
         fileName = args[2].trim();
 
@@ -78,6 +78,7 @@ public class BackupServer {
             return;
         }
 
+
         try(FileOutputStream localFileOutputStream = new FileOutputStream(localFilePath)){ //Cria o ficheiro local
 
             System.out.println("Ficheiro " + localFilePath + " criado.");
@@ -85,23 +86,27 @@ public class BackupServer {
             /*
              * Obtem a referencia remota para o servico com nome "servidor-ficheiros-pd".
              */
+
             remoteFileService = (ServerInterface) Naming.lookup(objectUrl);
 
             /*
              * Lanca o servico local para acesso remoto por parte do servidor.
              */
+
             myRemoteService = new ServerBackupFileServer();
 
             /*
              * Passa ao servico RMI LOCAL uma referencia para o objecto localFileOutputStream.
              */
+
             myRemoteService.setFout(localFileOutputStream);
 
             /*
              * Obtem o ficheiro pretendido, invocando o metodo getFile no servico remoto.
              */
 
-            remoteFileService.getFile(fileName,myRemoteService);
+                remoteFileService.getFile(fileName,myRemoteService);
+
 
         }catch(RemoteException e){
             System.out.println("Erro remoto - " + e);

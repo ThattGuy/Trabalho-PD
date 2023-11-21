@@ -103,6 +103,7 @@ public class ServerFile extends UnicastRemoteObject implements ServerInterface {
                  * sua interface remota.
                  */
 
+
                 cliRemoto.writeFileChunk(fileChunk, nbytes);
 
             }
@@ -148,11 +149,11 @@ public class ServerFile extends UnicastRemoteObject implements ServerInterface {
         /*
          * Trata os argumentos da linha de comando
          */
-        System.setProperty("java.rmi.server.hostname", "10.204.129.94");
+        System.setProperty("java.rmi.server.hostname", "localhost");
         if(args.length != 1){
             System.out.println("Sintaxe: java GetFileUdpServer localRootDirectory");
             //return;
-            args = new String[] {"src/pt/isec/pd/ex18/serverFiles"};
+            args = new String[] {"../"};
         }
 
         localDirectory = new File(args[0].trim());
@@ -202,7 +203,7 @@ public class ServerFile extends UnicastRemoteObject implements ServerInterface {
              * obter a sua referencia remota (endereco IP, porto de escuta, etc.).
              */
 
-            Naming.bind("rmi://localhost/" + SERVICE_NAME, fileService);
+            Naming.bind("//localhost/" + SERVICE_NAME, fileService);
 
             System.out.println("Servico " + SERVICE_NAME + " registado no registry...");
 
