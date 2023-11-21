@@ -385,13 +385,13 @@ public class DataBase {
             preparedStatement.setInt(1, eventId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\";");
+                presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
                     String name = resultSet.getString("name");
                     int studentNumber = resultSet.getInt("studentNumber");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";");
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\"");
                 }
             }
         } catch (SQLException e) {
@@ -450,7 +450,7 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 csvLines.add("\"Nome\";\"Número identificação\"");
-                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "\"");
+                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "");
 
                 csvLines.add("\"Designação\";\"Local\";\"Data\";\"Horainício\"");
 
@@ -505,7 +505,7 @@ public class DataBase {
     public List<String> getPresenceForEvent(int eventId) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\" " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.event_id = ?";
@@ -520,7 +520,7 @@ public class DataBase {
                     String name = resultSet.getString("Nome");
                     int studentNumber = resultSet.getInt("Número identificação");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";\"");
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "");
                 }
             }
         } catch (SQLException e) {
@@ -530,7 +530,7 @@ public class DataBase {
         return presenceList;
     }
 
-    public List<String> getPresenceForUser(String username) {
+    public List<String> getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
@@ -540,7 +540,7 @@ public class DataBase {
                 "WHERE User.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, userName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 presenceList.add("\"Designação\";\"Local\";\"Data\";\"Horainício\";\"Horafim\"");
