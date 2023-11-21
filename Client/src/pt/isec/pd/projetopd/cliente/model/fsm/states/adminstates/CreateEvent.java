@@ -6,6 +6,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
+import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.User;
 import java.text.SimpleDateFormat;
 
@@ -22,7 +23,7 @@ public class CreateEvent extends ClientStateAdapter {
             case SUBMIT -> {
                 String[] splitString = string.split("\n");
 
-                if (splitString.length >= 7) {
+                if (splitString.length == 5) {
                     try {
                         data.sendToServer(new Event(
                                 splitString[0],
@@ -45,7 +46,12 @@ public class CreateEvent extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
-        //todo handle repsonse
+        if(message instanceof RESPONSE response){
+            switch (response){
+                case ACCEPTED -> data.setMessage("Event Created");
+                case DECLINED -> data.setMessage("Event Was Not Created");
+            }
+        }
 
         return false;
     }

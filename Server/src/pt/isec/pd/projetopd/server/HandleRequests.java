@@ -16,11 +16,11 @@ import java.io.Serializable;
 //
 public class HandleRequests {
 
-    private DataBase ManDB;
+    private DataBase manDB;
     private ServerInfo serverInfo;
 
     public HandleRequests(String path, ServerInfo serverInfo){
-        this.ManDB = new DataBase(path);
+        this.manDB = new DataBase(path);
         this.serverInfo = serverInfo;
     }
 
@@ -33,20 +33,21 @@ public class HandleRequests {
                 return this.InterpretRequest(requests, ClientMail);
             }
             case Authentication auth -> {
-                return ManDB.CheckLogin(auth.getUsername(), auth.getPassword());
+                return manDB.CheckLogin(auth.getUsername(), auth.getPassword());
             }
             case User clientInfo -> {
-                return ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
+                return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Presence presence -> {
-                isReturn = ManDB.registerPresence(presence.getcode(), ClientMail);
+                isReturn = manDB.registerPresence(presence.getcode(), ClientMail);
             }
             case Event event -> {
-                isReturn = ManDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
-                if(isReturn) return event;
+                isReturn = manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
+                if(isReturn) return RESPONSE.ACCEPTED;
+                else return RESPONSE.DECLINED;
             }
             case EventPresence eventPresence -> {
-                return (Serializable) ManDB.getEventPresence(eventPresence.getEvent().getName().toString());
+                return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName().toString());
             }
             default -> {
                 return RESPONSE.DECLINED;
@@ -85,14 +86,14 @@ public class HandleRequests {
     {
         switch (request){
             case PRESENCE -> {
-                return (Serializable) ManDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
+                return (Serializable) manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
-                ManDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
+                manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
             case USER_DATA -> {
-                return ManDB.getUserData(clientMail);
+                return manDB.getUserData(clientMail);
             }
         }
 

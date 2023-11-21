@@ -353,7 +353,6 @@ public class DataBase {
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
                 "AND Event.id = ?";
-
         int existingPresenceCount = 0;
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
