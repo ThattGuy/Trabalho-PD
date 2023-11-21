@@ -39,7 +39,7 @@ public class HandleRequests {
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Presence presence -> {
-                isReturn = manDB.registerPresence(presence.getcode(), ClientMail);
+                return manDB.registerPresence(presence.getcode(), ClientMail);
             }
             case Event event -> {
                 isReturn = manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
@@ -53,11 +53,6 @@ public class HandleRequests {
                 return RESPONSE.DECLINED;
             }
         }
-
-        if(isReturn == null || !isReturn)
-            return RESPONSE.DECLINED;
-        else
-            return RESPONSE.ACCEPTED;
 
     }
 

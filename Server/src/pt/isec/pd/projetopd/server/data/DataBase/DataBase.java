@@ -348,7 +348,7 @@ public class DataBase {
         }
     }
 
-    public boolean registerPresence(int code, String clientMail) {
+    public Serializable registerPresence(int code, String clientMail) {
         String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
@@ -365,13 +365,11 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error checking existing presence: " + e.getMessage());
-            return false;
+            return "Error checking existing presence: " + e.getMessage();
         }
 
         if (existingPresenceCount > 0) {
-            System.err.println("User already has a presence registered for the event.");
-            return false;
+            return "User already has a presence registered for the event.";
         }
 
         String insertQuery = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
@@ -382,10 +380,9 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            return true;
         } catch (SQLException e) {
-            System.err.println("Error registering presence: " + e.getMessage());
-            return false;
+            return "Error registering presence: " + e.getMessage();
         }
     }
 
