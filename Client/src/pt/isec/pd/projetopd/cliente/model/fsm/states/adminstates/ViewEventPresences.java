@@ -15,9 +15,6 @@ public class ViewEventPresences extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case SUBMIT -> {
-
-            }
             case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
         }
 

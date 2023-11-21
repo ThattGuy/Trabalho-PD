@@ -70,6 +70,7 @@ public class Data {
 
     public synchronized void addPresence(Presence presence) {
         presences.add(presence);
+        //todo delete old presence
     }
 
     public synchronized String getPresenceString() {

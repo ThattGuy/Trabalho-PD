@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
+package pt.isec.pd.projetopd.cliente.model.fsm.states.userStates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
@@ -19,7 +19,7 @@ public class ViewPresence extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case CSV -> data.sendToServer(REQUESTS.CSV);
+            case CSV -> data.sendToServer(REQUESTS.CSV_PRESENCE);
             case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
         }
 
