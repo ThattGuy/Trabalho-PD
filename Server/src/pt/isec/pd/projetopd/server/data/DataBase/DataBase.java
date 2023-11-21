@@ -183,6 +183,7 @@ public class DataBase {
 
 
     public Serializable register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
+
         String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
         int existingIDCount = 0;
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
@@ -213,7 +214,13 @@ public class DataBase {
             preparedStatement.setString(7, address);
             preparedStatement.setBoolean(8, admin);
 
-            return new User(username,psswd,name,studentnumber,nif,  id,  address);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return new User(username, psswd, name, studentnumber, nif, id, address);
+            } else {
+                return "Error registering user: No rows affected.";
+            }
         } catch (SQLException e) {
             return "Error registering user: " + e.getMessage();
         }
