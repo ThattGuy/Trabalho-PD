@@ -36,7 +36,7 @@ public class HandleRequests {
                 return ManDB.CheckLogin(auth.getUsername(), auth.getPassword());
             }
             case User clientInfo -> {
-                isReturn = ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
+                return ManDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Presence presence -> {
                 isReturn = ManDB.registerPresence(presence.getcode(), ClientMail);

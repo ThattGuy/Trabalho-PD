@@ -182,7 +182,7 @@ public class DataBase {
 
 
 
-    public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
+    public Serializable register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
         String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
         int existingIDCount = 0;
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
@@ -193,15 +193,13 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error verifying ID:" + e.getMessage());
-            return false;
+            return "Error verifying ID:" + e.getMessage();
         }
         if (existingIDCount > 0 && admin!=true) {
-            System.err.println("ID already exists.");
-            return false;
+            return "ID already exists.";
         }else{
             if(admin==true){
-                return false;
+                return "Admin";
             }
         }
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -215,12 +213,9 @@ public class DataBase {
             preparedStatement.setString(7, address);
             preparedStatement.setBoolean(8, admin);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            return rowsAffected > 0;
+            return new User(username,psswd,name,studentnumber,nif,  id,  address);
         } catch (SQLException e) {
-            System.err.println("Error registering user: " + e.getMessage());
-            return false;
+            return "Error registering user: " + e.getMessage();
         }
     }
 
