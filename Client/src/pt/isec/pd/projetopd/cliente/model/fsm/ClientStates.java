@@ -3,6 +3,9 @@ package pt.isec.pd.projetopd.cliente.model.fsm;
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.adminstates.*;
 import pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates.*;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.userStates.RegisterPresence;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.userStates.SelectOptionUser;
+import pt.isec.pd.projetopd.cliente.model.fsm.states.userStates.ViewPresence;
 
 public enum ClientStates {
     INITIAL, REG_USER, LOGIN, SELECT_OPT, EDIT_USER_DATA, REG_PRESENCE, VIEW_PRESENCE, EDIT_EVENT, CREATE_EVENT, VIEW_EVENT_PRESENCE, VIEW_EVENTS, SELECT_OPT_ADMIN;

@@ -6,6 +6,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
+import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 
 public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
@@ -16,6 +17,7 @@ public class ViewEvents extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+            case CSV -> data.sendToServer(REQUESTS.CSV_EVENT_PRESENCE);
             case EDIT_EVENT -> changeState(ClientStates.EDIT_EVENT); // TODO HOW TO KNOW WHAT'S THE EVENT
             case VIEW_PRESENCE -> changeState(ClientStates.VIEW_EVENT_PRESENCE);
             case CREATE_EVENT -> changeState(ClientStates.CREATE_EVENT);

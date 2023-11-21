@@ -5,11 +5,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
-import pt.isec.pd.projetopd.cliente.ui.uistates.UserInfoUI;
-import pt.isec.pd.projetopd.cliente.ui.uistates.admin.CreateEventUI;
-import pt.isec.pd.projetopd.cliente.ui.uistates.admin.SelectOptAdminUI;
-import pt.isec.pd.projetopd.cliente.ui.uistates.shared.*;
-import pt.isec.pd.projetopd.communication.classes.User;
+import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.CreateEventUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.SelectOptAdminUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.sharedstatesui.*;
+import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterPresenceUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterUserUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.SelectOptUserUI;
 
 public class RootPane extends BorderPane {
     Manager manager;
@@ -33,15 +34,12 @@ public class RootPane extends BorderPane {
                 new InitialUI(manager),
                 new LoginUI(manager),
                 new RegisterUserUI(manager),
-                new SelectOptUI(manager),
+                new SelectOptUserUI(manager),
                 new SelectOptAdminUI(manager),
                 new CreateEventUI(manager),
                 new RegisterPresenceUI(manager),
                 new EditInfoUI(manager)
         );
-        UserInfoUI userInfoUI = new UserInfoUI(manager);
-        userInfoUI.setPrefWidth(200); // Adjust the width as needed
-        this.setLeft(userInfoUI);
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");
         StackPane.setAlignment(watermark, Pos.BOTTOM_RIGHT);

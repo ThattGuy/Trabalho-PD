@@ -1,10 +1,12 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates.admin;
+package pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
@@ -12,6 +14,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 public class SelectOptAdminUI extends BorderPane {
 
     Manager manager;
+    VBox userInfo;
     Button btnCreateEvent, btnViewEvents, btnEditInfo, btnLogout;
 
     public SelectOptAdminUI(Manager manager) {
@@ -62,7 +65,11 @@ public class SelectOptAdminUI extends BorderPane {
         btnEditInfo.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnLogout.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnViewEvents.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
+        setPadding(new Insets(10));
 
+        userInfo = new VBox();
+        userInfo.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        this.setLeft(userInfo);
         this.setCenter(vbox);
     }
 
@@ -71,7 +78,7 @@ public class SelectOptAdminUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> { update(); });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnCreateEvent.setOnAction(event -> {
             manager.selectOption(OPTIONS.CREATE_EVENT, null);
@@ -95,6 +102,13 @@ public class SelectOptAdminUI extends BorderPane {
             this.setVisible(false);
             return;
         }
+
+        Label userName = new Label(manager.getUserName());
+
+        userName.setStyle("-fx-font-size: 20;");
+
+        userInfo.getChildren().clear();
+        userInfo.getChildren().add(userName);
         setVisible(true);
     }
 

@@ -19,7 +19,7 @@ public class EditInfo extends ClientStateAdapter {
 
         switch (opt) {
             case SUBMIT -> {
-                return false;
+                //todo
             }
             case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
         }

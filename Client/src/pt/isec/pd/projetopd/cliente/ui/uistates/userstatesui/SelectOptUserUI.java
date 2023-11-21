@@ -1,20 +1,22 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates.shared;
+package pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
-public class SelectOptUI extends BorderPane {
+public class SelectOptUserUI extends BorderPane {
 
     Manager manager;
     Button btnRegisterPresence, btnViewPresence, btnEditInfo, btnLogout;
+    VBox userInfo;
 
-    public SelectOptUI(Manager manager) {
+    public SelectOptUserUI(Manager manager) {
         this.manager = manager;
         createViews();
         registerHandlers();
@@ -63,6 +65,9 @@ public class SelectOptUI extends BorderPane {
         btnLogout.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
         btnViewPresence.minWidthProperty().bind(vbox.widthProperty().multiply(buttonWidthPercentage));
 
+        userInfo = new VBox();
+        userInfo.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        this.setLeft(userInfo);
         this.setCenter(vbox);
     }
 
@@ -95,6 +100,14 @@ public class SelectOptUI extends BorderPane {
             this.setVisible(false);
             return;
         }
+
+        Label userName = new Label(manager.getUserName());
+
+        userName.setStyle("-fx-font-size: 20;");
+
+        userInfo.getChildren().clear();
+        userInfo.getChildren().add(userName);
+
         setVisible(true);
     }
 

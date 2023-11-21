@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.model.fsm.states.sharedstates;
+package pt.isec.pd.projetopd.cliente.model.fsm.states.userStates;
 
 import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;

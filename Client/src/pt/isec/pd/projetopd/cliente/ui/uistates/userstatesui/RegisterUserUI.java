@@ -1,4 +1,4 @@
-package pt.isec.pd.projetopd.cliente.ui.uistates.shared;
+package pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
