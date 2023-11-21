@@ -82,7 +82,7 @@ public class HandleRequests {
     {
         switch (request){
             case PRESENCE -> {
-                return ManDB.getPresence(2);//Enviar id do evento com o qual quer ver as presenças
+                return ManDB.getPresenceForUser();//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
                 ManDB.generateCSV(ClientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
