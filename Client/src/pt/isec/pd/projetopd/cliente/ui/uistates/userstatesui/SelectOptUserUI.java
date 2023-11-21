@@ -101,7 +101,7 @@ public class SelectOptUserUI extends BorderPane {
             return;
         }
 
-        Label userName = new Label(manager.getUserName());
+       Label userName = new Label(manager.getUserName());
 
         userName.setStyle("-fx-font-size: 20;");
 

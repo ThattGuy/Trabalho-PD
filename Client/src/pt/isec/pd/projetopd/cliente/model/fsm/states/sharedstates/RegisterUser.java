@@ -48,17 +48,16 @@ public class RegisterUser extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
-
-        if(message instanceof RESPONSE response){
-            if(response == RESPONSE.ACCEPTED){
+        if(message instanceof User user){
+            data.setUserInfo(user);
+            if(data.isUserAdmin()){
+                changeState(ClientStates.SELECT_OPT_ADMIN);
+                return true;
+            }else{
                 changeState(ClientStates.SELECT_OPT);
                 return true;
             }
-            if(response == RESPONSE.PROBLEM_WITH_NAME){
-                data.setMessage("Username already in use");
-            }
         }
-
         return false;
     }
 
