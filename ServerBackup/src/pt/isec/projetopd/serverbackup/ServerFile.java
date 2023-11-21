@@ -48,6 +48,7 @@ public class ServerFile extends UnicastRemoteObject implements ServerInterface {
 
     @Override
     public byte [] getFileChunk(String fileName, long offset) throws RemoteException, IOException {
+
         byte [] fileChunk = new byte[MAX_CHUNCK_SIZE];
         int nbytes;
 
@@ -206,7 +207,6 @@ public class ServerFile extends UnicastRemoteObject implements ServerInterface {
             Naming.bind("//localhost/" + SERVICE_NAME, fileService);
 
             System.out.println("Servico " + SERVICE_NAME + " registado no registry...");
-
             /*
              * Para terminar um servico RMI do tipo UnicastRemoteObject:
              *

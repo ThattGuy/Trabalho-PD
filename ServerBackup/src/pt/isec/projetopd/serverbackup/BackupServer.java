@@ -105,7 +105,7 @@ public class BackupServer {
              * Obtem o ficheiro pretendido, invocando o metodo getFile no servico remoto.
              */
 
-                remoteFileService.getFile(fileName,myRemoteService);
+            remoteFileService.getFile(fileName,myRemoteService);
 
 
         }catch(RemoteException e){

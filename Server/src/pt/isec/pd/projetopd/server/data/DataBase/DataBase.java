@@ -182,7 +182,7 @@ public class DataBase {
 
 
 
-    public boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
+    public Serializable register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
         String checkQuery = "SELECT COUNT(*) FROM User WHERE id = ?";
         int existingIDCount = 0;
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
@@ -193,15 +193,13 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error verifying ID:" + e.getMessage());
-            return false;
+            return "Error verifying ID:" + e.getMessage();
         }
         if (existingIDCount > 0 && admin!=true) {
-            System.err.println("ID already exists.");
-            return false;
+            return "ID already exists.";
         }else{
             if(admin==true){
-                return false;
+                return "Admin";
             }
         }
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -215,12 +213,9 @@ public class DataBase {
             preparedStatement.setString(7, address);
             preparedStatement.setBoolean(8, admin);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            return rowsAffected > 0;
+            return new User(username,psswd,name,studentnumber,nif,  id,  address);
         } catch (SQLException e) {
-            System.err.println("Error registering user: " + e.getMessage());
-            return false;
+            return "Error registering user: " + e.getMessage();
         }
     }
 
@@ -376,7 +371,7 @@ public class DataBase {
     public Serializable getPresence(int eventId) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.username, User.name, User.studentNumber, User.email " +
+        String query = "SELECT User.username, User.name, User.studentNumber " +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.event_id = ?";
@@ -385,14 +380,13 @@ public class DataBase {
             preparedStatement.setInt(1, eventId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+                presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
                     String name = resultSet.getString("name");
                     int studentNumber = resultSet.getInt("studentNumber");
-                    String email = resultSet.getString("email");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";\"" + email + "\"");
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\"");
                 }
             }
         } catch (SQLException e) {
@@ -406,7 +400,7 @@ public class DataBase {
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -418,7 +412,7 @@ public class DataBase {
             preparedStatement.setString(3, endTime);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+                presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
                     String designacao = resultSet.getString("Designacao");
@@ -440,7 +434,7 @@ public class DataBase {
     public void generateCSV(String mail, String filePath) {
         List<String> csvLines = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -450,8 +444,8 @@ public class DataBase {
             preparedStatement.setString(1, mail);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                csvLines.add("\"Nome\";\"Número identificação\";\"Email\"");
-                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "\";\"" + resultSet.getString("email") + "\"");
+                csvLines.add("\"Nome\";\"Número identificação\"");
+                csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "");
 
                 csvLines.add("\"Designação\";\"Local\";\"Data\";\"Horainício\"");
 
@@ -478,15 +472,14 @@ public class DataBase {
         }
     }
 
-    public User getUserData(String email) {
-        String query = "SELECT * FROM User WHERE email = ?";
+    public User getUserData(String username) {
+        String query = "SELECT * FROM User WHERE username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, email);
+            preparedStatement.setString(1, username);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String username = resultSet.getString("username");
                     String password = resultSet.getString("password");
                     String name = resultSet.getString("name");
                     int studentNumber = resultSet.getInt("studentNumber");
@@ -507,7 +500,7 @@ public class DataBase {
     public List<String> getPresenceForEvent(int eventId) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.event_id = ?";
@@ -516,14 +509,13 @@ public class DataBase {
             preparedStatement.setInt(1, eventId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+                presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
                     String name = resultSet.getString("Nome");
                     int studentNumber = resultSet.getInt("Número identificação");
-                    String email = resultSet.getString("email");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\";\"" + email + "\"");
+                    presenceList.add("\"" + name + "\";\"" + studentNumber + "");
                 }
             }
         } catch (SQLException e) {
@@ -533,17 +525,17 @@ public class DataBase {
         return presenceList;
     }
 
-    public List<String> getPresenceForUser(String userEmail) {
+    public List<String> getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE User.email = ?";
+                "WHERE User.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, userEmail);
+            preparedStatement.setString(1, userName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 presenceList.add("\"Designação\";\"Local\";\"Data\";\"Horainício\";\"Horafim\"");
@@ -568,7 +560,7 @@ public class DataBase {
     public List<String> getPresenceByEventName(String mail, String eventName) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", User.email, Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_id = Event.id " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -579,7 +571,7 @@ public class DataBase {
             preparedStatement.setString(2, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\";\"Email\"");
+                presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
                     String designacao = resultSet.getString("Designacao");
