@@ -43,7 +43,7 @@ public class DataBase {
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Event ( " +
-                    "id INTEGER PRIMARY KEY, " +
+                    "nome TEXT PRIMARY KEY NOT NULL, " +
                     "Designacao TEXT NOT NULL, " +
                     "Local TEXT NOT NULL, " +
                     "Data DATE NOT NULL, " +
@@ -56,16 +56,16 @@ public class DataBase {
             statement.execute("CREATE TABLE IF NOT EXISTS CodigoRegisto ( " +
                     "id INTEGER PRIMARY KEY, " +
                     "codigo TEXT NOT NULL, " +
-                    "event_id INTEGER, " +
-                    "FOREIGN KEY (event_id) REFERENCES Event(id) " +
+                    "event_nome TEXT NOT NULL, " +
+                    "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS UserEvent ( " +
                     "id INTEGER PRIMARY KEY, " +
                     "user_id INTEGER, " +
-                    "event_id INTEGER, " +
+                    "event_nome INTEGER, " +
                     "FOREIGN KEY (user_id) REFERENCES User(id), " +
-                    "FOREIGN KEY (event_id) REFERENCES Event(id) " +
+                    "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
         } catch (SQLException e) {
             System.err.println("Error creating tables: " + e.getMessage());
@@ -275,12 +275,11 @@ public class DataBase {
             return false;
         }
     }
-
-    public boolean deleteEvent(int eventId) {
-        String query = "DELETE FROM Event WHERE id = ?";
+    public boolean deleteEvent(String nome) {
+        String query = "DELETE FROM Event WHERE nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, eventId);
+            preparedStatement.setString(1, nome);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -311,7 +310,7 @@ public class DataBase {
         }
     }
 
-    public boolean editEvent(int eventId, String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
+    public boolean editEvent(int nome, String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
         String query = "UPDATE Event SET Designacao = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -321,7 +320,7 @@ public class DataBase {
             preparedStatement.setString(4, horaInicio);
             preparedStatement.setString(5, horaFim);
             preparedStatement.setInt(6, userId);
-            preparedStatement.setInt(7, eventId);
+            preparedStatement.setInt(7, nome);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -331,13 +330,12 @@ public class DataBase {
             return false;
         }
     }
-
-    public boolean addCodeRegister(String codigo, int eventId) {
-        String query = "INSERT INTO CodigoRegisto (codigo, event_id) VALUES (?, ?)";
+    public boolean addCodeRegister(String codigo, String eventName) {
+        String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, (SELECT id FROM Event WHERE nome = ?))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, codigo);
-            preparedStatement.setInt(2, eventId);
+            preparedStatement.setString(2, eventName);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -347,12 +345,11 @@ public class DataBase {
             return false;
         }
     }
-
     public Serializable registerPresence(int code, String clientMail) {
         String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
-                "AND Event.id = ?";
+                "AND Event.nome = ?";
         int existingPresenceCount = 0;
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
@@ -372,7 +369,7 @@ public class DataBase {
             return "User already has a presence registered for the event.";
         }
 
-        String insertQuery = "INSERT INTO UserEvent (user_id, event_id) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
+        String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
@@ -385,17 +382,17 @@ public class DataBase {
             return "Error registering presence: " + e.getMessage();
         }
     }
-
-    public Serializable getPresence(int eventId) {
+    public Serializable getPresence(String eventName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.username, User.name, User.studentNumber " +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.event_id = ?";
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
+                "WHERE Event.nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, eventId);
+            preparedStatement.setString(1, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 presenceList.add("\"Nome\";\"Número identificação\"");
@@ -420,7 +417,7 @@ public class DataBase {
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.user_id = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
 
@@ -454,7 +451,7 @@ public class DataBase {
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.user_id = ?";
 
@@ -521,7 +518,7 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.event_id = ?";
+                "WHERE UserEvent.event_name = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             // Assuming event_id is a string in your database, use setString
@@ -550,7 +547,7 @@ public class DataBase {
 
         String query = "SELECT Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE User.username = ?";
 
@@ -582,7 +579,7 @@ public class DataBase {
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_id = Event.id " +
+                "JOIN Event ON UserEvent.event_name = Event.name " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.user_id = ? AND Event.Designacao = ?";
 
