@@ -291,6 +291,27 @@ public class DataBase {
     }
 
     public boolean registerEvent(String designacao, String local, String data, String horaInicio, String horaFim, String userId) {
+        String checkQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
+        int existingEventCount = 0;
+
+        try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
+            checkStatement.setString(1, designacao);
+
+            try (ResultSet resultSet = checkStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    existingEventCount = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error verifying existing event: " + e.getMessage());
+            return false;
+        }
+
+        if (existingEventCount > 0) {
+            System.out.println("Event with the same name already exists.");
+            return false;
+        }
+
         String query = "INSERT INTO Event (Designacao, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
