@@ -537,7 +537,6 @@ public class DataBase {
                 "WHERE UserEvent.event_name = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            // Assuming event_id is a string in your database, use setString
             preparedStatement.setString(1, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
