@@ -44,7 +44,6 @@ public class DataBase {
 
             statement.execute("CREATE TABLE IF NOT EXISTS Event ( " +
                     "nome TEXT PRIMARY KEY NOT NULL, " +
-                    "Designacao TEXT NOT NULL, " +
                     "Local TEXT NOT NULL, " +
                     "Data DATE NOT NULL, " +
                     "HoraInicio TIME NOT NULL, " +
@@ -187,10 +186,8 @@ public class DataBase {
         String checkUsernameQuery = "SELECT COUNT(*) FROM User WHERE username = ?";
         int existingIDCount = 0;
         int existingUsernameCount = 0;
-
         try (PreparedStatement checkIDStatement = con.prepareStatement(checkIDQuery);
              PreparedStatement checkUsernameStatement = con.prepareStatement(checkUsernameQuery)) {
-
             checkIDStatement.setString(1, id);
             try (ResultSet idResultSet = checkIDStatement.executeQuery()) {
                 if (idResultSet.next()) {
@@ -207,17 +204,16 @@ public class DataBase {
 
         } catch (SQLException e) {
             return "Error verifying ID or email: " + e.getMessage();
+
         }
 
         if (existingIDCount > 0 && admin != true) {
             return "ID already exists.";
         } else if (existingUsernameCount > 0) {
             return "Email already exists.";
-        } else {
-            if (admin) {
-                return "Admin";
-            }
         }
+
+
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, username);
@@ -230,7 +226,6 @@ public class DataBase {
             preparedStatement.setBoolean(8, admin);
 
             int rowsAffected = preparedStatement.executeUpdate();
-
             if (rowsAffected > 0) {
                 return new User(username, psswd, name, studentnumber, nif, id, address);
             } else {
@@ -290,12 +285,12 @@ public class DataBase {
         }
     }
 
-    public boolean registerEvent(String designacao, String local, String data, String horaInicio, String horaFim, String userId) {
+    public boolean registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
         String checkQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
         int existingEventCount = 0;
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
-            checkStatement.setString(1, designacao);
+            checkStatement.setString(1, nome);
 
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -312,10 +307,10 @@ public class DataBase {
             return false;
         }
 
-        String query = "INSERT INTO Event (Designacao, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Event (nome, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, designacao);
+            preparedStatement.setString(1, nome);
             preparedStatement.setString(2, local);
             preparedStatement.setString(3, data);
             preparedStatement.setString(4, horaInicio);
@@ -331,17 +326,16 @@ public class DataBase {
         }
     }
 
-    public boolean editEvent(int nome, String designacao, String local, String data, String horaInicio, String horaFim, int userId) {
-        String query = "UPDATE Event SET Designacao = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
+    public boolean editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
+        String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, designacao);
+            preparedStatement.setString(1, nome);
             preparedStatement.setString(2, local);
             preparedStatement.setString(3, data);
             preparedStatement.setString(4, horaInicio);
             preparedStatement.setString(5, horaFim);
             preparedStatement.setInt(6, userId);
-            preparedStatement.setInt(7, nome);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -436,7 +430,7 @@ public class DataBase {
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -451,13 +445,13 @@ public class DataBase {
                 presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
-                    String designacao = resultSet.getString("Designacao");
+                    String nome = resultSet.getString("Nome");
                     String local = resultSet.getString("Local");
                     String data = resultSet.getString("Data");
                     String horaInicio = resultSet.getString("HoraInicio");
                     String horaFim = resultSet.getString("HoraFim");
 
-                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                    presenceList.add("\"" + nome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
                 }
             }
         } catch (SQLException e) {
@@ -470,7 +464,7 @@ public class DataBase {
     public void generateCSV(String mail, String filePath) {
         List<String> csvLines = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -483,15 +477,15 @@ public class DataBase {
                 csvLines.add("\"Nome\";\"Número identificação\"");
                 csvLines.add("\"" + resultSet.getString("Nome") + "\";\"" + resultSet.getInt("Número identificação") + "");
 
-                csvLines.add("\"Designação\";\"Local\";\"Data\";\"Horainício\"");
+                csvLines.add("\"Nome\";\"Local\";\"Data\";\"Horainício\"");
 
                 while (resultSet.next()) {
-                    String designacao = resultSet.getString("Designacao");
+                    String nome = resultSet.getString("nome");
                     String local = resultSet.getString("Local");
                     String data = resultSet.getString("Data");
                     String horaInicio = resultSet.getString("HoraInicio");
 
-                    csvLines.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\"");
+                    csvLines.add("\"" + nome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\"");
                 }
             }
         } catch (SQLException e) {
@@ -566,7 +560,7 @@ public class DataBase {
     public List<String> getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+        String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "JOIN User ON UserEvent.user_id = User.id " +
@@ -576,16 +570,16 @@ public class DataBase {
             preparedStatement.setString(1, userName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Designação\";\"Local\";\"Data\";\"Horainício\";\"Horafim\"");
+                presenceList.add("\"Nome\";\"Local\";\"Data\";\"Horainício\";\"Horafim\"");
 
                 while (resultSet.next()) {
-                    String designacao = resultSet.getString("Designacao");
+                    String nome = resultSet.getString("nome");
                     String local = resultSet.getString("Local");
                     String data = resultSet.getString("Data");
                     String horaInicio = resultSet.getString("HoraInicio");
                     String horaFim = resultSet.getString("HoraFim");
 
-                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                    presenceList.add("\"" + nome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
                 }
             }
         } catch (SQLException e) {
@@ -598,11 +592,11 @@ public class DataBase {
     public List<String> getPresenceByEventName(String mail, String eventName) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.Designacao, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_name = Event.name " +
                 "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ? AND Event.Designacao = ?";
+                "WHERE UserEvent.user_id = ? AND Event.nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, mail);
@@ -612,13 +606,13 @@ public class DataBase {
                 presenceList.add("\"Nome\";\"Número identificação\"");
 
                 while (resultSet.next()) {
-                    String designacao = resultSet.getString("Designacao");
+                    String nome = resultSet.getString("nome");
                     String local = resultSet.getString("Local");
                     String data = resultSet.getString("Data");
                     String horaInicio = resultSet.getString("HoraInicio");
                     String horaFim = resultSet.getString("HoraFim");
 
-                    presenceList.add("\"" + designacao + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
+                    presenceList.add("\"" + nome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
                 }
             }
         } catch (SQLException e) {
