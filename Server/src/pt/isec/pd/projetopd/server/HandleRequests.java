@@ -47,7 +47,7 @@ public class HandleRequests {
                 else return RESPONSE.DECLINED;
             }
             case EventPresence eventPresence -> {
-                return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName().toString());
+                return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
             }
             default -> {
                 return RESPONSE.DECLINED;

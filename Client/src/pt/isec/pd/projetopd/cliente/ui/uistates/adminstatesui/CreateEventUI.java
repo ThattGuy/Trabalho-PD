@@ -127,10 +127,7 @@ public class CreateEventUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> {
-            Platform.runLater(this::update);
-            update();
-        });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnSubmit.setOnAction(event -> {
             String string = eventName.getText() + "\n"
