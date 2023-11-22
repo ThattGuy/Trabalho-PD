@@ -87,14 +87,15 @@ public class CreateEventUI extends BorderPane {
         grid.add(local, 1, rowIndex, 25, 1);
 
         rowIndex++;
-        grid.add(lBeginning, 0, rowIndex);
+        grid.add(lDate, 0, rowIndex);
         grid.add(date, 1, rowIndex, 25, 1);
 
         rowIndex++;
-        grid.add(lEndTime, 0, rowIndex);
+        grid.add(lBeginning, 0, rowIndex);
         grid.add(beginning, 1, rowIndex, 25, 1);
 
         rowIndex++;
+        grid.add(lEndTime, 0, rowIndex);
         grid.add(endTime, 1, rowIndex, 20, 1);
 
         hBox = new HBox(btnBack, btnSubmit);
