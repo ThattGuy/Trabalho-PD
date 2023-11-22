@@ -52,8 +52,8 @@ public class Data {
         return message;
     }
 
-    public synchronized void addEvents(Event event) {
-        events.add(event);
+    public synchronized void addEvents(EventList events) {
+        this.events = events.getEvents();
     }
 
     public synchronized String getEventsString() {

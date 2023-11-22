@@ -28,7 +28,7 @@ public class EditEvent extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
         if (message instanceof Event event) {
-            data.addEvents(event);
+            //data.addEvents(event);
             return true;
         } else {
             data.setMessage("Error deserializing the Event object");

@@ -165,6 +165,5 @@ public class CreateEventUI extends BorderPane {
         if (msg != null) {
             messageLabel.setText(msg);
         }
-
     }
 }
