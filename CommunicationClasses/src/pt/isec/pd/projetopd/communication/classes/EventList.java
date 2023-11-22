@@ -1,9 +1,8 @@
 package pt.isec.pd.projetopd.communication.classes;
-
-import javax.xml.stream.events.EntityReference;
+import java.io.Serializable;
 import java.util.List;
 
-public class EventList {
+public class EventList implements Serializable {
     List<Event> events;
 
     public EventList(List<Event> events) {
