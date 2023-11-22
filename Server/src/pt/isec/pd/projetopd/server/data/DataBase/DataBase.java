@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.server.data.DataBase;
 
 import pt.isec.pd.projetopd.communication.classes.Admin;
+import pt.isec.pd.projetopd.communication.classes.Event;
 import pt.isec.pd.projetopd.communication.classes.RESPONSE;
 import pt.isec.pd.projetopd.communication.classes.User;
 
@@ -587,6 +588,31 @@ public class DataBase {
         }
 
         return presenceList;
+    }
+
+    public List<Event> getAllEvents() {
+        List<Event> eventList = new ArrayList<>();
+
+        String query = "SELECT * FROM Event";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String nome = resultSet.getString("nome");
+                String local = resultSet.getString("Local");
+                String data = resultSet.getString("Data");
+                String horaInicio = resultSet.getString("HoraInicio");
+                String horaFim = resultSet.getString("HoraFim");
+
+                Event event = new Event(nome, local, data, horaInicio, horaFim);
+                eventList.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting all events: " + e.getMessage());
+        }
+
+        return eventList;
     }
 
     public List<String> getPresenceByEventName(String mail, String eventName) {
