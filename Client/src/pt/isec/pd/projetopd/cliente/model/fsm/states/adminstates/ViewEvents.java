@@ -8,6 +8,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
 import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 
+import java.util.List;
+
 public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
         super(context, data);
@@ -30,8 +32,8 @@ public class ViewEvents extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof Event event){
-            data.addEvents(event);
+        if(message instanceof ){
+            data.addEvents();
         }
 
         return false;

@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.cliente.ui.uistates.sharedstatesui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -83,7 +84,7 @@ public class LoginUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> { update(); });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnLogin.setOnAction(event -> {
             manager.selectOption(OPTIONS.LOGIN, usernameField.getText() + "\n" + passwordField.getText());

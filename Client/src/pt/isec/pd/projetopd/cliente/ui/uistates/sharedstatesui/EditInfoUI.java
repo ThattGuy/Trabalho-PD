@@ -144,10 +144,7 @@ public class EditInfoUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> {
-            Platform.runLater(this::update);
-            update();
-        });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnRegister.setOnAction(event -> {
             String string = usernameField.getText() + "\n"
@@ -187,7 +184,6 @@ public class EditInfoUI extends BorderPane {
         if (msg != null) {
             messageLabel.setText(msg);
         }
-
 
         usernameField.setText(manager.getUserName());
         passwordField.setText("");

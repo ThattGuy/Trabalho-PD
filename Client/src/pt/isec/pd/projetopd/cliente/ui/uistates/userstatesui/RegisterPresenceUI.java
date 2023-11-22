@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -75,7 +76,7 @@ public class RegisterPresenceUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> { update(); });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnSubmit.setOnAction(event -> {
             manager.selectOption(OPTIONS.SUBMIT, presenceCode.getText() );

@@ -145,10 +145,7 @@ public class RegisterUserUI extends BorderPane {
      */
     private void registerHandlers() {
 
-        manager.addPropertyChangeListener(evt -> {
-            Platform.runLater(this::update);
-            update();
-        });
+        manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
         btnRegister.setOnAction(event -> {
             String string = usernameField.getText() + "\n"
