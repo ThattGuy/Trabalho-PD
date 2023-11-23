@@ -14,6 +14,7 @@ import java.util.List;
 public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
         super(context, data);
+        data.sendToServer(REQUESTS.EVENTS);
     }
 
     @Override

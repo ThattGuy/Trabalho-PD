@@ -47,7 +47,6 @@ public class NotificationThread  extends Thread {
 
             }
         }
-
          */
         for(Socket sock : clients){
             try (ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream())){

@@ -66,7 +66,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
         return fsm.getAdress();
     }
 
-    public boolean isUserAdmin() {
-        return fsm.isUserAdmin();
+    public String getEvents() {
+        return fsm.getEvents();
     }
 }

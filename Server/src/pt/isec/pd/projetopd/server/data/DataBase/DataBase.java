@@ -1,9 +1,6 @@
 package pt.isec.pd.projetopd.server.data.DataBase;
 
-import pt.isec.pd.projetopd.communication.classes.Admin;
-import pt.isec.pd.projetopd.communication.classes.Event;
-import pt.isec.pd.projetopd.communication.classes.RESPONSE;
-import pt.isec.pd.projetopd.communication.classes.User;
+import pt.isec.pd.projetopd.communication.classes.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -590,7 +587,7 @@ public class DataBase {
         return presenceList;
     }
 
-    public List<Event> getAllEvents() {
+    public EventList getAllEvents() {
         List<Event> eventList = new ArrayList<>();
 
         String query = "SELECT * FROM Event";
@@ -612,7 +609,9 @@ public class DataBase {
             System.err.println("Error getting all events: " + e.getMessage());
         }
 
-        return eventList;
+        EventList events = new EventList(eventList);
+
+        return events;
     }
 
     public List<String> getPresenceByEventName(String mail, String eventName) {

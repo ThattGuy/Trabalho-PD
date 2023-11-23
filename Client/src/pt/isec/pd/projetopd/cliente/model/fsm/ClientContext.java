@@ -70,8 +70,7 @@ public class ClientContext {
         return data.getAddress();
     }
 
-    public boolean isUserAdmin() {
-        return data.isUserAdmin();
+    public String getEvents() {
+        return data.getEventsString();
     }
-
 }

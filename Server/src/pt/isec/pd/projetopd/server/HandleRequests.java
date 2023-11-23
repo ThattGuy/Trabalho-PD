@@ -90,6 +90,9 @@ public class HandleRequests {
             case USER_DATA -> {
                 return manDB.getUserData(clientMail);
             }
+            case EVENTS -> {
+                return manDB.getAllEvents();
+            }
         }
 
         return RESPONSE.DECLINED;
