@@ -5,11 +5,12 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
+import pt.isec.pd.projetopd.communication.classes.*;
 
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
-        //todo enviar evento
+        data.sendToServer(new EventPresence(data.getEventToEdit()));
     }
 
     @Override
@@ -24,6 +25,9 @@ public class ViewEventPresences extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+        if(message instanceof PresencesList presencesList){
+            data.addPresences(presencesList);
+        }
         return false;
     }
 

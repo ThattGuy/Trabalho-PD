@@ -5,10 +5,8 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
-import pt.isec.pd.projetopd.communication.classes.Presence;
 import pt.isec.pd.projetopd.communication.classes.REQUESTS;
-
-import java.util.List;
+import pt.isec.pd.projetopd.communication.classes.PresencesList;
 
 public class ViewPresence extends ClientStateAdapter {
     public ViewPresence(ClientContext context, Data data) {
@@ -22,7 +20,7 @@ public class ViewPresence extends ClientStateAdapter {
 
         switch (opt){
             case CSV -> data.sendToServer(REQUESTS.CSV_PRESENCE);
-            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
+            case BACK -> changeState(ClientStates.SELECT_OPT);
         }
 
         return true;
@@ -31,9 +29,8 @@ public class ViewPresence extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof List presence){
-            data.addPresence(presence);
-            //todo remover presenças já não existentes
+        if(message instanceof PresencesList presences){
+            data.addPresences(presences);
         }
 
         return false;

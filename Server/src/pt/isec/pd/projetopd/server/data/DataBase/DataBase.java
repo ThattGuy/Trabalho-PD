@@ -148,7 +148,7 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
+                if(resultSet.getString("username") != null) //todo caso password estaja errada retornar msg de erro
 
                 if (resultSet.next()) {
 
@@ -554,7 +554,7 @@ public class DataBase {
     }
 
 
-    public List<String> getPresenceForUser(String userName) {
+    public PresencesList getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
@@ -583,7 +583,9 @@ public class DataBase {
             System.err.println("Error getting presence for user: " + e.getMessage());
         }
 
-        return presenceList;
+        PresencesList pl = new PresencesList(presenceList.toString());
+
+        return pl;
     }
 
     public EventList getAllEvents() {

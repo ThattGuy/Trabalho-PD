@@ -21,7 +21,7 @@ public class RegisterPresence extends ClientStateAdapter {
             case SUBMIT -> {
                 data.sendToServer(new Presence(Integer.parseInt(string)));
             }
-            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
+            case BACK -> changeState(ClientStates.SELECT_OPT);
         }
 
         return true;

@@ -21,7 +21,7 @@ public class EditEvent extends ClientStateAdapter {
                 //todo edit
             }
             case BACK -> {
-                data.setEventToEdit(-1);
+                data.setEventIndexEdit(-1);
                 changeState(ClientStates.SELECT_OPT_ADMIN);
             }
         }

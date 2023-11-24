@@ -16,8 +16,8 @@ public class Data {
     private Socket socket;
     private String message = null;
     private List<Event> events = new ArrayList<>();
-    private List<Presence> presences = new ArrayList<>();
-    private int indexOfEditObject = -1;
+    private String presences;
+    private int indexOfEventObject = -1;
     public Data(String ip, int port) {;
         try {
             this.socket = new Socket(ip, port);
@@ -63,26 +63,16 @@ public class Data {
         for (Event event : events) {
             sb.add(event.toString());
         }
-        //todo fix get null
 
         return sb;
     }
 
-    public synchronized void addPresence(Presence presence) {
-        presences.add(presence);
-        //todo delete old presence
+    public synchronized void addPresences(PresencesList presencesList) {
+        this.presences = presencesList.toString();
     }
 
     public synchronized String getPresenceString() {
-        StringBuilder sb = new StringBuilder();
-
-        for (Presence presence : presences) {
-            sb.append(presence.toString());
-            sb.append("\n");
-        }
-        //todo fix get null
-
-        return sb.toString();
+        return presences;
     }
 
     public String getUserName() {
@@ -127,11 +117,18 @@ public class Data {
         return null;
     }
 
-    public void setEventToEdit(int index) {
-        indexOfEditObject = index;
+    public void setEventIndexEdit(int index) {
+        indexOfEventObject = index;
     }
 
-    public String getEventToEdit() {
-        return events.get(indexOfEditObject).toString();
+    public Event getEventToEdit() {
+        return events.get(indexOfEventObject);
+    }
+
+    public void logout() {
+        userInfo = null;
+        events = null;
+        presences = null;
+        tcpSend.sendObject(REQUESTS.LOGOUT);
     }
 }

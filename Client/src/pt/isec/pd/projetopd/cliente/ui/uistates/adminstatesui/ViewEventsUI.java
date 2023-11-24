@@ -23,7 +23,8 @@ public class ViewEventsUI extends BorderPane {
     private VBox centerContainer;
     private HBox hBox;
     private Button btnBack;
-    private List<Button> eventButtons;
+    private List<Button> eventEditButtons;
+    private List<Button> eventPresenceButtons;
 
     public ViewEventsUI(Manager manager) {
         this.manager = manager;
@@ -71,11 +72,19 @@ public class ViewEventsUI extends BorderPane {
             update();
         });
 
-        if(eventButtons != null){
-            for (int i = 0; i < eventButtons.size(); i++) {
+        if(eventEditButtons != null){
+            for (int i = 0; i < eventEditButtons.size(); i++) {
                 int finalI = i;
-                eventButtons.get(i).setOnAction(event ->
+                eventEditButtons.get(i).setOnAction(event ->
                         manager.selectOption(OPTIONS.EDIT_EVENT, String.valueOf(finalI))
+                );
+            }
+        }
+        if(eventPresenceButtons != null){
+            for (int i = 0; i < eventPresenceButtons.size(); i++) {
+                int finalI = i;
+                eventPresenceButtons.get(i).setOnAction(event ->
+                        manager.selectOption(OPTIONS.VIEW_PRESENCE, String.valueOf(finalI))
                 );
             }
         }
@@ -92,7 +101,8 @@ public class ViewEventsUI extends BorderPane {
 
         // Clear existing labels and buttons
         centerContainer.getChildren().clear();
-        eventButtons = new ArrayList<>();
+        eventEditButtons = new ArrayList<>();
+        eventPresenceButtons = new ArrayList<>();
         eventsLabel = new ArrayList<>();
 
         List<String> events = manager.getEvents();
@@ -103,14 +113,16 @@ public class ViewEventsUI extends BorderPane {
         }
 
         for (int i = 0; i < eventsLabel.size(); i++) {
-            eventButtons.add(new Button("Edit"));
+            eventEditButtons.add(new Button("Edit"));
+            eventPresenceButtons.add(new Button("Presences"));
 
             eventsLabel.get(i).setStyle("-fx-font-size: 16px;");
 
             eventsLabel.get(i).setMinSize(200, 50);
-            eventButtons.get(i).setMinSize(50, 50);
+            eventEditButtons.get(i).setMinSize(50, 50);
+            eventPresenceButtons.get(i).setMinSize(50, 50);
 
-            HBox hEvent = new HBox(eventsLabel.get(i), eventButtons.get(i));
+            HBox hEvent = new HBox(eventsLabel.get(i), eventPresenceButtons.get(i),eventEditButtons.get(i));
 
             hEvent.setSpacing(20);
 

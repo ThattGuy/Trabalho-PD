@@ -12,6 +12,7 @@ import pt.isec.pd.projetopd.cliente.ui.uistates.sharedstatesui.*;
 import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterPresenceUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterUserUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.SelectOptUserUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.ViewPresenceUI;
 
 public class RootPane extends BorderPane {
     Manager manager;
@@ -40,7 +41,8 @@ public class RootPane extends BorderPane {
                 new CreateEventUI(manager),
                 new RegisterPresenceUI(manager),
                 new EditInfoUI(manager),
-                new ViewEventsUI(manager)
+                new ViewEventsUI(manager),
+                new ViewPresenceUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");

@@ -93,7 +93,8 @@ public class SelectOptAdminUI extends BorderPane {
             update();
         });
         btnLogout.setOnAction(event -> {
-            System.exit(0);
+            manager.selectOption(OPTIONS.LOGOUT, null);
+            update();
         });
     }
 
