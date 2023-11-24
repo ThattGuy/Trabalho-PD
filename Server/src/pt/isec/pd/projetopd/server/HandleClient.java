@@ -3,6 +3,7 @@ package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.communication.classes.Authentication;
 import pt.isec.pd.projetopd.communication.classes.ServerPort;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 import java.io.*;
 import java.net.Socket;
@@ -37,8 +38,8 @@ public class HandleClient implements Runnable {
                 System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + o);
                 if(o == null) { socket.close(); return;}
 
-                if(o instanceof Authentication)  socket.setSoTimeout(0);
                 o = handleRequests.receive(o, out);
+                if(o instanceof User) socket.setSoTimeout(0);
 
                 out.writeObject(o);
                 out.flush();

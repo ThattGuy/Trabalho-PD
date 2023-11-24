@@ -1,11 +1,12 @@
 package pt.isec.pd.projetopd.server.Remote;
 
+import pt.isec.projetopd.serverbackup.BackupServerInterface;
+
 import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
+
 
 public interface UpdateDB extends Remote{
-    List<Map<String, Object>> getDB() throws RemoteException;
+    byte [] getFileChunk(String fileName, long offset) throws java.rmi.RemoteException, java.io.IOException;
+    void getFile(String fileName, BackupServerInterface cliRef) throws java.io.IOException,java.rmi.RemoteException;
 
 }
