@@ -8,6 +8,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Presence;
 import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 
+import java.util.List;
+
 public class ViewPresence extends ClientStateAdapter {
     public ViewPresence(ClientContext context, Data data) {
         super(context, data);
@@ -29,7 +31,7 @@ public class ViewPresence extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof Presence presence){
+        if(message instanceof List presence){
             data.addPresence(presence);
             //todo remover presenças já não existentes
         }

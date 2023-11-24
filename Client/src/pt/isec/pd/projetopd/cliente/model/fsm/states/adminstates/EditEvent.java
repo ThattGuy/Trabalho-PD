@@ -10,6 +10,7 @@ import pt.isec.pd.projetopd.communication.classes.Event;
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
         super(context, data);
+        System.out.println(data.getEventToEdit());
     }
 
     @Override
@@ -19,7 +20,10 @@ public class EditEvent extends ClientStateAdapter {
             case SUBMIT -> {
                 //todo edit
             }
-            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
+            case BACK -> {
+                data.setEventToEdit(-1);
+                changeState(ClientStates.SELECT_OPT_ADMIN);
+            }
         }
 
         return true;

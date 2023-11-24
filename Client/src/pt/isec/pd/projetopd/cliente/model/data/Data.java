@@ -17,6 +17,7 @@ public class Data {
     private String message = null;
     private List<Event> events = new ArrayList<>();
     private List<Presence> presences = new ArrayList<>();
+    private int indexOfEditObject = -1;
     public Data(String ip, int port) {;
         try {
             this.socket = new Socket(ip, port);
@@ -124,5 +125,13 @@ public class Data {
             return userInfo.getAddress();
         }
         return null;
+    }
+
+    public void setEventToEdit(int index) {
+        indexOfEditObject = index;
+    }
+
+    public String getEventToEdit() {
+        return events.get(indexOfEditObject).toString();
     }
 }
