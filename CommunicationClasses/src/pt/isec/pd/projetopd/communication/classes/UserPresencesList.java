@@ -6,9 +6,9 @@ import java.util.List;
 
 public class UserPresencesList implements Serializable {
 
-    ArrayList<Presence> presences;
+    List<Presence> presences;
 
-    public UserPresencesList(ArrayList<Presence> presences) {
+    public UserPresencesList(List<Presence> presences) {
         this.presences = presences;
     }
 

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventList implements Serializable {
-    ArrayList<Event> events;
+    List<Event> events;
 
-    public EventList(ArrayList<Event> events) {
+    public EventList(List<Event> events) {
         this.events = events;
     }
 
-    public ArrayList<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 }
