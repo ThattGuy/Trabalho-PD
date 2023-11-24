@@ -1,6 +1,6 @@
 package pt.isec.pd.projetopd.server.Remote;
 
-import pt.isec.projetopd.serverbackup.BackupServerInterface;
+import pt.isec.projetopd.serverbackup.*;
 
 import java.rmi.Remote;
 
