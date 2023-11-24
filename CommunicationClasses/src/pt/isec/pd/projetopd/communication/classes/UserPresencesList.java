@@ -1,13 +1,14 @@
 package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserPresencesList implements Serializable {
 
-    List<Presence> presences;
+    ArrayList<Presence> presences;
 
-    public UserPresencesList(List<Presence> presences) {
+    public UserPresencesList(ArrayList<Presence> presences) {
         this.presences = presences;
     }
 
