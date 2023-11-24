@@ -56,16 +56,15 @@ public class Data {
         this.events = events.getEvents();
     }
 
-    public synchronized String getEventsString() {
-        StringBuilder sb = new StringBuilder();
+    public synchronized List<String> getEventsString() {
+        List<String> sb = new ArrayList<>();
 
         for (Event event : events) {
-            sb.append(event.toString());
-            sb.append("\n");
+            sb.add(event.toString());
         }
         //todo fix get null
 
-        return sb.toString();
+        return sb;
     }
 
     public synchronized void addPresence(Presence presence) {

@@ -3,6 +3,7 @@ import pt.isec.pd.projetopd.cliente.model.data.Data;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 
 import java.net.Socket;
+import java.util.List;
 
 public class ClientContext {
 
@@ -70,7 +71,7 @@ public class ClientContext {
         return data.getAddress();
     }
 
-    public String getEvents() {
+    public List<String> getEvents() {
         return data.getEventsString();
     }
 }

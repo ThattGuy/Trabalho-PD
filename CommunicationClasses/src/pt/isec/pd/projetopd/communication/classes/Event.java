@@ -29,6 +29,6 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("\"%s\";\"%s\";\"%s\";\"%s - %s\"", name, location, date, beginning, endTime);
+        return String.format("Event Name: %s; Location: %s; Date: %s; Beginning %s - %s\n", name, location, date, beginning, endTime);
     }
 }

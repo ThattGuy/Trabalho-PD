@@ -8,6 +8,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 public class Manager implements TCPReceive.MessageReceivedListener {
 
@@ -66,7 +67,7 @@ public class Manager implements TCPReceive.MessageReceivedListener {
         return fsm.getAdress();
     }
 
-    public String getEvents() {
+    public List<String> getEvents() {
         return fsm.getEvents();
     }
 }
