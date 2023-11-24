@@ -42,9 +42,7 @@ public class HandleRequests {
                 return manDB.registerPresence(presence.getcode(), ClientMail);
             }
             case Event event -> {
-                isReturn = manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
-                if(isReturn) return RESPONSE.ACCEPTED;
-                else return RESPONSE.DECLINED;
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
             }
             case EventPresence eventPresence -> {
                 return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
