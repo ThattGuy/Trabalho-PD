@@ -19,7 +19,7 @@ public class ViewPresenceUI extends BorderPane {
 
     private Manager manager;
     private Label messageLabel;
-    private List<Label> presencesLabel;
+    private Label presencesLabel;
     private VBox centerContainer;
     private HBox hBox;
     private Button btnBack, btnCSV;
@@ -82,20 +82,9 @@ public class ViewPresenceUI extends BorderPane {
 
         // Clear existing labels and buttons
         centerContainer.getChildren().clear();
-        presencesLabel = new ArrayList<>();
+        presencesLabel = new Label(manager.getPresences());
 
-        List<String> events = manager.getEvents();
-        if (events != null) {
-            for (int i = 0; i < events.size(); i++) {
-                presencesLabel.add(new Label(events.get(i)));
-            }
-        }
-
-        for (int i = 0; i < presencesLabel.size(); i++) {
-            presencesLabel.get(i).setStyle("-fx-font-size: 16px;");
-            presencesLabel.get(i).setMinSize(200, 50);
-            centerContainer.getChildren().add(presencesLabel.get(i));
-        }
+        centerContainer.getChildren().add(presencesLabel);
 
         String msg = manager.getLastMessage();
         if (msg != null) {

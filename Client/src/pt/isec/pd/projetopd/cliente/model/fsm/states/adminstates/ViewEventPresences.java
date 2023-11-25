@@ -10,6 +10,7 @@ import pt.isec.pd.projetopd.communication.classes.*;
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
+        System.out.printf("ViewEventPresences STATE");
         data.sendToServer(new EventPresence(data.getEventToEdit()));
     }
 

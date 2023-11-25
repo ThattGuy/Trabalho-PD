@@ -16,7 +16,7 @@ public class Data {
     private Socket socket;
     private String message = null;
     private List<Event> events = new ArrayList<>();
-    private String presences;
+    private String presences = "No Presences";
     private int indexOfEventObject = -1;
     public Data(String ip, int port) {;
         try {

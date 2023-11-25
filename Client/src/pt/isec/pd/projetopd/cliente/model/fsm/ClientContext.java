@@ -74,4 +74,8 @@ public class ClientContext {
     public List<String> getEvents() {
         return data.getEventsString();
     }
+
+    public String getPresences() {
+        return data.getPresenceString();
+    }
 }

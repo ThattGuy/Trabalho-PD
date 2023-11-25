@@ -131,7 +131,7 @@ public class ViewEventsUI extends BorderPane {
             centerContainer.getChildren().add(hEvent);
         }
 
-        String msg = manager.getLastMessage();
+        String msg = manager.getPresences();
         if (msg != null) {
             messageLabel.setText(msg);
         }

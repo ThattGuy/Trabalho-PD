@@ -35,11 +35,8 @@ public class Login extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
-        if(message instanceof RESPONSE response){
-            switch (response){
-                case PROBLEM_WITH_NAME -> data.setMessage("Username incorrect");
-                case PROBLEM_WITH_PASSWORD -> data.setMessage("Password incorrect");
-            }
+        if(message instanceof String response){
+            data.setMessage(response);
         }
 
         if(message instanceof User user){
