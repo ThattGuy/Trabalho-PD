@@ -49,7 +49,7 @@ public class HandleRequests {
             case EventPresence eventPresence -> {
                 return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
             }
-            case EventCodes eventCodes-> {
+            case EventCode eventCodes-> {
                 return null;
                 //TODO FRANCISCO obter o último código do evento, verificar se ele já existe, se não existir adicioná-lo ao banco de dados, retornar erros se houver, caso não haja erros adicionar o UUID e retornar o evento
             }
