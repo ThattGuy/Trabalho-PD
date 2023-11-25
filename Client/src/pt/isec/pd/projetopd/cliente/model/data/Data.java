@@ -122,7 +122,10 @@ public class Data {
     }
 
     public Event getEventToEdit() {
-        return events.get(indexOfEventObject);
+        if (events != null && indexOfEventObject != -1){
+            return events.get(indexOfEventObject);
+        }
+        return null;
     }
 
     public void logout() {
@@ -142,5 +145,9 @@ public class Data {
 
     public RegisterCode getLastEventCode() {
         return events.get(indexOfEventObject).getPresenceCodes().getLast();
+    }
+
+    public void modifyEditEvent(Event event) {
+        events.set(indexOfEventObject, event);
     }
 }

@@ -16,6 +16,8 @@ import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
+import java.util.List;
+
 public class EditEventUI extends BorderPane {
 
     private Manager manager;
@@ -26,6 +28,8 @@ public class EditEventUI extends BorderPane {
     private GridPane grid;
     private HBox hBox;
     private Label messageLabel;
+    private List<String> eventVariables;
+    private String nameS, locationS, dateS, beginningS, endTimeS;
 
     public EditEventUI(Manager manager) {
         this.manager = manager;
@@ -39,6 +43,9 @@ public class EditEventUI extends BorderPane {
      */
     private void createViews() {
 
+
+
+
         btnSubmit = new Button("Submit");
         btnSubmit.setMinWidth(200);
         btnSubmit.setMinHeight(50);
@@ -49,12 +56,12 @@ public class EditEventUI extends BorderPane {
         btnBack.setMinHeight(50);
 
         Label lName = new Label("Name:");
-        eventName = new TextField("");
+        eventName = new TextField();
         eventName.setPromptText("Enter new Name");
 
-        Label lLocal = new Label("Local:");
+        Label lLocal = new Label("Location:");
         local = new TextField();
-        local.setPromptText("Enter new Local");
+        local.setPromptText("Enter new Location");
 
         Label lDate = new Label("Date:");
         date = new TextField();
@@ -155,7 +162,7 @@ public class EditEventUI extends BorderPane {
     }
 
     private void update() {
-        if (manager.getState() != ClientStates.CREATE_EVENT) {
+        if (manager.getState() != ClientStates.EDIT_EVENT) {
             this.setVisible(false);
             return;
         }
@@ -165,5 +172,19 @@ public class EditEventUI extends BorderPane {
         if (msg != null) {
             messageLabel.setText(msg);
         }
+
+        eventVariables = manager.getEventVariables();
+        nameS = eventVariables.get(0);
+        locationS = eventVariables.get(1);
+        dateS = eventVariables.get(2);
+        beginningS = eventVariables.get(3);
+        endTimeS = eventVariables.get(4);
+
+        eventName.setText(nameS);
+        local.setText(locationS);
+        date.setText(dateS);
+        beginning.setText(beginningS);
+        endTime.setText(endTimeS);
+
     }
 }

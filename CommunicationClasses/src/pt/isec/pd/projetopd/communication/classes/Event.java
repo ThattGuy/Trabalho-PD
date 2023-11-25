@@ -29,6 +29,10 @@ public class Event implements Serializable {
         return registerCodes;
     }
 
+    public List<String> getVariables() {
+        return List.of(name, location, date, beginning, endTime);
+    }
+
     public void addPresenceCode(RegisterCode registerCodes) {
         this.registerCodes.add(registerCodes);
     }

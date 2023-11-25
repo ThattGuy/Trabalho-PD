@@ -78,4 +78,11 @@ public class ClientContext {
     public String getPresences() {
         return data.getPresenceString();
     }
+
+
+    public List<String> getEventVariables() {
+        if(data.getEventToEdit() == null)
+            return null;
+        return data.getEventToEdit().getVariables();
+    }
 }

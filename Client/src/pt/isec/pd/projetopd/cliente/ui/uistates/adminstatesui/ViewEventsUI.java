@@ -67,11 +67,6 @@ public class ViewEventsUI extends BorderPane {
             update();
         });
 
-        btnBack.setOnAction(event -> {
-            manager.selectOption(OPTIONS.BACK, null);
-            update();
-        });
-
         if(eventEditButtons != null){
             for (int i = 0; i < eventEditButtons.size(); i++) {
                 int finalI = i;
@@ -119,8 +114,8 @@ public class ViewEventsUI extends BorderPane {
             eventsLabel.get(i).setStyle("-fx-font-size: 16px;");
 
             eventsLabel.get(i).setMinSize(200, 50);
-            eventEditButtons.get(i).setMinSize(50, 50);
-            eventPresenceButtons.get(i).setMinSize(50, 50);
+            eventEditButtons.get(i).setMinSize(25, 25);
+            eventPresenceButtons.get(i).setMinSize(25, 25);
 
             HBox hEvent = new HBox(eventsLabel.get(i), eventPresenceButtons.get(i),eventEditButtons.get(i));
 

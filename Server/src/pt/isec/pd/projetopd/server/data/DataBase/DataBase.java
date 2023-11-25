@@ -334,6 +334,7 @@ public class DataBase {
         return "Failed to insert event.";
     }
 
+    //todo fix
     public Serializable editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
         String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
 
@@ -389,7 +390,7 @@ public class DataBase {
 
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    existingPresenceCount = resultSet.getInt();
+                    existingPresenceCount = resultSet.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -404,7 +405,7 @@ public class DataBase {
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
-            preparedStatement.setInt(2, );//todo
+            preparedStatement.setInt(2, 1);//todo
 
             int rowsAffected = preparedStatement.executeUpdate();
 

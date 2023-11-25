@@ -74,4 +74,9 @@ public class Manager implements TCPReceive.MessageReceivedListener {
     public String getPresences() {
         return fsm.getPresences();
     }
+
+
+    public List<String> getEventVariables() {
+        return fsm.getEventVariables();
+    }
 }
