@@ -5,9 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pt.isec.pd.projetopd.cliente.model.Manager;
 import pt.isec.pd.projetopd.cliente.ui.resources.ImageManager;
-import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.CreateEventUI;
-import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.SelectOptAdminUI;
-import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.ViewEventsUI;
+import pt.isec.pd.projetopd.cliente.ui.uistates.adminstatesui.*;
 import pt.isec.pd.projetopd.cliente.ui.uistates.sharedstatesui.*;
 import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterPresenceUI;
 import pt.isec.pd.projetopd.cliente.ui.uistates.userstatesui.RegisterUserUI;
@@ -42,7 +40,9 @@ public class RootPane extends BorderPane {
                 new RegisterPresenceUI(manager),
                 new EditInfoUI(manager),
                 new ViewEventsUI(manager),
-                new ViewPresenceUI(manager)
+                new ViewPresenceUI(manager),
+                new ViewEventPresencesUI(manager),
+                new EditEventUI(manager)
         );
         Label watermark = new Label("Developed by: Tiago Garcia Quintas, 2019128044");
         watermark.getStyleClass().add("watermark");

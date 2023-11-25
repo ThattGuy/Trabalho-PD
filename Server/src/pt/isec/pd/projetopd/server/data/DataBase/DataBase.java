@@ -5,12 +5,10 @@ import pt.isec.pd.projetopd.communication.classes.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.CodeSigner;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Date;
 
 public class DataBase {
     Connection con;
@@ -48,13 +46,14 @@ public class DataBase {
                     "HoraInicio TIME NOT NULL, " +
                     "HoraFim TIME NOT NULL, " +
                     "user_id INTEGER, " +
+                    "codigo UUID, " +
                     "FOREIGN KEY (user_id) REFERENCES User(id) " +
-                    ");");
+                    ")");
 
             statement.execute("CREATE TABLE IF NOT EXISTS CodigoRegisto ( " +
-                    "id INTEGER PRIMARY KEY, " +
-                    "codigo TEXT NOT NULL, " +
+                    "codigo UUID PRIMARY KEY, " +
                     "event_nome TEXT NOT NULL, " +
+                    "hora_termino DATETIME NOT NULL, " +
                     "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
 
@@ -148,23 +147,27 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                if(resultSet.getString("username") != null) //todo caso password estaja errada retornar msg de erro
+                if(resultSet.getString("username") != null)
 
                 if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("password");
+                    if (pass.equals(storedPassword)) {
+                        // Check if the user is an admin
+                        boolean isAdmin = resultSet.getBoolean("admin");
 
-                    // Check if the user is an admin
-                    boolean isAdmin = resultSet.getBoolean("admin");
+                        if (isAdmin) {
+                            return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        } else {
+                            return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        }
 
-                    if (isAdmin) {
-                        return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        // User credentials are correct
+
+                        //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     } else {
-                        return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        // Wrong password
+                        return "Palavra passe incorreta";
                     }
-
-                    // User credentials are correct
-
-                    //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
-
                 } else {
                     // No matching username and password
                     return RESPONSE.DECLINED;
@@ -205,12 +208,15 @@ public class DataBase {
 
         }
 
+        if (!username.endsWith("@isec.pt")) {
+            return "Invalid email format. The email must end with @isec.pt.";
+        }
+
         if (existingIDCount > 0 && admin != true) {
             return "ID already exists.";
         } else if (existingUsernameCount > 0) {
             return "Email already exists.";
         }
-
 
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -332,6 +338,7 @@ public class DataBase {
         return "Failed to insert event.";
     }
 
+    //todo fix
     public Serializable editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
         String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
 
@@ -373,40 +380,37 @@ public class DataBase {
         }
         return false;
     }
-
-    public Serializable registerPresence(int code, String clientMail) {
-        String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
-                "AND Event.nome = ?";
-        int existingPresenceCount = 0;
+    public Serializable registerPresence(UUID code, String clientMail) {
+        String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
+                "WHERE codigo = ? AND hora_termino > datetime('now')";
+        int validCodeCount = 0;
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
-            checkStatement.setString(1, clientMail);
-            checkStatement.setInt(2, code);
+            checkStatement.setString(1, code.toString());
 
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    existingPresenceCount = resultSet.getInt(1);
+                    validCodeCount = resultSet.getInt(1);
                 }
             }
         } catch (SQLException e) {
-            return "Error checking existing presence: " + e.getMessage();
+            return "Error checking valid code: " + e.getMessage();
         }
 
-        if (existingPresenceCount > 0) {
-            return "User already has a presence registered for the event.";
+        if (validCodeCount == 0) {
+            return "Invalid or expired registration code.";
         }
 
-        String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), ?)";
+        String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), " +
+                "(SELECT event_nome FROM CodigoRegisto WHERE codigo = ?))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
-            preparedStatement.setInt(2, code);
+            preparedStatement.setString(2, code.toString());
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return true;
+            return rowsAffected > 0;
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
@@ -664,5 +668,47 @@ public class DataBase {
         return presenceList;
     }
 
+    public Serializable createCode(String eventName, UUID code, Date expirationTime) {
+        // Verifica se o evento existe
+        String checkEventQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
+        int eventCount = 0;
+
+        try (PreparedStatement checkEventStatement = con.prepareStatement(checkEventQuery)) {
+            checkEventStatement.setString(1, eventName);
+
+            try (ResultSet resultSet = checkEventStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    eventCount = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            return "Error checking existing event: " + e.getMessage();
+        }
+
+        if (eventCount == 0) {
+            return "Event does not exist. Cannot create a registration code.";
+        }
+
+        String insertCodeQuery = "INSERT INTO CodigoRegisto (codigo, event_nome, hora_termino) VALUES (?, ?, ?)";
+        try (PreparedStatement insertCodeStatement = con.prepareStatement(insertCodeQuery)) {
+            insertCodeStatement.setString(1, code.toString());
+            insertCodeStatement.setString(2, eventName);
+            insertCodeStatement.setTimestamp(3, new java.sql.Timestamp(expirationTime.getTime()));
+            insertCodeStatement.executeUpdate();
+        } catch (SQLException e) {
+            return "Error inserting registration code: " + e.getMessage();
+        }
+
+        String updateEventCodeQuery = "UPDATE Event SET codigoregistoupdate = ? WHERE nome = ?";
+        try (PreparedStatement updateEventCodeStatement = con.prepareStatement(updateEventCodeQuery)) {
+            updateEventCodeStatement.setString(1, code.toString());
+            updateEventCodeStatement.setString(2, eventName);
+            updateEventCodeStatement.executeUpdate();
+        } catch (SQLException e) {
+            return "Error updating event registration code: " + e.getMessage();
+        }
+
+        return true;
+    }
 }
 

@@ -12,6 +12,7 @@ public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
         super(context, data);
         data.sendToServer(REQUESTS.EVENTS);
+        System.out.printf("VIEW_EVENTS STATE");
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ViewEvents extends ClientStateAdapter {
                         }
 
                     } catch (NumberFormatException e) {
-                        data.setMessage("Index can't be a string");//todo FIX CONCURRENCE
+                        data.setMessage("Index can't be a string");
                         return false;
                     }
             }
@@ -42,7 +43,7 @@ public class ViewEvents extends ClientStateAdapter {
                     }
 
                 } catch (NumberFormatException e) {
-                    data.setMessage("Index can't be a string");//todo FIX CONCURRENCE
+                    data.setMessage("Index can't be a string");
                     return false;
                 }
             }
@@ -56,8 +57,14 @@ public class ViewEvents extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
+        if(message instanceof String response){
+            data.setMessage(response);
+            return true;
+        }
+
         if(message instanceof EventList events){
             data.addEvents(events);
+            return true;
         }
 
         return false;

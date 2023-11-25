@@ -48,6 +48,11 @@ public class RegisterUser extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+
+        if(message instanceof String response){
+            data.setMessage(response);
+        }
+
         if(message instanceof User user){
             data.setUserInfo(user);
             if(data.isUserAdmin()){

@@ -16,7 +16,7 @@ public class Data {
     private Socket socket;
     private String message = null;
     private List<Event> events = new ArrayList<>();
-    private String presences;
+    private String presences = "No Presences";
     private int indexOfEventObject = -1;
     public Data(String ip, int port) {;
         try {
@@ -122,7 +122,10 @@ public class Data {
     }
 
     public Event getEventToEdit() {
-        return events.get(indexOfEventObject);
+        if (events != null && indexOfEventObject != -1){
+            return events.get(indexOfEventObject);
+        }
+        return null;
     }
 
     public void logout() {
@@ -130,5 +133,21 @@ public class Data {
         events = null;
         presences = null;
         tcpSend.sendObject(REQUESTS.LOGOUT);
+    }
+
+    public void addEventCode(RegisterCode registerCode) {
+        events.get(indexOfEventObject).addPresenceCode(registerCode);
+    }
+
+    public void addEvent(Event event) {
+        events.add(indexOfEventObject, event);
+    }
+
+    public RegisterCode getLastEventCode() {
+        return events.get(indexOfEventObject).getPresenceCodes().getLast();
+    }
+
+    public void modifyEditEvent(Event event) {
+        events.set(indexOfEventObject, event);
     }
 }

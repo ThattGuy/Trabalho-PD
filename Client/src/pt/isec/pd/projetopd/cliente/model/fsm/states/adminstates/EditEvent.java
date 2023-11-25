@@ -5,24 +5,52 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
+import pt.isec.pd.projetopd.communication.classes.EditedEvent;
 import pt.isec.pd.projetopd.communication.classes.Event;
+import pt.isec.pd.projetopd.communication.classes.CreateCode;
+import pt.isec.pd.projetopd.communication.classes.RegisterCode;
 
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
         super(context, data);
-        System.out.println(data.getEventToEdit());
+        System.out.printf("EDIT_EVENT STATE");
     }
 
     @Override
     public boolean selOpt(OPTIONS opt, String string) {
 
-        switch (opt){
+        switch (opt) {
             case SUBMIT -> {
-                //todo edit
+                String[] splitString = string.split("\n");
+
+                if (splitString.length == 5) {
+                    try {
+                        Event event = new Event(
+                                splitString[0],
+                                splitString[1],
+                                splitString[2],
+                                splitString[3],
+                                splitString[4]);
+                        data.sendToServer(new EditedEvent(event, data.getEventToEdit().getName()));
+                    } catch (NumberFormatException e) {
+                        data.setMessage("Wrong format");
+                        return false;
+                    }
+                }
+            }
+            case NEW_CODE -> {
+                try {
+                    int timeInMinutes = Integer.parseInt(string);
+                    data.addEventCode(new RegisterCode(timeInMinutes));
+                    data.sendToServer(new CreateCode(data.getEventToEdit().getName(), data.getLastEventCode()));
+                } catch (NumberFormatException e) {
+                    data.setMessage("Time must be in minutes");
+                    return false;
+                }
             }
             case BACK -> {
                 data.setEventIndexEdit(-1);
-                changeState(ClientStates.SELECT_OPT_ADMIN);
+                changeState(ClientStates.VIEW_EVENTS);
             }
         }
 
@@ -31,8 +59,13 @@ public class EditEvent extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+        if (message instanceof String response) {
+            data.setMessage(response);
+            return true;
+        }
+
         if (message instanceof Event event) {
-            //data.addEvents(event);
+            data.modifyEditEvent(event);
             return true;
         } else {
             data.setMessage("Error deserializing the Event object");

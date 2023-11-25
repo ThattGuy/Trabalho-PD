@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class EventPresence implements Serializable {
     private Event event;
-
     public EventPresence(Event event) {
         this.event = event;
     }
@@ -13,3 +12,4 @@ public class EventPresence implements Serializable {
         return event;
     }
 }
+

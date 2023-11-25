@@ -10,6 +10,7 @@ import pt.isec.pd.projetopd.communication.classes.*;
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
+        System.out.printf("VIEW_PRESENCE_STATE STATE");
         data.sendToServer(new EventPresence(data.getEventToEdit()));
     }
 
@@ -17,7 +18,7 @@ public class ViewEventPresences extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
+            case BACK -> changeState(ClientStates.VIEW_EVENTS);
         }
 
         return true;
@@ -25,9 +26,16 @@ public class ViewEventPresences extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+        if(message instanceof String response){
+            data.setMessage(response);
+            return true;
+        }
+
         if(message instanceof PresencesList presencesList){
             data.addPresences(presencesList);
+            return true;
         }
+
         return false;
     }
 
