@@ -1,7 +1,8 @@
 package pt.isec.projetopd.serverbackup.RMI;
 
 import pt.isec.pd.projetopd.communication.classes.HbeatMessage;
-import pt.isec.pd.projetopd.server.Remote.UpdateDB;
+import pt.isec.pd.projetopd.communication.interfaces.BackupServerInterface;
+import pt.isec.pd.projetopd.communication.interfaces.UpdateDB;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,12 +17,13 @@ import java.rmi.server.UnicastRemoteObject;
 public class HandleRmi  {
 
     String directory;
-    String NameMyRmi = "rmi://localhost/backup";
+    String NameMyRmi;
     RemoteDatabase myRemoteService = null;
-    public HandleRmi(String directory) throws RemoteException {
+    public HandleRmi(String directory, String name) throws RemoteException {
 
         super();
         this.directory = directory;
+        this.NameMyRmi = name;
         StartmyRMI();
     }
 
@@ -53,7 +55,7 @@ public class HandleRmi  {
              * Obtem o ficheiro pretendido, invocando o metodo getFile no servico remoto.
              */
 
-            serverDB.getFile(NameMyRmi, myRemoteService);
+            serverDB.getFile(myRemoteService);
 
         }catch(RemoteException e){
             System.out.println("Erro remoto - " + e);

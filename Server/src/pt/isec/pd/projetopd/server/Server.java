@@ -91,8 +91,7 @@ public class Server
         try {
 
             Server server = new Server(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
-            HbeatMessage hbeatMessage = new HbeatMessage("rmi:///" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI, server.REGISTRY_PORT, 0, InetAddress.getLocalHost().getHostAddress());
-            RemoteManager remoteManager = new RemoteManager(server.REGISTRY_PORT, server.DATABASE_PATH, "rmi:///" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI);
+            HbeatMessage hbeatMessage = new HbeatMessage("rmi://" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI, server.REGISTRY_PORT, 0, InetAddress.getLocalHost().getHostAddress());
             SendHBeat sendHBeat = new SendHBeat(server.socket, hbeatMessage, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
 
 
@@ -100,6 +99,7 @@ public class Server
             ServerInfo serverInfo = new ServerInfo(sendHBeat, notificationThread);
             HandleRequests handleRequests = new HandleRequests(args[1], serverInfo);
             ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, handleRequests);
+            RemoteManager remoteManager = new RemoteManager(server.REGISTRY_PORT, server.DATABASE_PATH, "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI);
 
 
 

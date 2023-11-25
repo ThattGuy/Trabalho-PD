@@ -14,8 +14,9 @@ public class ReceiveHbeat extends Thread{
     private final MulticastSocket ms;
     private HandleRmi rmiHandler;
 
-    public ReceiveHbeat(MulticastSocket ms) {
+    public ReceiveHbeat(MulticastSocket ms, HandleRmi rmiHandler){
         this.ms = ms;
+        this.rmiHandler = rmiHandler;
     }
 
     //TODO: Update databse version
@@ -37,7 +38,7 @@ public class ReceiveHbeat extends Thread{
 
                 if(o instanceof HbeatMessage info)
                 {
-                    if(((HbeatMessage) o).getDatabaseVersion() == 0)//TODO: Verifcar se versao BD local igual a que vem no hbeat
+                    if(((HbeatMessage) o).getDatabaseVersion() != 0)//TODO: Verifcar se versao BD local igual a que vem no hbeat
                         throw new IOException("Database version is 0");
                     System.out.println("Received heartbeat from " + info.getRMI() + " " + info.getRegistryPort());
                     //TODO: Update databse version

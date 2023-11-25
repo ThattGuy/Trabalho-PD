@@ -8,7 +8,6 @@ public class mainBackup {
         }
 
         Manager man = new Manager(args[0]);
-        man.start();
 
     }
 }

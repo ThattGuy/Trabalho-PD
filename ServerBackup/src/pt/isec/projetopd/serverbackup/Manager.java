@@ -25,11 +25,11 @@ public class Manager {
         try {
             this.DBpath = path;
             this.file = new File(path);
-            if(!checkPath(file)) //TODO: TIRAR DE COMENTARIO! ESTA EM DEBUG ASSIM
+            if(!checkPath())
                return;
 
-
             this.multicast = new MulticastSocket(MULTICAST_PORT);
+            start();
 
         } catch (IOException e) {
             throw new IllegalStateException("EXIT: The directory is not valid.");
@@ -37,21 +37,22 @@ public class Manager {
     }
 
 
-    public boolean checkPath(File directory)  {
+    public boolean checkPath()  {
 
-        return directory.exists() && directory.isDirectory() && directory.length() == 0;
+        if (!file.exists())
+            if(!file.mkdirs())
+                return false;
+
+        return file.isDirectory() && file.length() == 0 ;
     }
     private void setRMI() {
         String directo = null;
         try{
              directo = new File(file.getPath()+ File.separator + DBpath).getCanonicalPath();
-            this.rmiHandler = new HandleRmi(directo);
+            this.rmiHandler = new HandleRmi(directo, this.DBpath);
         }catch(IOException ex){
             System.out.println("Erro E/S - " + ex);
-            return;
         }
-
-
     }
 
     public void start(){
@@ -64,7 +65,7 @@ public class Manager {
             InetAddress ipGroup = InetAddress.getByName(MULTICAST_ADDRESS);
             NetworkInterface nif = NetworkInterface.getByInetAddress(ipGroup);
             this.multicast.joinGroup(new InetSocketAddress(ipGroup, MULTICAST_PORT), nif);
-            ReceiveHbeat receiveHbeat = new ReceiveHbeat(this.multicast);
+            ReceiveHbeat receiveHbeat = new ReceiveHbeat(this.multicast, this.rmiHandler);
             receiveHbeat.start();
 
 

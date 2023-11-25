@@ -1,5 +1,7 @@
 package pt.isec.projetopd.serverbackup;
 
+import pt.isec.pd.projetopd.communication.interfaces.BackupServerInterface;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

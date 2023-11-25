@@ -15,7 +15,7 @@ import java.util.Map;
 public class DataBase {
     Connection con;
     public DataBase(String path) {
-        String url = path;
+        String url = "jdbc:sqlite:" + path ;
 
         try {
             con = DriverManager.getConnection(url);

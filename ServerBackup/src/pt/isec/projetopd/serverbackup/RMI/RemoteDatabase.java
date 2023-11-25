@@ -1,6 +1,6 @@
 package pt.isec.projetopd.serverbackup.RMI;
 
-import pt.isec.projetopd.serverbackup.BackupServerInterface;
+import pt.isec.pd.projetopd.communication.interfaces.BackupServerInterface;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

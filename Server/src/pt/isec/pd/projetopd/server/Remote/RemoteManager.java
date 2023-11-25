@@ -24,7 +24,7 @@ public class RemoteManager {
             this.name = name;
             this.file = file;
             this.directory = new File(file.trim());
-            if( !(directory.exists() && directory.isDirectory() && directory.canWrite() && directory.length()  == 0))
+            if( !( directory.exists() ))// && directory.isDirectory() && directory.canRead() ))
                 return;
 
             this.port_registry = port;
@@ -39,7 +39,6 @@ public class RemoteManager {
         System.setProperty("java.rmi.server.hostname", "localhost");
 
         try{
-
             try{
 
                 this.registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
