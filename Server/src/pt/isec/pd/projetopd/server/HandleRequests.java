@@ -46,12 +46,8 @@ public class HandleRequests {
                 return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
             }
             case CreateCode eventCode-> {
-<<<<<<< HEAD
-                return null;//manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
                 //TODO FRANCISCO obter o último código do evento, verificar se ele já existe, se não existir adicioná-lo ao banco de dados, retornar erros se houver, caso não haja erros adicionar o UUID e retornar o evento
-=======
                 return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
->>>>>>> c7d1bd79203939c605a391b12e6f96311f934fb7
             }
             case UUID code -> {
                 return manDB.registerPresence(code, ClientMail);
