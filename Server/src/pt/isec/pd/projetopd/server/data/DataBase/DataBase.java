@@ -48,8 +48,7 @@ public class DataBase {
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS CodigoRegisto ( " +
-                    "id INTEGER PRIMARY KEY, " +
-                    "codigo TEXT NOT NULL, " +
+                    "codigo INTEGER PRIMARY KEY, " +
                     "event_nome TEXT NOT NULL, " +
                     "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
@@ -665,6 +664,25 @@ public class DataBase {
         }
 
         return presenceList;
+    }
+
+    public Serializable addRegistrationCode(String eventName, int registrationCode) {
+        String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, ?)";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, registrationCode);
+            preparedStatement.setString(2, eventName);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return registrationCode;
+            } else {
+                return "Error adding registration code.";
+            }
+        } catch (SQLException e) {
+            return "Error adding registration code: " + e.getMessage();
+        }
     }
 
 }
