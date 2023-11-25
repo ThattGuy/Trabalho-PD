@@ -1,18 +1,18 @@
 package pt.isec.projetopd.serverbackup.HeartBeat;
 
 import pt.isec.pd.projetopd.communication.classes.HbeatMessage;
+import pt.isec.projetopd.serverbackup.RMI.HandleRmi;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 
 public class ReceiveHbeat extends Thread{
     private final MulticastSocket ms;
+    private HandleRmi rmiHandler;
 
     public ReceiveHbeat(MulticastSocket ms) {
         this.ms = ms;
@@ -23,6 +23,7 @@ public class ReceiveHbeat extends Thread{
 
     @Override
     public void run() {
+        boolean first = true;
         try {
             for(;;) {
 
@@ -40,6 +41,11 @@ public class ReceiveHbeat extends Thread{
                         throw new IOException("Database version is 0");
                     System.out.println("Received heartbeat from " + info.getRMI() + " " + info.getRegistryPort());
                     //TODO: Update databse version
+                    if(first) {
+                        rmiHandler.setLocalDatabase((HbeatMessage) o);
+                        first = false;
+                    }
+                    else rmiHandler.fileReceived(o);
                 }
                 else{
                     System.out.println("Received unknown object");
