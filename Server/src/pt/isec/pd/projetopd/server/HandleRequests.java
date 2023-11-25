@@ -53,7 +53,7 @@ public class HandleRequests {
                 return manDB.registerPresence(code, ClientMail);
             }
             case EditedEvent editedEvent-> {
-                return null;//manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName()); //TODO FRANCISCO verificar se o evento existe, se existir editar, se não existir retornar erro
+                return null;//manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName()); //TODO FRANCISCO verificar se o evento existe, se existir editar e retornar o evento, se não existir retornar erro
             }
 
             default -> {

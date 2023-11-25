@@ -390,11 +390,7 @@ public class DataBase {
 
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
-<<<<<<< HEAD
-                    existingPresenceCount = resultSet.getInt(1);
-=======
                     validCodeCount = resultSet.getInt(1);
->>>>>>> c7d1bd79203939c605a391b12e6f96311f934fb7
                 }
             }
         } catch (SQLException e) {
@@ -410,11 +406,7 @@ public class DataBase {
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
-<<<<<<< HEAD
-            preparedStatement.setInt(2, 1);//todo
-=======
             preparedStatement.setString(2, code.toString());
->>>>>>> c7d1bd79203939c605a391b12e6f96311f934fb7
 
             int rowsAffected = preparedStatement.executeUpdate();
 
