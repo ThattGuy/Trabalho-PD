@@ -42,9 +42,7 @@ public class HandleRequests {
                 return manDB.registerPresence(presence.getcode(), ClientMail);
             }
             case Event event -> {
-                isReturn = manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
-                if(isReturn) return RESPONSE.ACCEPTED;
-                else return RESPONSE.DECLINED;
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
             }
             case EventPresence eventPresence -> {
                 return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
@@ -81,7 +79,7 @@ public class HandleRequests {
     {
         switch (request){
             case PRESENCE -> {
-                return (Serializable) manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
+                return manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
                 manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv

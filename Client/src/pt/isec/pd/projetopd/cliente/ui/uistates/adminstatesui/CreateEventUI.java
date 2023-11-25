@@ -149,7 +149,7 @@ public class CreateEventUI extends BorderPane {
         });
 
         btnBack.setOnAction(event -> {
-            manager.selectOption(OPTIONS.BACK, eventName.getText() + "\n" + local.getText());
+            manager.selectOption(OPTIONS.BACK, null);
             update();
         });
     }

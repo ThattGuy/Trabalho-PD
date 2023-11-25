@@ -16,7 +16,8 @@ public class Data {
     private Socket socket;
     private String message = null;
     private List<Event> events = new ArrayList<>();
-    private List<Presence> presences = new ArrayList<>();
+    private String presences;
+    private int indexOfEventObject = -1;
     public Data(String ip, int port) {;
         try {
             this.socket = new Socket(ip, port);
@@ -56,33 +57,22 @@ public class Data {
         this.events = events.getEvents();
     }
 
-    public synchronized String getEventsString() {
-        StringBuilder sb = new StringBuilder();
+    public synchronized List<String> getEventsString() {
+        List<String> sb = new ArrayList<>();
 
         for (Event event : events) {
-            sb.append(event.toString());
-            sb.append("\n");
+            sb.add(event.toString());
         }
-        //todo fix get null
 
-        return sb.toString();
+        return sb;
     }
 
-    public synchronized void addPresence(Presence presence) {
-        presences.add(presence);
-        //todo delete old presence
+    public synchronized void addPresences(PresencesList presencesList) {
+        this.presences = presencesList.toString();
     }
 
     public synchronized String getPresenceString() {
-        StringBuilder sb = new StringBuilder();
-
-        for (Presence presence : presences) {
-            sb.append(presence.toString());
-            sb.append("\n");
-        }
-        //todo fix get null
-
-        return sb.toString();
+        return presences;
     }
 
     public String getUserName() {
@@ -125,5 +115,20 @@ public class Data {
             return userInfo.getAddress();
         }
         return null;
+    }
+
+    public void setEventIndexEdit(int index) {
+        indexOfEventObject = index;
+    }
+
+    public Event getEventToEdit() {
+        return events.get(indexOfEventObject);
+    }
+
+    public void logout() {
+        userInfo = null;
+        events = null;
+        presences = null;
+        tcpSend.sendObject(REQUESTS.LOGOUT);
     }
 }

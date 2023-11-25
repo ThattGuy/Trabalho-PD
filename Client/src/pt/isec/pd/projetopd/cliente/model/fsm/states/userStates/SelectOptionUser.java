@@ -20,7 +20,10 @@ public class SelectOptionUser extends ClientStateAdapter {
             case EDIT_DATA -> changeState(ClientStates.EDIT_USER_DATA);
             case REG_PRESENCE -> changeState(ClientStates.REG_PRESENCE);
             case VIEW_PRESENCE -> changeState(ClientStates.VIEW_PRESENCE);
-            case LOGOUT -> changeState(ClientStates.INITIAL);//todo
+            case LOGOUT -> {
+                data.logout();
+                changeState(ClientStates.INITIAL);
+            }
         }
 
         return true;

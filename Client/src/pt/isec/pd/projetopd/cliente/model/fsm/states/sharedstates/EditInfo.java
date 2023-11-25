@@ -21,7 +21,7 @@ public class EditInfo extends ClientStateAdapter {
             case SUBMIT -> {
                 //todo
             }
-            case BACK -> changeState(ClientStates.SELECT_OPT_ADMIN);
+            case BACK -> changeState(context.getLastState());
         }
 
         return true;

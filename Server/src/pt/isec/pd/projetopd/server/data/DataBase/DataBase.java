@@ -5,6 +5,7 @@ import pt.isec.pd.projetopd.communication.classes.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.CodeSigner;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,7 +118,7 @@ public class DataBase {
 
 
 
-    public boolean verifyAdmin(int userId) {
+    public Serializable verifyAdmin(int userId) {
         String query = "SELECT admin FROM User WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -125,13 +126,12 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    // Obtém o valor da coluna "admin" (true se for admin, false se não for)
                     boolean isAdmin = resultSet.getBoolean("admin");
                     return isAdmin;
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error checking admin status: " + e.getMessage());
+            return "Error checking admin status: " + e.getMessage();
         }
         return false;
     }
@@ -148,7 +148,7 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                if(resultSet.getString("username") != null) //todo retornar declined caso password estaja errada
+                if(resultSet.getString("username") != null) //todo caso password estaja errada retornar msg de erro
 
                 if (resultSet.next()) {
 
@@ -234,41 +234,46 @@ public class DataBase {
         }
     }
 
-    public boolean editDataUser(String username, String name, int studentnumber, int nif, String id, String address) {
-        String query = "UPDATE User SET username = ?, name = ?, studentNumber = ?, nif = ?, address = ?, admin = ? WHERE id = ?";
+    public Serializable editDataUser(String username, String password , String name, int studentnumber, int nif, String id, String address) {
+        String query = "UPDATE User SET username = ?, password = ?, name = ?, studentNumber = ?, nif = ?, address = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, name);
-            preparedStatement.setInt(3, studentnumber);
-            preparedStatement.setInt(4, nif);
-            preparedStatement.setString(5, address);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, name);
+            preparedStatement.setInt(4, studentnumber);
+            preparedStatement.setInt(5, nif);
+            preparedStatement.setString(6, address);
             preparedStatement.setString(7, id);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                return new User(username, password, name, studentnumber, nif, id, address);
+            } else {
+                return "No rows affected. User not found or data unchanged.";
+            }
         } catch (SQLException e) {
-            System.err.println("Error editing user data: " + e.getMessage());
-            return false;
+            return "Error editing user data: " + e.getMessage();
         }
     }
 
-    public boolean deleteUser(String id) {
+    public Serializable deleteUser(String id) {
         String query = "DELETE FROM User WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, id);
 
             int rowsAffected = preparedStatement.executeUpdate();
-
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+               return "User deleted successfully.";
+            }
         } catch (SQLException e) {
-            System.err.println("Error removing user: " + e.getMessage());
-            return false;
+            return "Error removing user: " + e.getMessage();
         }
+        return false;
     }
-    public boolean deleteEvent(String nome) {
+    public Serializable deleteEvent(String nome) {
         String query = "DELETE FROM Event WHERE nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -276,14 +281,16 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                return "Event deleted successfully.";
+            }
         } catch (SQLException e) {
-            System.err.println("Error deleting event: " + e.getMessage());
-            return false;
+           return "Error deleting event: " + e.getMessage();
         }
+        return false;
     }
 
-    public boolean registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
+    public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
         String checkQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
         int existingEventCount = 0;
 
@@ -296,13 +303,11 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error verifying existing event: " + e.getMessage());
-            return false;
+            return "Error verifying existing event: " + e.getMessage();
         }
 
         if (existingEventCount > 0) {
-            System.out.println("Event with the same name already exists.");
-            return false;
+            return "Event with the same name already exists.";
         }
 
         String query = "INSERT INTO Event (nome, Local, Data, HoraInicio, HoraFim, user_id) VALUES (?, ?, ?, ?, ?, ?)";
@@ -317,14 +322,17 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                return new Event(nome, local, data, horaInicio, horaFim);
+            }
         } catch (SQLException e) {
-            System.err.println("Error inserting event: " + e.getMessage());
-            return false;
+            return "Error inserting event: " + e.getMessage();
         }
+
+        return "Failed to insert event.";
     }
 
-    public boolean editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
+    public Serializable editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
         String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -337,13 +345,17 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Retorna o objeto Event após a edição
+                return new Event(nome, local, data, horaInicio, horaFim);
+            } else {
+                return "No rows affected. Event not found or no changes made.";
+            }
         } catch (SQLException e) {
-            System.err.println("Error editing event: " + e.getMessage());
-            return false;
+            return "Error editing event: " + e.getMessage();
         }
     }
-    public boolean addCodeRegister(String codigo, String eventName) {
+    public Serializable addCodeRegister(String codigo, String eventName) {
         String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, (SELECT id FROM Event WHERE nome = ?))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -352,12 +364,16 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Retorna o objeto Event após a edição
+                return true;
+            }
         } catch (SQLException e) {
-            System.err.println("Error adding registration code:" + e.getMessage());
-            return false;
+            return "Error adding registration code:" + e.getMessage();
         }
+        return false;
     }
+
     public Serializable registerPresence(int code, String clientMail) {
         String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
@@ -554,7 +570,7 @@ public class DataBase {
     }
 
 
-    public List<String> getPresenceForUser(String userName) {
+    public PresencesList getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
@@ -583,7 +599,9 @@ public class DataBase {
             System.err.println("Error getting presence for user: " + e.getMessage());
         }
 
-        return presenceList;
+        PresencesList pl = new PresencesList(presenceList.toString());
+
+        return pl;
     }
 
     public EventList getAllEvents() {

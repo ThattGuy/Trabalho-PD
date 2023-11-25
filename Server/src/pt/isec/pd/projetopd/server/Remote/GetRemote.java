@@ -1,7 +1,7 @@
 package pt.isec.pd.projetopd.server.Remote;
 
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
-import pt.isec.projetopd.serverbackup.BackupServerInterface;
+//import pt.isec.projetopd.serverbackup.BackupServerInterface;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
+
 public class GetRemote extends UnicastRemoteObject implements UpdateDB{
 
     public static final int MAX_CHUNCK_SIZE = 10000; //bytes
@@ -20,14 +21,19 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
         this.directory = direc;
     }
 
-    protected FileInputStream getRequestedFileInputStream(String fileName) throws IOException {
-        String requestedCanonicalFilePath;
+    //protected FileInputStream getRequestedFileInputStream(String fileName) throws IOException
+
+    @Override
+    public byte[] getFileChunk(String fileName, long offset) throws RemoteException, IOException {
+        return new byte[0];
+    }
+       /* String requestedCanonicalFilePath;
 
         fileName = fileName.trim();
 
-        /*
+
          * Verifica se o ficheiro solicitado existe e encontra-se por baixo da localDirectory.
-         */
+         *
 
         requestedCanonicalFilePath = new File(directory + File.separator + fileName).getCanonicalPath();
 
@@ -54,7 +60,7 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
 
             /*
              * Obtem um bloco de bytes do ficheiro, omitindo os primeiros offset bytes.
-             */
+             *
             requestedFileInputStream.skip(offset);
             nbytes = requestedFileInputStream.read(fileChunk);
 
@@ -65,7 +71,7 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
             /*
              * Se fileChunk nao esta' totalmente preenchido (MAX_CHUNCK_SIZE), recorre-se
              * a um array auxiliar com tamanho correspondente ao numero de bytes efectivamente lidos.
-             */
+             *
             if(nbytes < fileChunk.length){
                 return Arrays.copyOf(fileChunk, nbytes);
             }
@@ -79,6 +85,7 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
 
     }
 
+    /*
     @Override
     public void getFile(String fileName, BackupServerInterface cliRemoto) throws IOException {
         byte [] fileChunk = new byte[MAX_CHUNCK_SIZE];
@@ -91,13 +98,13 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
 
             /*
              * Obtem os bytes do ficheiro por blocos de bytes ("file chunks").
-             */
+
             while((nbytes = requestedFileInputStream.read(fileChunk))!=-1){
 
                 /*
                  * Escreve o bloco actual no cliente, invocando o metodo writeFileChunk da
                  * sua interface remota.
-                 */
+
 
 
                 cliRemoto.writeFileChunk(fileChunk, nbytes);
@@ -117,7 +124,6 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB{
             System.out.println("Ocorreu a excecao de E/S: \n\t" + e);
             throw new IOException(fileName, e.getCause());
         }
-
-    }
+    }*/
 
 }
