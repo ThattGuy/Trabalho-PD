@@ -208,6 +208,7 @@ public class DataBase {
             return "Error verifying ID or email: " + e.getMessage();
 
         }
+
         if (!username.endsWith("@isec.pt")) {
             return "Invalid email format. The email must end with @isec.pt.";
         }
@@ -217,7 +218,6 @@ public class DataBase {
         } else if (existingUsernameCount > 0) {
             return "Email already exists.";
         }
-
 
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
