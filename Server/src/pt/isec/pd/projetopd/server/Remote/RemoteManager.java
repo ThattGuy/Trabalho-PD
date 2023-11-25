@@ -17,9 +17,11 @@ public class RemoteManager {
     int port_registry;
     File directory;
     String file;
-    public RemoteManager( int port, String file) {
+    String name; //vem da linha de comandos
+    public RemoteManager( int port, String file, String name) {
         super();
         try{
+            this.name = name;
             this.file = file;
             this.directory = new File(file.trim());
             if( !(directory.exists() && directory.isDirectory() && directory.canWrite() && directory.length()  == 0))
@@ -52,7 +54,7 @@ public class RemoteManager {
             //this.getRemote = (GetRemote) UnicastRemoteObject.exportObject(this.getRemote, port_registry);
 
 
-            Naming.bind("rmi://localhost/" + "server-database", getRemote);
+            Naming.bind(name, getRemote);
 
         }catch(RemoteException e){
             System.out.println("Erro remoto - " + e);

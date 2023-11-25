@@ -148,23 +148,27 @@ public class DataBase {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                if(resultSet.getString("username") != null) //todo caso password estaja errada retornar msg de erro
+                if(resultSet.getString("username") != null)
 
                 if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("password");
+                    if (pass.equals(storedPassword)) {
+                        // Check if the user is an admin
+                        boolean isAdmin = resultSet.getBoolean("admin");
 
-                    // Check if the user is an admin
-                    boolean isAdmin = resultSet.getBoolean("admin");
+                        if (isAdmin) {
+                            return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        } else {
+                            return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        }
 
-                    if (isAdmin) {
-                        return new Admin(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        // User credentials are correct
+
+                        //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     } else {
-                        return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
+                        // Wrong password
+                        return "Palavra passe incorreta";
                     }
-
-                    // User credentials are correct
-
-                    //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
-
                 } else {
                     // No matching username and password
                     return RESPONSE.DECLINED;
@@ -205,12 +209,15 @@ public class DataBase {
 
         }
 
+        if (!username.endsWith("@isec.pt")) {
+            return "Invalid email format. The email must end with @isec.pt.";
+        }
+
         if (existingIDCount > 0 && admin != true) {
             return "ID already exists.";
         } else if (existingUsernameCount > 0) {
             return "Email already exists.";
         }
-
 
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
