@@ -7,6 +7,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
+import java.util.UUID;
+
 public class RegisterPresence extends ClientStateAdapter {
     public RegisterPresence(ClientContext context, Data data) {
         super(context, data);
@@ -16,10 +18,18 @@ public class RegisterPresence extends ClientStateAdapter {
 
     @Override
     public boolean selOpt(OPTIONS opt, String string) {
-
         switch (opt){
             case SUBMIT -> {
-                data.sendToServer(new Presence(Integer.parseInt(string)));
+                UUID uuid = null;
+                try {
+                    uuid = UUID.fromString(string);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+
+                if (uuid != null) {
+                    data.sendToServer(uuid);
+                }
             }
             case BACK -> changeState(ClientStates.SELECT_OPT);
         }

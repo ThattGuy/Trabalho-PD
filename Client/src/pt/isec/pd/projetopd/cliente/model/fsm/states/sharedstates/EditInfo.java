@@ -29,13 +29,17 @@ public class EditInfo extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+
+        if(message instanceof String response){
+            data.setMessage(response);
+            return true;
+        }
+
         if (message instanceof User) {
             data.setUserInfo((User) message);
             return true;
-        } else {
-            data.setMessage("Error deserializing the User object");
-            return false;
         }
+        return false;
     }
 
     @Override

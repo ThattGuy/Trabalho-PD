@@ -109,7 +109,7 @@ public class ViewEventPresencesUI extends BorderPane {
             messageLabel.setText(msg);
         }
 
-        if(msg != "No Prefawsences"){
+        if(msg != "No Presences"){
             removePresenceHBox = new HBox(lRemove,userName, eventName,btnRemove);
             removePresenceHBox.setAlignment(Pos.CENTER);
             hBox = new HBox(removePresenceHBox,btnBack, btnCSV);

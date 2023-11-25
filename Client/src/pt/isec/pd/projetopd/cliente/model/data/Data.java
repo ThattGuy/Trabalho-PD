@@ -131,4 +131,12 @@ public class Data {
         presences = null;
         tcpSend.sendObject(REQUESTS.LOGOUT);
     }
+
+    public void addEventCode(PresenceCode presenceCode) {
+        events.get(indexOfEventObject).addPresenceCode(presenceCode);
+    }
+
+    public void addEvent(Event event) {
+        events.add(indexOfEventObject, event);
+    }
 }

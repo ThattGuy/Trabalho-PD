@@ -6,19 +6,32 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
+import pt.isec.pd.projetopd.communication.classes.EventCodes;
+import pt.isec.pd.projetopd.communication.classes.PresenceCode;
+import pt.isec.pd.projetopd.communication.classes.User;
 
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
         super(context, data);
-        System.out.println(data.getEventToEdit());
+        System.out.printf("EDIT_EVENT STATE");
     }
 
     @Override
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case SUBMIT -> {
-                //todo edit
+            case SUBMIT -> {//todo
+
+            }
+            case NEW_CODE -> {
+                try {
+                    int timeInMinutes = Integer.parseInt(string);
+                    data.addEventCode(new PresenceCode(timeInMinutes));
+                    data.sendToServer(new EventCodes(data.getEventToEdit()));
+                } catch (NumberFormatException e) {
+                    data.setMessage("Time must be in minutes");
+                    return false;
+                }
             }
             case BACK -> {
                 data.setEventIndexEdit(-1);
@@ -31,8 +44,13 @@ public class EditEvent extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+        if (message instanceof String response) {
+            data.setMessage(response);
+            return true;
+        }
+
         if (message instanceof Event event) {
-            //data.addEvents(event);
+            data.addEvent(event);
             return true;
         } else {
             data.setMessage("Error deserializing the Event object");

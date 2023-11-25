@@ -30,6 +30,13 @@ public class SelectOptionAdmin extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+
+
+        if(message instanceof String response){
+            data.setMessage(response);
+            return true;
+        }
+
         return false;
     }
 

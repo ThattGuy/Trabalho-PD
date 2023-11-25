@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 public class CreateEvent extends ClientStateAdapter {
     public CreateEvent(ClientContext context, Data data) {
         super(context, data);
+        System.out.printf("CREATE_EVENT STATE");
     }
 
     @Override
@@ -32,7 +33,7 @@ public class CreateEvent extends ClientStateAdapter {
                                 splitString[3],
                                 splitString[4]));
                     } catch (NumberFormatException e) {
-                        data.setMessage("Wrong format");//todo FIX CONCURRENCE
+                        data.setMessage("Wrong format");
                         return false;
                     }
 
@@ -46,6 +47,12 @@ public class CreateEvent extends ClientStateAdapter {
 
     @Override
     public synchronized boolean onMessageReceived(Object message) {
+
+        if (message instanceof String response) {
+            data.setMessage(response);
+            return true;
+        }
+
         if(message instanceof RESPONSE response){
             switch (response){
                 case ACCEPTED -> data.setMessage("Event Created");

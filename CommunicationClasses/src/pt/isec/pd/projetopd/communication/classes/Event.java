@@ -10,8 +10,7 @@ public class Event implements Serializable {
     private String date;
     private String beginning;
     private String endTime;
-    private List<User> users; //todo string ou user?
-
+    private List<PresenceCode> presenceCodes;
     public Event(String name, String location, String date, String beginning, String endTime) {
         this.name = name;
         this.location = location;
@@ -25,7 +24,14 @@ public class Event implements Serializable {
     public String getDate() {return date;}
     public String getBeginning() {return beginning;}
     public String getEndTime() {return endTime;}
-    public List<User> getUsers() {return users;}
+
+    public List<PresenceCode> getPresenceCodes() {
+        return presenceCodes;
+    }
+
+    public void addPresenceCode(PresenceCode presenceCodes) {
+        this.presenceCodes.add(presenceCodes);
+    }
 
     @Override
     public String toString() {

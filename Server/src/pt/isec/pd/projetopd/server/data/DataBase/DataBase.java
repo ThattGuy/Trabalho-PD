@@ -5,12 +5,8 @@ import pt.isec.pd.projetopd.communication.classes.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.CodeSigner;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataBase {
     Connection con;
@@ -381,7 +377,7 @@ public class DataBase {
         return false;
     }
 
-    public Serializable registerPresence(int code, String clientMail) {
+    public Serializable registerPresence(UUID code, String clientMail) {//TODO FIX THIS
         String checkQuery = "SELECT COUNT(*) FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
                 "WHERE UserEvent.user_id = (SELECT id FROM User WHERE username = ?) " +
@@ -390,7 +386,7 @@ public class DataBase {
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
             checkStatement.setString(1, clientMail);
-            checkStatement.setInt(2, code);
+            checkStatement.setInt(2, 1);//todo fix
 
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -409,7 +405,7 @@ public class DataBase {
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, clientMail);
-            preparedStatement.setInt(2, code);
+            preparedStatement.setInt(2, 1);//todo
 
             int rowsAffected = preparedStatement.executeUpdate();
 
