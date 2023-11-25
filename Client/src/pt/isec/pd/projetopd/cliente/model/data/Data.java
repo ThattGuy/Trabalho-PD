@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Data {
     private TCPSend tcpSend;
@@ -133,15 +132,15 @@ public class Data {
         tcpSend.sendObject(REQUESTS.LOGOUT);
     }
 
-    public void addEventCode(PresenceCode presenceCode) {
-        events.get(indexOfEventObject).addPresenceCode(presenceCode);
+    public void addEventCode(RegisterCode registerCode) {
+        events.get(indexOfEventObject).addPresenceCode(registerCode);
     }
 
     public void addEvent(Event event) {
         events.add(indexOfEventObject, event);
     }
 
-    public PresenceCode getLastEventCode() {
+    public RegisterCode getLastEventCode() {
         return events.get(indexOfEventObject).getPresenceCodes().getLast();
     }
 }

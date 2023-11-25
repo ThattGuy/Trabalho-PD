@@ -6,8 +6,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
-import pt.isec.pd.projetopd.communication.classes.EventCode;
-import pt.isec.pd.projetopd.communication.classes.PresenceCode;
+import pt.isec.pd.projetopd.communication.classes.CreateCode;
+import pt.isec.pd.projetopd.communication.classes.RegisterCode;
 
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
@@ -25,8 +25,8 @@ public class EditEvent extends ClientStateAdapter {
             case NEW_CODE -> {
                 try {
                     int timeInMinutes = Integer.parseInt(string);
-                    data.addEventCode(new PresenceCode(timeInMinutes));
-                    data.sendToServer(new EventCode(data.getEventToEdit().getName(), data.getLastEventCode()));
+                    data.addEventCode(new RegisterCode(timeInMinutes));
+                    data.sendToServer(new CreateCode(data.getEventToEdit().getName(), data.getLastEventCode()));
                 } catch (NumberFormatException e) {
                     data.setMessage("Time must be in minutes");
                     return false;

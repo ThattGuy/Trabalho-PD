@@ -9,16 +9,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 
-public class PresenceCode implements Serializable {
+public class RegisterCode implements Serializable {
 
-    private Date expirationTime;
     private UUID code;
+    private Date expirationTime;
 
-    public PresenceCode(int minutesActive) {
+    public RegisterCode(int minutesActive) {
         this.code = UUID.randomUUID();
         setExpirationTime(minutesActive);
     }

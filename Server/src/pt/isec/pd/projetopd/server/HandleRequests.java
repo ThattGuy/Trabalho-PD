@@ -39,19 +39,19 @@ public class HandleRequests {
             case User clientInfo -> {
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
-            case UUID code -> {
-                //TODO FRANCISCO mudar as cenas de int para UUID tanto nas verificações como na base de dados em si
-                return manDB.registerPresence(code, ClientMail);
-            }
             case Event event -> {
                 return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(), ClientMail);
             }
             case EventPresence eventPresence -> {
                 return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
             }
-            case EventCode eventCodes-> {
+            case CreateCode eventCodes-> {
                 return null;
                 //TODO FRANCISCO obter o último código do evento, verificar se ele já existe, se não existir adicioná-lo ao banco de dados, retornar erros se houver, caso não haja erros adicionar o UUID e retornar o evento
+            }
+            case UUID code -> {
+                //TODO FRANCISCO mudar as cenas de int para UUID tanto nas verificações como na base de dados em si
+                return manDB.registerPresence(code, ClientMail);
             }
             default -> {
                 return RESPONSE.DECLINED;

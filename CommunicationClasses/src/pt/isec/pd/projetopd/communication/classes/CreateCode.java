@@ -2,11 +2,11 @@ package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
 
-public class EventCode implements Serializable {
+public class CreateCode implements Serializable {
 
     private String eventName;
-    private PresenceCode eventCode;
-    public EventCode(String eventName, PresenceCode eventCode) {
+    private RegisterCode eventCode;
+    public CreateCode(String eventName, RegisterCode eventCode) {
         this.eventName = eventName;
         this.eventCode = eventCode;
     }
@@ -15,7 +15,7 @@ public class EventCode implements Serializable {
         return eventName;
     }
 
-    public PresenceCode getEventCode() {
+    public RegisterCode getEventCode() {
         return eventCode;
     }
 }

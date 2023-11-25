@@ -10,7 +10,7 @@ public class Event implements Serializable {
     private String date;
     private String beginning;
     private String endTime;
-    private List<PresenceCode> presenceCodes;
+    private List<RegisterCode> registerCodes;
     public Event(String name, String location, String date, String beginning, String endTime) {
         this.name = name;
         this.location = location;
@@ -25,12 +25,12 @@ public class Event implements Serializable {
     public String getBeginning() {return beginning;}
     public String getEndTime() {return endTime;}
 
-    public List<PresenceCode> getPresenceCodes() {
-        return presenceCodes;
+    public List<RegisterCode> getPresenceCodes() {
+        return registerCodes;
     }
 
-    public void addPresenceCode(PresenceCode presenceCodes) {
-        this.presenceCodes.add(presenceCodes);
+    public void addPresenceCode(RegisterCode registerCodes) {
+        this.registerCodes.add(registerCodes);
     }
 
     @Override
