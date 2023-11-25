@@ -47,9 +47,8 @@ public class DataBase {
                     "HoraFim TIME NOT NULL, " +
                     "user_id INTEGER, " +
                     "codigo UUID, " +
-                    "FOREIGN KEY (user_id) REFERENCES User(id), " +
-                    "FOREIGN KEY (codigo) REFERENCES CodigoRegisto(codigo) " +
-                    ");");
+                    "FOREIGN KEY (user_id) REFERENCES User(id) " +
+                    ")");
 
             statement.execute("CREATE TABLE IF NOT EXISTS CodigoRegisto ( " +
                     "codigo UUID PRIMARY KEY, " +
@@ -668,26 +667,8 @@ public class DataBase {
         return presenceList;
     }
 
-    public Serializable addRegistrationCode(String eventName, int registrationCode) {
-        String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, ?)";
-
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setInt(1, registrationCode);
-            preparedStatement.setString(2, eventName);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return registrationCode;
-            } else {
-                return "Error adding registration code.";
-            }
-        } catch (SQLException e) {
-            return "Error adding registration code: " + e.getMessage();
-        }
-    }
-
     public Serializable createCode(String eventName, UUID code, Date expirationTime) {
+        // Verifica se o evento existe
         String checkEventQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
         int eventCount = 0;
 
@@ -702,9 +683,21 @@ public class DataBase {
         } catch (SQLException e) {
             return "Error checking existing event: " + e.getMessage();
         }
+
         if (eventCount == 0) {
             return "Event does not exist. Cannot create a registration code.";
         }
+
+        String insertCodeQuery = "INSERT INTO CodigoRegisto (codigo, event_nome, hora_termino) VALUES (?, ?, ?)";
+        try (PreparedStatement insertCodeStatement = con.prepareStatement(insertCodeQuery)) {
+            insertCodeStatement.setString(1, code.toString());
+            insertCodeStatement.setString(2, eventName);
+            insertCodeStatement.setTimestamp(3, new java.sql.Timestamp(expirationTime.getTime()));
+            insertCodeStatement.executeUpdate();
+        } catch (SQLException e) {
+            return "Error inserting registration code: " + e.getMessage();
+        }
+
         String updateEventCodeQuery = "UPDATE Event SET codigoregistoupdate = ? WHERE nome = ?";
         try (PreparedStatement updateEventCodeStatement = con.prepareStatement(updateEventCodeQuery)) {
             updateEventCodeStatement.setString(1, code.toString());
@@ -713,6 +706,7 @@ public class DataBase {
         } catch (SQLException e) {
             return "Error updating event registration code: " + e.getMessage();
         }
+
         return true;
     }
 }
