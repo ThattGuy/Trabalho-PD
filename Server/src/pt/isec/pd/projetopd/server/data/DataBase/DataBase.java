@@ -297,7 +297,7 @@ public class DataBase {
         return false;
     }
 
-    public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
+    public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, RegisterCode registerCode, String userId) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             dateFormat.parse(data);

@@ -3,6 +3,7 @@ package pt.isec.pd.projetopd.communication.classes;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Event implements Serializable {
 
@@ -12,12 +13,13 @@ public class Event implements Serializable {
     private String beginning;
     private String endTime;
     private List<RegisterCode> registerCodes = new ArrayList<>();
-    public Event(String name, String location, String date, String beginning, String endTime) {
+    public Event(String name, String location, String date, String beginning, String endTime, int codeExpirationTime) {
         this.name = name;
         this.location = location;
         this.date = date;
         this.beginning = beginning;
         this.endTime = endTime;
+       registerCodes.add(new RegisterCode(codeExpirationTime);
     }
 
     public String getName() {return name;}
@@ -45,4 +47,5 @@ public class Event implements Serializable {
     public String toString() {
         return String.format("Event Name: %s; Location: %s; Date: %s; Beginning %s - %s\n", name, location, date, beginning, endTime);
     }
+
 }
