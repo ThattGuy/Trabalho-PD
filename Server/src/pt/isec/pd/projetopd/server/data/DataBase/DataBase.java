@@ -167,19 +167,16 @@ public class DataBase {
 
                         //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     } else {
-                        // Wrong password
                         return "Palavra passe incorreta";
                     }
                 } else {
-                    // No matching username and password
-                    return RESPONSE.DECLINED;
+                    return "No matching username and password";
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error verifying login: " + e.getMessage());
-            return RESPONSE.DECLINED;
+            return "Error verifying login: " + e.getMessage();
         }
-        return RESPONSE.DECLINED;
+        return "Error verifying login.";
     }
 
 
