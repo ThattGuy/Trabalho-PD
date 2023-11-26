@@ -1,13 +1,12 @@
 package pt.isec.pd.projetopd.server;
 
-import pt.isec.pd.projetopd.communication.classes.Authentication;
-import pt.isec.pd.projetopd.communication.classes.RESPONSE;
-import pt.isec.pd.projetopd.communication.classes.User;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ServerInfo {
@@ -15,14 +14,19 @@ public class ServerInfo {
     private int nTCPConnections;
     private int databaseVersion;
     private SendHBeat sendHBeat;
-    private NotificationThread notifications;
+    private ArrayList<Socket> notificationClients;
 
 
-    public ServerInfo(SendHBeat sendHBeat, NotificationThread notificationThread){
+    public ServerInfo(SendHBeat sendHBeat){
         this.clientsList = new HashMap<>();
         this.nTCPConnections = 0;
         this.sendHBeat = sendHBeat;
-        this.notifications = notificationThread;
+        this.databaseVersion = 0;
+        this.notificationClients = new ArrayList<>();
+    }
+
+    public void addNotificationClient(Socket socket){
+        this.notificationClients.add(socket);
     }
 
     public int getnTCPConnections() {
@@ -35,36 +39,35 @@ public class ServerInfo {
     public void addClient(String mail, ObjectOutputStream out) {
         this.clientsList.put(mail,out);
         this.nTCPConnections++;
-        //this.sendHBeat.SendHeartBeat(databaseVersion);
+        this.sendHBeat.SendHeartBeat(databaseVersion);
     }
+
+    private void updateAllClientsViews(Object data) {
+
+        Iterator<Socket> iterator = notificationClients.iterator();
+        while (iterator.hasNext()) {
+            Socket sock = iterator.next();
+            try (ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream())) {
+                out.writeObject(data);
+                out.flush();
+                out.reset();
+            } catch (Exception e) {
+                iterator.remove(); // Use the Iterator's remove method
+            }
+        }
+    }
+
+
     public void sendNotification(Object data, ObjectOutputStream out){
-        this.notifications.sendNotifications(data);
+        this.databaseVersion++;
+        this.sendHBeat.SendHeartBeat(databaseVersion);
+        System.out.println("I sended a notification");
+
+        //TODO: Atualizar backups atraves do rmi!!
+
+        updateAllClientsViews(data);
+
     }
-
-  /*  public Serializable updateDB(Object o, ObjectOutputStream out) {
-        Serializable aux = handleRequests.receive(o);
-
-
-        if(o instanceof Authentication && aux instanceof User  ||
-           o instanceof User && aux instanceof RESPONSE
-        ) //Check if new client connecting
-        {
-            addClient(((Authentication) o).getUsername(), out);
-        }
-
-        else if(aux instanceof RESPONSE)
-            if(aux.equals(RESPONSE.DECLINED))
-                return aux;
-        else
-        {
-            String mail = getClientMail(out);
-            this.notifications.sendNotifications(mail, aux);
-        }
-
-        return aux;
-    }
-
-   */
 
     public String getClientMail(ObjectOutputStream out) {
         for (Map.Entry<String, ObjectOutputStream> entry : clientsList.entrySet()) {

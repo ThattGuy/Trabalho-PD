@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
@@ -297,6 +298,23 @@ public class DataBase {
     }
 
     public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            dateFormat.parse(data);
+        } catch (ParseException e) {
+            return "Invalid date format. Please use the format yyyy-MM-dd.";
+        }
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        try {
+            timeFormat.parse(horaInicio);
+            timeFormat.parse(horaFim);
+        } catch (ParseException e) {
+            return "Invalid time format. Please use the format HH:mm for start and end times.";
+        }
+
+        if (compareTimes(horaInicio, horaFim) >= 0) {
+            return "End time must be later than start time.";
+        }
         String checkQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
         int existingEventCount = 0;
 
@@ -338,30 +356,39 @@ public class DataBase {
         return "Failed to insert event.";
     }
 
-    //todo fix
-    public Serializable editEvent(String nome, String local, String data, String horaInicio, String horaFim, int userId) {
-        String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ?, user_id = ? WHERE id = ?";
+    private int compareTimes(String time1, String time2) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            return format.parse(time1).compareTo(format.parse(time2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public Serializable editEvent(Event newEvent, String oldName) {
+        String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ? WHERE nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, nome);
-            preparedStatement.setString(2, local);
-            preparedStatement.setString(3, data);
-            preparedStatement.setString(4, horaInicio);
-            preparedStatement.setString(5, horaFim);
-            preparedStatement.setInt(6, userId);
+            preparedStatement.setString(1, newEvent.getName());
+            preparedStatement.setString(2, newEvent.getLocation());
+            preparedStatement.setString(3, newEvent.getDate());
+            preparedStatement.setString(4, newEvent.getBeginning());
+            preparedStatement.setString(5, newEvent.getEndTime());
+            preparedStatement.setString(6, oldName);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Retorna o objeto Event após a edição
-                return new Event(nome, local, data, horaInicio, horaFim);
+                return newEvent;
             } else {
-                return "No rows affected. Event not found or no changes made.";
+                return "No rows affected. Event with old name not found or no changes made.";
             }
         } catch (SQLException e) {
             return "Error editing event: " + e.getMessage();
         }
     }
+
     public Serializable addCodeRegister(String codigo, String eventName) {
         String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, (SELECT id FROM Event WHERE nome = ?))";
 
@@ -669,24 +696,23 @@ public class DataBase {
     }
 
     public Serializable createCode(String eventName, UUID code, Date expirationTime) {
-        // Verifica se o evento existe
-        String checkEventQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
-        int eventCount = 0;
+        String getLastCodeQuery = "SELECT codigo FROM CodigoRegisto WHERE event_nome = ? ORDER BY hora_termino DESC LIMIT 1";
+        String lastCode = null;
 
-        try (PreparedStatement checkEventStatement = con.prepareStatement(checkEventQuery)) {
-            checkEventStatement.setString(1, eventName);
+        try (PreparedStatement getLastCodeStatement = con.prepareStatement(getLastCodeQuery)) {
+            getLastCodeStatement.setString(1, eventName);
 
-            try (ResultSet resultSet = checkEventStatement.executeQuery()) {
+            try (ResultSet resultSet = getLastCodeStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    eventCount = resultSet.getInt(1);
+                    lastCode = resultSet.getString("codigo");
                 }
             }
         } catch (SQLException e) {
-            return "Error checking existing event: " + e.getMessage();
+            return "Error getting last registration code: " + e.getMessage();
         }
 
-        if (eventCount == 0) {
-            return "Event does not exist. Cannot create a registration code.";
+        if (lastCode != null && lastCode.equals(code.toString())) {
+            return "Registration code already exists for the event.";
         }
 
         String insertCodeQuery = "INSERT INTO CodigoRegisto (codigo, event_nome, hora_termino) VALUES (?, ?, ?)";
@@ -699,7 +725,7 @@ public class DataBase {
             return "Error inserting registration code: " + e.getMessage();
         }
 
-        String updateEventCodeQuery = "UPDATE Event SET codigoregistoupdate = ? WHERE nome = ?";
+        String updateEventCodeQuery = "UPDATE Event SET codigo = ? WHERE nome = ?";
         try (PreparedStatement updateEventCodeStatement = con.prepareStatement(updateEventCodeQuery)) {
             updateEventCodeStatement.setString(1, code.toString());
             updateEventCodeStatement.setString(2, eventName);
