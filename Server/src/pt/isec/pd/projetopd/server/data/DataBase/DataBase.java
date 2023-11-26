@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
@@ -297,6 +298,23 @@ public class DataBase {
     }
 
     public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            dateFormat.parse(data);
+        } catch (ParseException e) {
+            return "Invalid date format. Please use the format yyyy-MM-dd.";
+        }
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        try {
+            timeFormat.parse(horaInicio);
+            timeFormat.parse(horaFim);
+        } catch (ParseException e) {
+            return "Invalid time format. Please use the format HH:mm for start and end times.";
+        }
+
+        if (compareTimes(horaInicio, horaFim) >= 0) {
+            return "End time must be later than start time.";
+        }
         String checkQuery = "SELECT COUNT(*) FROM Event WHERE nome = ?";
         int existingEventCount = 0;
 
@@ -338,7 +356,16 @@ public class DataBase {
         return "Failed to insert event.";
     }
 
-    //todo fix
+    private int compareTimes(String time1, String time2) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            return format.parse(time1).compareTo(format.parse(time2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public Serializable editEvent(Event newEvent, String oldName) {
         String query = "UPDATE Event SET nome = ?, Local = ?, Data = ?, HoraInicio = ?, HoraFim = ? WHERE nome = ?";
 
