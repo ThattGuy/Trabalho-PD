@@ -49,15 +49,14 @@ public class HandleRequests {
                 return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
             }
             case UUID code -> {
-                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+                return manDB.registerPresence(code, ClientMail);
             }
             case EditedEvent editedEvent-> {
                 return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
             }
             case CSVEventPresence eventPresence-> {
-                return null;//todo Xico CSV retornar presenças de um evento em csv
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
             }
-
             default -> {
                 return RESPONSE.DECLINED;
             }
