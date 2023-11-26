@@ -27,15 +27,17 @@ public class HandleRmi  {
         StartmyRMI();
     }
 
-    public void fileReceived(Object o) {
+    public void fileReceived(HbeatMessage o) {
+
+       // if(o.getDatabaseVersion() != local)
+        //TODO: Se dbversion diferente mandar o server backup a baixo!
         System.out.println("Received file");
+
     }
 
     public void setLocalDatabase(HbeatMessage o) {
 
         //IR buscar a base de dados!
-
-
         try(FileOutputStream localFileOutputStream = new FileOutputStream(this.directory)){ //Cria o ficheiro local
 
             System.out.println("Ficheiro " + directory + " criado.");
@@ -109,7 +111,4 @@ public class HandleRmi  {
         }
 
     }
-
-
-
 }

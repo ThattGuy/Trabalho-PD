@@ -41,31 +41,6 @@ public class ServerInfo {
         this.notifications.sendNotifications(data);
     }
 
-  /*  public Serializable updateDB(Object o, ObjectOutputStream out) {
-        Serializable aux = handleRequests.receive(o);
-
-
-        if(o instanceof Authentication && aux instanceof User  ||
-           o instanceof User && aux instanceof RESPONSE
-        ) //Check if new client connecting
-        {
-            addClient(((Authentication) o).getUsername(), out);
-        }
-
-        else if(aux instanceof RESPONSE)
-            if(aux.equals(RESPONSE.DECLINED))
-                return aux;
-        else
-        {
-            String mail = getClientMail(out);
-            this.notifications.sendNotifications(mail, aux);
-        }
-
-        return aux;
-    }
-
-   */
-
     public String getClientMail(ObjectOutputStream out) {
         for (Map.Entry<String, ObjectOutputStream> entry : clientsList.entrySet()) {
             if(entry.getValue() == out)
