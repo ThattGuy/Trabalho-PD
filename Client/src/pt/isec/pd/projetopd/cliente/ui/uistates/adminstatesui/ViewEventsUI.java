@@ -156,6 +156,5 @@ public class ViewEventsUI extends BorderPane {
 
         //todo fix scroll
         //todo fix date picker
-
     }
 }

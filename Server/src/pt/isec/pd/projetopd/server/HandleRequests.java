@@ -54,6 +54,9 @@ public class HandleRequests {
             case EditedEvent editedEvent-> {
                 return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
             }
+            case CSVEventPresence eventPresence-> {
+                return null;//todo Xico CSV retornar presenças de um evento em csv
+            }
 
             default -> {
                 return RESPONSE.DECLINED;
@@ -87,6 +90,7 @@ public class HandleRequests {
                 return manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
+                //todo Xico CSV retornar presenças de um user em csv
                 manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
