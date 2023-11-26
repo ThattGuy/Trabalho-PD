@@ -10,6 +10,8 @@ import pt.isec.pd.projetopd.communication.classes.Event;
 import pt.isec.pd.projetopd.communication.classes.CreateCode;
 import pt.isec.pd.projetopd.communication.classes.RegisterCode;
 
+import java.util.ArrayList;
+
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
         super(context, data);
@@ -22,16 +24,19 @@ public class EditEvent extends ClientStateAdapter {
         switch (opt) {
             case SUBMIT -> {
                 String[] splitString = string.split("\n");
-
                 if (splitString.length == 5) {
                     try {
+                        ArrayList<RegisterCode> registerCodes = new ArrayList<>();
+                        registerCodes.add(new RegisterCode(Integer.parseInt(splitString[5])));
                         Event event = new Event(
                                 splitString[0],
                                 splitString[1],
                                 splitString[2],
                                 splitString[3],
                                 splitString[4],
-                                (int) data.getEventToEdit().getPresenceCodes().get(0).getExpirationTimeMinutes());
+                                registerCodes
+                        );
+
                         data.sendToServer(new EditedEvent(event, data.getEventToEdit().getName()));
                     } catch (NumberFormatException e) {
                         data.setMessage("Wrong format");

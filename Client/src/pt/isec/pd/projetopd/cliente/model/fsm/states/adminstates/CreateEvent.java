@@ -7,8 +7,10 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.Event;
 import pt.isec.pd.projetopd.communication.classes.RESPONSE;
+import pt.isec.pd.projetopd.communication.classes.RegisterCode;
 import pt.isec.pd.projetopd.communication.classes.User;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 
 public class CreateEvent extends ClientStateAdapter {
@@ -26,13 +28,16 @@ public class CreateEvent extends ClientStateAdapter {
 
                 if (splitString.length == 6) {
                     try {
+                        ArrayList<RegisterCode> registerCodes = new ArrayList<>();
+                        registerCodes.add(new RegisterCode(Integer.parseInt(splitString[5])));
                         data.sendToServer(new Event(
                                 splitString[0],
                                 splitString[1],
                                 splitString[2],
                                 splitString[3],
                                 splitString[4],
-                                Integer.parseInt(splitString[5])));
+                                registerCodes
+                                ));
                     } catch (NumberFormatException e) {
                         data.setMessage("Wrong format");
                         return false;

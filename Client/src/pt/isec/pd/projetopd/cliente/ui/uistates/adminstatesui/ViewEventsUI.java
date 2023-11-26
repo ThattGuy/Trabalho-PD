@@ -48,7 +48,7 @@ public class ViewEventsUI extends BorderPane {
         messageLabel.setTextFill(Color.RED);
         messageLabel.setStyle("-fx-font-size: 20px;");
 
-        // Creating a VBox to add buttons and labels, setting it as the center of the BorderPane
+
         centerContainer = new VBox();
         centerContainer.setAlignment(Pos.CENTER);
         centerContainer.setSpacing(10);

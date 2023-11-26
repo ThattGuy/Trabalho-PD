@@ -12,14 +12,14 @@ public class Event implements Serializable {
     private String date;
     private String beginning;
     private String endTime;
-    private List<RegisterCode> registerCodes = new ArrayList<>();
-    public Event(String name, String location, String date, String beginning, String endTime, int codeExpirationTime) {
+    private List<RegisterCode> registerCodes;
+    public Event(String name, String location, String date, String beginning, String endTime, List<RegisterCode> registerCodes) {
         this.name = name;
         this.location = location;
         this.date = date;
         this.beginning = beginning;
         this.endTime = endTime;
-       registerCodes.add(new RegisterCode(codeExpirationTime));
+        this.registerCodes = registerCodes;
     }
 
     public String getName() {return name;}
