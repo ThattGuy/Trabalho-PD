@@ -480,7 +480,7 @@ public class DataBase {
         return presenceList;
     }
 
-    public void generateCSV(String mail, String filePath) {
+    public Serializable generateCSV(String mail, String filePath) {
         List<String> csvLines = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio " +
@@ -508,7 +508,7 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error getting presence CSV: " + e.getMessage());
+            return "Error getting presence CSV: " + e.getMessage();
         }
 
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -517,8 +517,9 @@ public class DataBase {
             }
             System.out.println("CSV file generated successfully at: " + filePath);
         } catch (IOException e) {
-            System.err.println("Error writing CSV file: " + e.getMessage());
+            return "Error writing CSV file: " + e.getMessage();
         }
+        return (Serializable) csvLines;
     }
 
     public User getUserData(String username) {
