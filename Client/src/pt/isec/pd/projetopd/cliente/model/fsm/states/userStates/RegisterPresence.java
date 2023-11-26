@@ -24,7 +24,7 @@ public class RegisterPresence extends ClientStateAdapter {
                 try {
                     uuid = UUID.fromString(string);
                 } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
+                    data.setMessage("Wrong format");
                 }
 
                 if (uuid != null) {
@@ -40,11 +40,8 @@ public class RegisterPresence extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof RESPONSE response){
-            switch (response){
-                case ACCEPTED -> data.setMessage("Presence submitted");
-                case DECLINED -> data.setMessage("Presence not submitted.\n Verify code and make sure you're not registered in another class");
-            }
+        if(message instanceof String response){
+            data.setMessage(response);
         }
         return false;
     }
