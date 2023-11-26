@@ -672,7 +672,7 @@ public class DataBase {
                 String horaInicio = resultSet.getString("HoraInicio");
                 String horaFim = resultSet.getString("HoraFim");
 
-                Event event = new Event(nome, local, data, horaInicio, horaFim,0);
+                Event event = new Event(nome, local, data, horaInicio, horaFim,null);
                 eventList.add(event);
             }
         } catch (SQLException e) {

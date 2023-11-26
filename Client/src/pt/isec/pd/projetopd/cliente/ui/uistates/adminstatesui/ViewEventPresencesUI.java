@@ -127,7 +127,9 @@ public class ViewEventPresencesUI extends BorderPane {
             hBox.setSpacing(10);
         }
 
+        centerContainer.getChildren().add(removePresenceHBox);
         centerContainer.getChildren().add(hBox);
+
 
         registerHandlers();
         this.setCenter(centerContainer);

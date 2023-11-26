@@ -59,8 +59,8 @@ public class CreateEvent extends ClientStateAdapter {
             return true;
         }
 
-        if(message instanceof Event){
-            data.setMessage("Event Created");
+        if(message instanceof Event event){
+            data.setMessage("Event Created register codes" + event.getPresenceCodes().get(0));
         }
 
         return false;
