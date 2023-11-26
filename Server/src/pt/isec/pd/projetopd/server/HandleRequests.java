@@ -59,7 +59,6 @@ public class HandleRequests {
                 return RESPONSE.DECLINED;
             }
         }
-
     }
 
     public Serializable receive(Object request, ObjectOutputStream Clientout){
