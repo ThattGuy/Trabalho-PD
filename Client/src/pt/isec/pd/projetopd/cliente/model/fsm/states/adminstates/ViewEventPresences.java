@@ -47,9 +47,11 @@ public class ViewEventPresences extends ClientStateAdapter {
         }
 
         if(message instanceof PresencesList presencesList){
-            if(data.getUserName() == presencesList.getUsername())
+            if(data.getUserName().equals( presencesList.getUsername())){
                 data.addPresences(presencesList);
-            return true;
+                return true;
+            }
+
         }
 
         return false;

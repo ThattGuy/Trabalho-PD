@@ -9,6 +9,7 @@ public class PresencesList implements Serializable {
 
     public PresencesList(String presences, String username) {
         this.presences = presences;
+        this.username = username;
     }
 
     @Override

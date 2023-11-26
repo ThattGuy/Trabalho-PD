@@ -25,13 +25,13 @@ public class HandleRequests {
         this.serverInfo = serverInfo;
     }
 
-    private Serializable InterpretClientMessage(Object request, String ClientMail) {
+    private Serializable InterpretClientMessage(Object request, String clientMail) {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
         switch (request) {
             case REQUESTS requests -> {
-                return this.InterpretRequest(requests, ClientMail);
+                return this.InterpretRequest(requests, clientMail);
             }
             case Authentication auth -> {
                 //nao
@@ -43,11 +43,11 @@ public class HandleRequests {
             }
             case Event event -> {
                 //nao
-                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
             }
             case EventPresence eventPresence -> {
                 //sim
-                return manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
+                return manDB.getEventPresence(eventPresence.getEvent().getName(),clientMail);
             }
             case CreateCode eventCode-> {
                 //sim
@@ -55,7 +55,7 @@ public class HandleRequests {
             }
             case UUID code -> {
                 //nao
-                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+                return manDB.registerPresence(code, clientMail);//TODO mudar para o mail do cliente pois está a receber null
             }
             case EditedEvent editedEvent-> {
                 //sim
