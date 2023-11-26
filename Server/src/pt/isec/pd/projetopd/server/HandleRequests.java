@@ -29,6 +29,7 @@ public class HandleRequests {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
+        Serializable dbresponse;
         switch (request) {
             case REQUESTS requests -> {
                 return this.InterpretRequest(requests, ClientMail);
@@ -40,26 +41,33 @@ public class HandleRequests {
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Event event -> {
-                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
+
+                 manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
             }
             case EventPresence eventPresence -> {
-                return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
+                dbresponse =  (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case CreateCode eventCode-> {
-                return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                dbresponse =   manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case UUID code -> {
-                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+                return manDB.registerPresence(code, ClientMail);
             }
             case EditedEvent editedEvent-> {
-                return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                dbresponse =    manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
 
             default -> {
                 return RESPONSE.DECLINED;
             }
         }
-
+        return RESPONSE.DECLINED;
     }
 
     public Serializable receive(Object request, ObjectOutputStream Clientout){
@@ -70,12 +78,12 @@ public class HandleRequests {
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
             //return dbResponse;
+            mail =this.serverInfo.getClientMail(Clientout);
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-        this.serverInfo.sendNotification(dbResponse, Clientout);
         return dbResponse;
     }
 
@@ -95,6 +103,9 @@ public class HandleRequests {
             }
             case EVENTS -> {
                 return manDB.getAllEvents();
+            }
+            case LOGOUT -> {
+                this.serverInfo.removeClient(clientMail);
             }
         }
 

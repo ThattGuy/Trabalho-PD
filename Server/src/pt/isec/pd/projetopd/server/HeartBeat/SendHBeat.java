@@ -46,7 +46,6 @@ public class SendHBeat{
                 ous.flush();
                 var packet = new DatagramPacket(bout.toByteArray(), bout.size(), InetAddress.getByName(MULTICAST_ADDRES), MULTICAST_PORT);
                 socket.send(packet);
-                System.out.println("Heartbeat sent");
             } catch (Exception e) {
                 //e.printStackTrace();
                 System.err.println("Error: " + e);

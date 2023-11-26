@@ -8,6 +8,7 @@ import pt.isec.pd.projetopd.communication.classes.User;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.UUID;
 
 public class HandleClient implements Runnable {
 
@@ -27,15 +28,12 @@ public class HandleClient implements Runnable {
     @Override
     public void run() {
 
-        boolean close = true;
-
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             sendPort(new ServerPort(7001), out);
             socket.setSoTimeout(100000);
             do{
                 Object o = in.readObject();
-                System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + o);
                 if(o == null) { socket.close(); return;}
 
                 o = handleRequests.receive(o, out);
@@ -49,13 +47,10 @@ public class HandleClient implements Runnable {
 
         }catch(IOException | ClassNotFoundException e){
             try {
-                if(close) {
-                    socket.close();
-                    System.out.println("I closed the socket");
-                    throw new RuntimeException(e);
-                }
+                socket.close();
+                System.out.println("I closed the socket");
 
-                //TODO: Tenho de retornar esta excessao e de alguma forma o servidor tem de saber que esta thread foi a baixo
+
             } catch (IOException ex) {
                 System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + ex + "Connection with client lost!");
             }
