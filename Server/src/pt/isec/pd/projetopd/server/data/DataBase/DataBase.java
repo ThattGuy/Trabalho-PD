@@ -346,8 +346,27 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
+            String insertCodeQuery = "INSERT INTO CodigoRegisto (codigo, event_nome, hora_termino) VALUES (?, ?, ?)";
+            try (PreparedStatement insertCodeStatement = con.prepareStatement(insertCodeQuery)) {
+                insertCodeStatement.setString(1, registerCode.getCode().toString());
+                insertCodeStatement.setString(2, nome);
+                insertCodeStatement.setTimestamp(3, new java.sql.Timestamp(registerCode.getExpirationTime().getTime()));
+                insertCodeStatement.executeUpdate();
+            } catch (SQLException e) {
+                return "Error inserting registration code: " + e.getMessage();
+            }
+
+            String updateEventCodeQuery = "UPDATE Event SET codigo = ? WHERE nome = ?";
+            try (PreparedStatement updateEventCodeStatement = con.prepareStatement(updateEventCodeQuery)) {
+                updateEventCodeStatement.setString(1, registerCode.getCode().toString());
+                updateEventCodeStatement.setString(2, nome);
+                updateEventCodeStatement.executeUpdate();
+            } catch (SQLException e) {
+                return "Error updating event registration code: " + e.getMessage();
+            }
+
             if (rowsAffected > 0) {
-                return new Event(nome, local, data, horaInicio, horaFim);
+                return new Event(nome, local, data, horaInicio, horaFim,(int)registerCode.getExpirationTimeMinutes());
             }
         } catch (SQLException e) {
             return "Error inserting event: " + e.getMessage();
@@ -650,7 +669,7 @@ public class DataBase {
                 String horaInicio = resultSet.getString("HoraInicio");
                 String horaFim = resultSet.getString("HoraFim");
 
-                Event event = new Event(nome, local, data, horaInicio, horaFim);
+                Event event = new Event(nome, local, data, horaInicio, horaFim,0);
                 eventList.add(event);
             }
         } catch (SQLException e) {
