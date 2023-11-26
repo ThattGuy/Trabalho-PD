@@ -19,6 +19,10 @@ public class RegisterCode implements Serializable {
         this.code = UUID.randomUUID();
         setExpirationTime(minutesActive);
     }
+    public RegisterCode(UUID code, Date minutesActive) {
+        this.code = code;
+        this.expirationTime = minutesActive;
+    }
 
     private void setExpirationTime(int validTime) {
         if (validTime <= 0) {
