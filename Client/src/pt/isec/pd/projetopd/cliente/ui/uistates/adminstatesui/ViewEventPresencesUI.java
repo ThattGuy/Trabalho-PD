@@ -109,6 +109,9 @@ public class ViewEventPresencesUI extends BorderPane {
         centerContainer.getChildren().clear();
         presencesLabel = new Label(manager.getPresences());
 
+        presencesLabel.setStyle("-fx-background-color: #D3D3D3;");
+        presencesLabel.setAlignment(Pos.CENTER);
+
         centerContainer.getChildren().add(presencesLabel);
 
         String msg = manager.getPresences();
@@ -126,6 +129,7 @@ public class ViewEventPresencesUI extends BorderPane {
             hBox.setAlignment(Pos.CENTER);
             hBox.setSpacing(10);
         }
+
 
         centerContainer.getChildren().add(removePresenceHBox);
         centerContainer.getChildren().add(hBox);
