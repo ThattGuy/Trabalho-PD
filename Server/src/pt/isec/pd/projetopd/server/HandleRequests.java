@@ -29,6 +29,7 @@ public class HandleRequests {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
+        Serializable dbresponse = null;
         switch (request) {
             case REQUESTS requests -> {
                 return this.InterpretRequest(requests, clientMail);
@@ -47,11 +48,19 @@ public class HandleRequests {
             }
             case EventPresence eventPresence -> {
                 //sim
+<<<<<<< HEAD
                 return manDB.getEventPresence(eventPresence.getEvent().getName(),clientMail);
+=======
+                dbresponse =  manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
+>>>>>>> 1709d6ee8d9473a5753999ece08ca05174042235
             }
             case CreateCode eventCode-> {
                 //sim
-                return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                dbresponse = manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case UUID code -> {
                 //nao
@@ -59,7 +68,9 @@ public class HandleRequests {
             }
             case EditedEvent editedEvent-> {
                 //sim
-                return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                dbresponse = manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case CSVEventPresence eventPresence-> {
                 //nao
@@ -81,12 +92,12 @@ public class HandleRequests {
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
             //return dbResponse;
+            mail =this.serverInfo.getClientMail(Clientout);
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-        this.serverInfo.sendNotification(dbResponse, Clientout);
         return dbResponse;
     }
 
@@ -106,6 +117,9 @@ public class HandleRequests {
             }
             case EVENTS -> {
                 return manDB.getAllEvents();
+            }
+            case LOGOUT -> {
+                this.serverInfo.removeClient(clientMail);
             }
         }
 
