@@ -280,6 +280,7 @@ public class DataBase {
         }
         return false;
     }
+
     public Serializable deleteEvent(String nome) {
         String query = "DELETE FROM Event WHERE nome = ?";
 
@@ -545,7 +546,7 @@ public class DataBase {
         return null;
     }
 
-    public List<String> getEventPresence(String eventName) {
+    public Serializable getEventPresence(String eventName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
@@ -569,9 +570,8 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-        return presenceList;
+        return new PresencesList(presenceList.toString());
     }
-
 
     public PresencesList getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
