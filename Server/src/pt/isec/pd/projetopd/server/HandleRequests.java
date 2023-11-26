@@ -46,15 +46,11 @@ public class HandleRequests {
                 //nao
                 return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
             }
-            case EventPresence eventPresence -> {
+            case EventPresenceRequest eventPresenceRequest -> {
                 //sim
-<<<<<<< HEAD
-                return manDB.getEventPresence(eventPresence.getEvent().getName(),clientMail);
-=======
-                dbresponse =  manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
+                dbresponse =  manDB.getEventPresence(eventPresenceRequest.getEvent().getName(),clientMail);
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
->>>>>>> 1709d6ee8d9473a5753999ece08ca05174042235
             }
             case CreateCode eventCode-> {
                 //sim

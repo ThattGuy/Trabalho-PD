@@ -7,13 +7,11 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.*;
 
-import java.util.ArrayList;
-
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
         System.out.println("VIEW_PRESENCE_STATE STATE");
-        data.sendToServer(new EventPresence(data.getEventToEdit()));
+        data.sendToServer(new EventPresenceRequest(data.getEventToEdit()));
     }
 
     @Override
@@ -46,9 +44,9 @@ public class ViewEventPresences extends ClientStateAdapter {
             return true;
         }
 
-        if(message instanceof PresencesList presencesList){
-            if(data.getUserName().equals( presencesList.getUsername())){
-                data.addPresences(presencesList);
+        if(message instanceof EventPresencesList eventPresencesList){
+            if(data.getUserName().equals( eventPresencesList.getUsername())){
+                data.addPresences(eventPresencesList);
                 return true;
             }
 

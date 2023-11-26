@@ -2,9 +2,9 @@ package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
 
-public class EventPresence implements Serializable {
+public class EventPresenceRequest implements Serializable {
     private Event event;
-    public EventPresence(Event event) {
+    public EventPresenceRequest(Event event) {
         this.event = event;
     }
 
