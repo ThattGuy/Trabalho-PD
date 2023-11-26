@@ -366,7 +366,10 @@ public class DataBase {
             }
 
             if (rowsAffected > 0) {
-                return new Event(nome, local, data, horaInicio, horaFim,(int)registerCode.getExpirationTimeMinutes());
+                List<RegisterCode> registerCodes = new ArrayList<>();
+                registerCodes.add(registerCode);
+                Event newEvent = new Event(nome, local, data, horaInicio, horaFim,registerCodes);
+                return newEvent;
             }
         } catch (SQLException e) {
             return "Error inserting event: " + e.getMessage();
