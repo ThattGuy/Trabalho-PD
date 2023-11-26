@@ -297,7 +297,7 @@ public class DataBase {
         return false;
     }
 
-    public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, String userId) {
+    public Serializable registerEvent(String nome, String local, String data, String horaInicio, String horaFim, RegisterCode registerCode, String userId) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             dateFormat.parse(data);
@@ -437,7 +437,7 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            return "Presence registered successfully.";
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
@@ -734,7 +734,7 @@ public class DataBase {
             return "Error updating event registration code: " + e.getMessage();
         }
 
-        return true;
+        return "PresenceCode successfully created: " + code.toString();
     }
 }
 

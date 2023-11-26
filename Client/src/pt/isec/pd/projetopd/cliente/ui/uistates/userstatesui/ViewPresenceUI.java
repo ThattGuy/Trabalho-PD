@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,8 @@ public class ViewPresenceUI extends BorderPane {
     private VBox centerContainer;
     private HBox hBox;
     private Button btnBack, btnCSV;
+
+    private ScrollPane scrollPane;
 
     public ViewPresenceUI(Manager manager) {
         this.manager = manager;
@@ -48,12 +51,17 @@ public class ViewPresenceUI extends BorderPane {
         messageLabel.setTextFill(Color.RED);
         messageLabel.setStyle("-fx-font-size: 20px;");
 
-        // Creating a VBox to add buttons and labels, setting it as the center of the BorderPane
+        // Creating a VBox to add buttons and labels
         centerContainer = new VBox();
         centerContainer.setAlignment(Pos.CENTER);
         centerContainer.setSpacing(10);
 
-        this.setCenter(centerContainer);
+        // Wrap the VBox in a ScrollPane
+        scrollPane = new ScrollPane(centerContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        this.setCenter(scrollPane);
     }
 
 
@@ -69,6 +77,7 @@ public class ViewPresenceUI extends BorderPane {
             manager.selectOption(OPTIONS.BACK, null);
             update();
         });
+
 
 
     }

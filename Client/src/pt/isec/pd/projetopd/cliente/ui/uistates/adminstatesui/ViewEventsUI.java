@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,6 +26,7 @@ public class ViewEventsUI extends BorderPane {
     private Button btnBack;
     private List<Button> eventEditButtons;
     private List<Button> eventPresenceButtons;
+    private ScrollPane scrollPane;
 
     public ViewEventsUI(Manager manager) {
         this.manager = manager;
@@ -51,10 +53,17 @@ public class ViewEventsUI extends BorderPane {
         centerContainer.setAlignment(Pos.CENTER);
         centerContainer.setSpacing(10);
 
+        scrollPane = new ScrollPane(centerContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setMinHeight(400); // Adjust as needed
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); // Vertical scroll bar always shown
+
         this.setCenter(centerContainer);
     }
-
-
 
     /**
      * regista os handlers
@@ -137,7 +146,16 @@ public class ViewEventsUI extends BorderPane {
 
         centerContainer.getChildren().add(hBox);
 
+        scrollPane = new ScrollPane(centerContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setMinHeight(10); // Adjust as needed
+
         registerHandlers();
         this.setCenter(centerContainer);
+
+        //todo fix scroll
+        //todo fix date picker
+
     }
 }
