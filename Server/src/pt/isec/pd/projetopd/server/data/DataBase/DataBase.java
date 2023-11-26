@@ -411,24 +411,6 @@ public class DataBase {
         }
     }
 
-    public Serializable addCodeRegister(String codigo, String eventName) {
-        String query = "INSERT INTO CodigoRegisto (codigo, event_nome) VALUES (?, (SELECT id FROM Event WHERE nome = ?))";
-
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, codigo);
-            preparedStatement.setString(2, eventName);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                // Retorna o objeto Event após a edição
-                return true;
-            }
-        } catch (SQLException e) {
-            return "Error adding registration code:" + e.getMessage();
-        }
-        return false;
-    }
     public Serializable registerPresence(UUID code, String clientMail) {
         String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
                 "WHERE codigo = ? ";
@@ -462,35 +444,6 @@ public class DataBase {
             return "Error registering presence: " + e.getMessage();
         }
     }
-    public Serializable getPresence(String eventName) {
-        List<String> presenceList = new ArrayList<>();
-
-        String query = "SELECT User.username, User.name, User.studentNumber " +
-                "FROM UserEvent " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "WHERE Event.nome = ?";
-
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, eventName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\"");
-
-                while (resultSet.next()) {
-                    String name = resultSet.getString("name");
-                    int studentNumber = resultSet.getInt("studentNumber");
-
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "\"");
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error getting presence: " + e.getMessage());
-        }
-
-        return String.join("\n", presenceList);
-    }
-
 
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
         List<String> presenceList = new ArrayList<>();
@@ -616,7 +569,6 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-
         return presenceList;
     }
 
@@ -682,38 +634,6 @@ public class DataBase {
         return events;
     }
 
-    public List<String> getPresenceByEventName(String mail, String eventName) {
-        List<String> presenceList = new ArrayList<>();
-
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
-                "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_nome = Event.name " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ? AND Event.nome = ?";
-
-        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, mail);
-            preparedStatement.setString(2, eventName);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\"");
-
-                while (resultSet.next()) {
-                    String nome = resultSet.getString("nome");
-                    String local = resultSet.getString("Local");
-                    String data = resultSet.getString("Data");
-                    String horaInicio = resultSet.getString("HoraInicio");
-                    String horaFim = resultSet.getString("HoraFim");
-
-                    presenceList.add("\"" + nome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\";\"" + horaFim + "\"");
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error getting presence by event name: " + e.getMessage());
-        }
-
-        return presenceList;
-    }
 
     public Serializable createCode(String eventName, UUID code, Date expirationTime) {
         String getLastCodeQuery = "SELECT codigo FROM CodigoRegisto WHERE event_nome = ? ORDER BY hora_termino DESC LIMIT 1";
