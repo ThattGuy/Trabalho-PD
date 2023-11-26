@@ -20,7 +20,6 @@ public class ViewEvents extends ClientStateAdapter {
 
         switch (opt){
             case EDIT_EVENT -> {
-
                     try {
                         int index = Integer.parseInt(string);
                         if(index >= 0 ){
@@ -65,7 +64,6 @@ public class ViewEvents extends ClientStateAdapter {
             data.addEvents(events);
             return true;
         }
-
         return false;
     }
 

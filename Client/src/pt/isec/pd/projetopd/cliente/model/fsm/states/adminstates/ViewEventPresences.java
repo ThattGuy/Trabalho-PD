@@ -7,6 +7,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.*;
 
+import java.util.ArrayList;
+
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
@@ -18,7 +20,18 @@ public class ViewEventPresences extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+            case SUBMIT -> {
+                String[] splitString = string.split("\n");
+                if (splitString.length == 2) {
+                    try {
+                        data.sendToServer(new RemovePresence(splitString[0], splitString[1]));
+                    } catch (NumberFormatException e) {
+                        data.setMessage("Wrong format");
+                        return false;
+                    }
 
+                }
+            }
             case CSV -> data.sendToServer(new CSVEventPresence(data.getEventToEdit()));
             case BACK -> changeState(ClientStates.VIEW_EVENTS);
         }
@@ -34,7 +47,8 @@ public class ViewEventPresences extends ClientStateAdapter {
         }
 
         if(message instanceof PresencesList presencesList){
-            data.addPresences(presencesList);
+            if(data.getUserName() == presencesList.getUsername())
+                data.addPresences(presencesList);
             return true;
         }
 

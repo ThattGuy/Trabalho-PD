@@ -29,48 +29,55 @@ public class HandleRequests {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
-        Serializable dbresponse;
+        Serializable dbresponse = null;
         switch (request) {
             case REQUESTS requests -> {
                 return this.InterpretRequest(requests, ClientMail);
             }
             case Authentication auth -> {
+                //nao
                 return manDB.CheckLogin(auth.getUsername(), auth.getPassword());
             }
             case User clientInfo -> {
+                //nao
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Event event -> {
-
-                 manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
+                //nao
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
             }
             case EventPresence eventPresence -> {
-                dbresponse =  (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
+                //sim
+                dbresponse =  manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
             case CreateCode eventCode-> {
-                dbresponse =   manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                //sim
+                dbresponse = manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
             case UUID code -> {
-                return manDB.registerPresence(code, ClientMail);
+                //nao
+                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
             }
             case EditedEvent editedEvent-> {
-                dbresponse =    manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                //sim
+                dbresponse = manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
             case CSVEventPresence eventPresence-> {
-                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+                //nao
+                return null;//todo Xico CSV retornar presenças de um evento em csv
+                //return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+
             }
             default -> {
                 return RESPONSE.DECLINED;
             }
         }
-        return RESPONSE.DECLINED;
-
     }
 
     public Serializable receive(Object request, ObjectOutputStream Clientout){

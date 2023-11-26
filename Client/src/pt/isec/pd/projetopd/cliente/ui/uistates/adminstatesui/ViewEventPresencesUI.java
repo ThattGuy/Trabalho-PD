@@ -119,20 +119,22 @@ public class ViewEventPresencesUI extends BorderPane {
             messageLabel.setText(msg);
         }
 
-        if(msg != "No Presences"){
-            removePresenceHBox = new HBox(lRemove,userName, eventName,btnRemove);
+        removePresenceHBox = new HBox(); // Initialize it here
+
+        if (msg != "No Presences") {
+            removePresenceHBox.getChildren().setAll(lRemove, userName, eventName, btnRemove);
             removePresenceHBox.setAlignment(Pos.CENTER);
-            hBox = new HBox(removePresenceHBox,btnBack, btnCSV);
+            hBox = new HBox(removePresenceHBox, btnBack, btnCSV);
             hBox.setAlignment(Pos.CENTER);
-        }else {
+        } else {
             hBox = new HBox(btnBack);
             hBox.setAlignment(Pos.CENTER);
             hBox.setSpacing(10);
         }
 
-
         centerContainer.getChildren().add(removePresenceHBox);
         centerContainer.getChildren().add(hBox);
+
 
 
         registerHandlers();
