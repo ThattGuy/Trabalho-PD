@@ -437,7 +437,7 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            return "Presence registered successfully.";
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
