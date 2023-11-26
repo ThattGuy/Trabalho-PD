@@ -12,7 +12,7 @@ public class ViewEvents extends ClientStateAdapter {
     public ViewEvents(ClientContext context, Data data) {
         super(context, data);
         data.sendToServer(REQUESTS.EVENTS);
-        System.out.printf("VIEW_EVENTS STATE");
+        System.out.println("VIEW_EVENTS STATE");
     }
 
     @Override

@@ -13,7 +13,7 @@ import pt.isec.pd.projetopd.communication.classes.RegisterCode;
 public class EditEvent extends ClientStateAdapter {
     public EditEvent(ClientContext context, Data data) {
         super(context, data);
-        System.out.printf("EDIT_EVENT STATE");
+        System.out.println("EDIT_EVENT STATE");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class EditEvent extends ClientStateAdapter {
                     data.addEventCode(new RegisterCode(timeInMinutes));
                     data.sendToServer(new CreateCode(data.getEventToEdit().getName(), data.getLastEventCode()));
                 } catch (NumberFormatException e) {
-                    data.setMessage("Time must be in minutes");
+                    data.setMessage("Need to enter time in minutes");
                     return false;
                 }
             }

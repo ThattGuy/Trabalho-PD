@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,7 @@ public class ViewEventPresencesUI extends BorderPane {
     private Button btnBack, btnCSV, btnRemove;
     private HBox removePresenceHBox;
     private TextField userName, eventName;
+    private ScrollPane scrollPane;
 
     public ViewEventPresencesUI(Manager manager) {
         this.manager = manager;
@@ -66,7 +68,12 @@ public class ViewEventPresencesUI extends BorderPane {
         centerContainer.setAlignment(Pos.CENTER);
         centerContainer.setSpacing(10);
 
+        scrollPane = new ScrollPane(centerContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
         this.setCenter(centerContainer);
+
     }
 
 

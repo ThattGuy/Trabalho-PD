@@ -708,7 +708,7 @@ public class DataBase {
             return "Error updating event registration code: " + e.getMessage();
         }
 
-        return true;
+        return "PresenceCode successfully created: " + code.toString();
     }
 }
 

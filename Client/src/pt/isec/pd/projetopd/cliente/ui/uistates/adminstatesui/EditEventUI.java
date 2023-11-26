@@ -21,9 +21,8 @@ import java.util.List;
 public class EditEventUI extends BorderPane {
 
     private Manager manager;
-    private Button btnSubmit, btnBack;
-    private TextField eventName, local, date, beginning, endTime;
-
+    private Button btnSubmit, btnBack, btnNewCode;
+    private TextField eventName, local, date, beginning, endTime, codeExpTime;
     private VBox vbox;
     private GridPane grid;
     private HBox hBox;
@@ -50,6 +49,9 @@ public class EditEventUI extends BorderPane {
         btnSubmit.setMinWidth(200);
         btnSubmit.setMinHeight(50);
 
+        btnNewCode = new Button("Generate New Presence Code");
+        btnNewCode.setMinWidth(200);
+        btnNewCode.setMinHeight(50);
 
         btnBack = new Button("Back");
         btnBack.setMinWidth(200);
@@ -74,6 +76,10 @@ public class EditEventUI extends BorderPane {
         Label lEndTime = new Label("EndTime");
         endTime = new TextField();
         endTime.setPromptText("Enter new EndTime");
+
+        Label lCodeExpTime = new Label("Code Expiration Time");
+        codeExpTime = new TextField();
+        codeExpTime.setPromptText("Enter Code Expiration Time");
 
         messageLabel = new Label();
         messageLabel.getStyleClass().add("info");
@@ -105,7 +111,11 @@ public class EditEventUI extends BorderPane {
         grid.add(lEndTime, 0, rowIndex);
         grid.add(endTime, 1, rowIndex, 20, 1);
 
-        hBox = new HBox(btnBack, btnSubmit);
+        rowIndex++;
+        grid.add(lCodeExpTime, 0, rowIndex);
+        grid.add(codeExpTime, 1, rowIndex, 20, 1);
+
+        hBox = new HBox(btnBack, btnSubmit,btnNewCode);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
 
@@ -122,6 +132,7 @@ public class EditEventUI extends BorderPane {
         date.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         beginning.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         endTime.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
+        codeExpTime.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
 
         VBox container = new VBox(vbox);
         container.setAlignment(Pos.CENTER);
@@ -157,6 +168,11 @@ public class EditEventUI extends BorderPane {
 
         btnBack.setOnAction(event -> {
             manager.selectOption(OPTIONS.BACK, null);
+            update();
+        });
+
+        btnNewCode.setOnAction(event -> {
+            manager.selectOption(OPTIONS.NEW_CODE, codeExpTime.getText());
             update();
         });
     }

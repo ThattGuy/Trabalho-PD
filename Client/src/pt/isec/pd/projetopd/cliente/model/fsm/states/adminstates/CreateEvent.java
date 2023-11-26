@@ -53,11 +53,8 @@ public class CreateEvent extends ClientStateAdapter {
             return true;
         }
 
-        if(message instanceof RESPONSE response){
-            switch (response){
-                case ACCEPTED -> data.setMessage("Event Created");
-                case DECLINED -> data.setMessage("Event Was Not Created");
-            }
+        if(message instanceof Event){
+            data.setMessage("Event Created");
         }
 
         return false;

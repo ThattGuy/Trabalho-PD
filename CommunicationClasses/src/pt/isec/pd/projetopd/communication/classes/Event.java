@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.communication.classes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event implements Serializable {
@@ -10,7 +11,7 @@ public class Event implements Serializable {
     private String date;
     private String beginning;
     private String endTime;
-    private List<RegisterCode> registerCodes;
+    private List<RegisterCode> registerCodes = new ArrayList<>();
     public Event(String name, String location, String date, String beginning, String endTime) {
         this.name = name;
         this.location = location;
@@ -33,8 +34,11 @@ public class Event implements Serializable {
         return List.of(name, location, date, beginning, endTime);
     }
 
-    public void addPresenceCode(RegisterCode registerCodes) {
-        this.registerCodes.add(registerCodes);
+    public void addPresenceCode(RegisterCode newRegisterCode) {
+        if (this.registerCodes == null) {
+            this.registerCodes = new ArrayList<>();
+        }
+        this.registerCodes.add(newRegisterCode);
     }
 
     @Override
