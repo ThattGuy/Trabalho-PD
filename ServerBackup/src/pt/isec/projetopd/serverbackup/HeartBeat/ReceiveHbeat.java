@@ -25,7 +25,9 @@ public class ReceiveHbeat extends Thread{
     @Override
     public void run() {
         boolean first = true;
+        Object o = null;
         try {
+
             for(;;) {
 
                 ms.setSoTimeout(30000);
@@ -34,12 +36,11 @@ public class ReceiveHbeat extends Thread{
 
 
                 ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(dp.getData(), 0, dp.getLength()));
-                Object o = ois.readObject();
-
+                o = ois.readObject();
+                //TODO: Verifcar se versao BD local igual a que vem no hbeat
                 if(o instanceof HbeatMessage info)
                 {
-                    if(((HbeatMessage) o).getDatabaseVersion() != 0)//TODO: Verifcar se versao BD local igual a que vem no hbeat
-                        throw new IOException("Database version is 0");
+
                     System.out.println("Received heartbeat from " + info.getRMI() + " " + info.getRegistryPort());
                     //TODO: Update databse version
                     if(first) {
@@ -49,6 +50,7 @@ public class ReceiveHbeat extends Thread{
                     else rmiHandler.fileReceived((HbeatMessage) o);
                 }
                 else{
+                    o = null;
                     System.out.println("Received unknown object");
                 }
             }

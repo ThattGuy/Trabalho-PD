@@ -32,7 +32,7 @@ public class HandleClient implements Runnable {
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             sendPort(new ServerPort(7001), out);
-            socket.setSoTimeout(10000);
+            socket.setSoTimeout(100000);
             do{
                 Object o = in.readObject();
                 System.out.println("<" + Thread.currentThread().getName() + ">:\n\t" + o);

@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB {
 
     protected GetRemote(File direc) throws RemoteException {
         this.directory = direc;
-        List<BackupServerInterface> backupServers = new ArrayList<>();
+        backupServers = new ArrayList<>();
+
     }
 
     protected FileInputStream getRequestedFileInputStream(String fileName) throws IOException {
@@ -88,18 +90,16 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB {
     }
 
     private boolean checkIfNewBackup(BackupServerInterface backup){
-        if(this.backupServers.contains(backup))
-            return false;
-        return true;
+        return !this.backupServers.contains(backup);
 
     }
 
-    //, BackupServerInterface cliRemoto
     @Override
     public void getFile(BackupServerInterface backup) throws IOException {
 
         byte[] fileBytes = Files.readAllBytes(directory.toPath());
-        if(checkIfNewBackup(backup)) backupServers.add(backup);
+
         backup.writeFileChunk(fileBytes, fileBytes.length);
+        if(checkIfNewBackup(backup)) backupServers.add(backup);
     }
 }

@@ -20,6 +20,7 @@ public class RemoteDatabase extends UnicastRemoteObject implements BackupServerI
     }
     @Override
     public void writeFileChunk(byte[] fileChunk, int nbytes) throws IOException {
+        System.out.println("Recebido pedido");
         if (fout == null) {
             System.out.println("Nao existe um FileOutputStream aberto para escrita!");
             throw new IOException("<CLI> Nao existe um FileOutputStream aberto para escrita!");

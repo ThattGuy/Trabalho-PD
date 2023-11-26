@@ -70,16 +70,13 @@ public class HandleRequests {
         if(request instanceof Authentication && dbResponse instanceof User ) //Check if new client connecting
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
+            //return dbResponse;
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-            else  if(dbResponse instanceof Event)//TODO: Perceber em que casos é que se deve enviar notificações
-            {
-                this.serverInfo.sendNotification(dbResponse, Clientout);
-            }
-
+        this.serverInfo.sendNotification(dbResponse, Clientout);
         return dbResponse;
     }
 

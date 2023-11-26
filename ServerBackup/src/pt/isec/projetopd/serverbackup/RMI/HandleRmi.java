@@ -18,7 +18,7 @@ public class HandleRmi  {
 
     String directory;
     String NameMyRmi;
-    RemoteDatabase myRemoteService = null;
+    RemoteDatabase myRemoteService;
     public HandleRmi(String directory, String name) throws RemoteException {
 
         super();
@@ -26,12 +26,44 @@ public class HandleRmi  {
         this.NameMyRmi = name;
         StartmyRMI();
     }
+    private void StartmyRMI(){
+        try{
+
+            try{
+                LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+                System.out.println("Registry lancado!");
+            }catch(RemoteException e){
+                //Provavelmente ja tinha sido lancado.
+            }
+
+            /*
+             * Cria o proprio servico.
+             */
+
+            myRemoteService = new RemoteDatabase();
+
+            /*
+             * Regista o servico com o nome "backup" para que os clientes possam encontra'-lo, ou seja,
+             * obter a sua referencia remota.
+             */
+
+            Naming.bind(NameMyRmi, myRemoteService);
+
+        }catch(RemoteException e){
+            System.out.println("Erro remoto - " + e);
+            System.exit(1);
+        }catch(Exception e){
+            System.out.println("Erro - " + e);
+            System.exit(1);
+        }
+
+    }
 
     public void fileReceived(HbeatMessage o) {
 
        // if(o.getDatabaseVersion() != local)
         //TODO: Se dbversion diferente mandar o server backup a baixo!
-        System.out.println("Received file");
+        System.out.println("Received file from " + o.getRMI() + " with version " + o.getDatabaseVersion());
 
     }
 
@@ -79,36 +111,4 @@ public class HandleRmi  {
         }
     }
 
-    private void StartmyRMI(){
-        try{
-
-            try{
-                LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-                System.out.println("Registry lancado!");
-            }catch(RemoteException e){
-                //Provavelmente ja tinha sido lancado.
-            }
-
-            /*
-             * Cria o proprio servico.
-             */
-
-            myRemoteService = new RemoteDatabase();
-
-            /*
-             * Regista o servico com o nome "backup" para que os clientes possam encontra'-lo, ou seja,
-             * obter a sua referencia remota.
-             */
-
-            Naming.bind(NameMyRmi, myRemoteService);
-
-        }catch(RemoteException e){
-            System.out.println("Erro remoto - " + e);
-            System.exit(1);
-        }catch(Exception e){
-            System.out.println("Erro - " + e);
-            System.exit(1);
-        }
-
-    }
 }
