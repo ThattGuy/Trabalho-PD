@@ -54,23 +54,29 @@ public class HandleRequests {
                 return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
             }
             case UUID code -> {
+<<<<<<< HEAD
                 //nao
                 return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+=======
+                return manDB.registerPresence(code, ClientMail);
+>>>>>>> 3409d35509da79f22043f68b4f3cb672710ed9c7
             }
             case EditedEvent editedEvent-> {
                 //sim
                 return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
             }
             case CSVEventPresence eventPresence-> {
+<<<<<<< HEAD
                 //nao
                 return null;//todo Xico CSV retornar presenças de um evento em csv
+=======
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+>>>>>>> 3409d35509da79f22043f68b4f3cb672710ed9c7
             }
-
             default -> {
                 return RESPONSE.DECLINED;
             }
         }
-
     }
 
     public Serializable receive(Object request, ObjectOutputStream Clientout){
@@ -98,8 +104,7 @@ public class HandleRequests {
                 return manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
-                //todo Xico CSV retornar presenças de um user em csv
-                manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
+                return manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
             case USER_DATA -> {
