@@ -34,27 +34,35 @@ public class HandleRequests {
                 return this.InterpretRequest(requests, ClientMail);
             }
             case Authentication auth -> {
+                //nao
                 return manDB.CheckLogin(auth.getUsername(), auth.getPassword());
             }
             case User clientInfo -> {
+                //nao
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Event event -> {
+                //nao
                 return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
             }
             case EventPresence eventPresence -> {
-                return (Serializable) manDB.getEventPresence(eventPresence.getEvent().getName());
+                //sim
+                return manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
             }
             case CreateCode eventCode-> {
+                //sim
                 return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
             }
             case UUID code -> {
+                //nao
                 return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
             }
             case EditedEvent editedEvent-> {
+                //sim
                 return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
             }
             case CSVEventPresence eventPresence-> {
+                //nao
                 return null;//todo Xico CSV retornar presenças de um evento em csv
             }
 

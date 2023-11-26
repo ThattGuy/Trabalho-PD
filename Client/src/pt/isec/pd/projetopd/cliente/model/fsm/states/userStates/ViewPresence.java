@@ -29,9 +29,12 @@ public class ViewPresence extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof PresencesList presences){
-            data.addPresences(presences);
+        if(message instanceof PresencesList presencesList){
+            if(data.getUserName() == presencesList.getUsername())
+                data.addPresences(presencesList);
+            return true;
         }
+
 
         return false;
     }
