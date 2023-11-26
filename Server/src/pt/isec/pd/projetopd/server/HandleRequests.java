@@ -62,12 +62,15 @@ public class HandleRequests {
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
-
+            case CSVEventPresence eventPresence-> {
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+            }
             default -> {
                 return RESPONSE.DECLINED;
             }
         }
         return RESPONSE.DECLINED;
+
     }
 
     public Serializable receive(Object request, ObjectOutputStream Clientout){
@@ -95,7 +98,7 @@ public class HandleRequests {
                 return manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
-                manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
+                return manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
             case USER_DATA -> {

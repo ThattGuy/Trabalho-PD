@@ -2,6 +2,7 @@ package pt.isec.pd.projetopd.server.data.DataBase;
 
 import pt.isec.pd.projetopd.communication.classes.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -166,19 +167,16 @@ public class DataBase {
 
                         //return new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("name"), resultSet.getInt("studentNumber"), resultSet.getInt("nif"), resultSet.getString("id"), resultSet.getString("address"));
                     } else {
-                        // Wrong password
                         return "Palavra passe incorreta";
                     }
                 } else {
-                    // No matching username and password
-                    return RESPONSE.DECLINED;
+                    return "No matching username and password";
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error verifying login: " + e.getMessage());
-            return RESPONSE.DECLINED;
+            return "Error verifying login: " + e.getMessage();
         }
-        return RESPONSE.DECLINED;
+        return "Error verifying login.";
     }
 
 
@@ -480,7 +478,7 @@ public class DataBase {
         return presenceList;
     }
 
-    public void generateCSV(String mail, String filePath) {
+    public Serializable generateCSV(String mail, String filePath) {
         List<String> csvLines = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio " +
@@ -508,7 +506,7 @@ public class DataBase {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error getting presence CSV: " + e.getMessage());
+            return "Error getting presence CSV: " + e.getMessage();
         }
 
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -517,9 +515,55 @@ public class DataBase {
             }
             System.out.println("CSV file generated successfully at: " + filePath);
         } catch (IOException e) {
-            System.err.println("Error writing CSV file: " + e.getMessage());
+            return "Error writing CSV file: " + e.getMessage();
         }
+        return (Serializable) csvLines;
     }
+
+    public Serializable generateEventCSV(String eventName, String filePath) {
+        List<String> csvLines = new ArrayList<>();
+
+        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome AS NomeEvento, Event.Local, Event.Data, Event.HoraInicio " +
+                "FROM UserEvent " +
+                "JOIN Event ON UserEvent.event_nome = Event.nome " +
+                "JOIN User ON UserEvent.user_id = User.id " +
+                "WHERE UserEvent.event_nome = ?";
+
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setString(1, eventName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Adicione cabeçalhos ao CSV
+                csvLines.add("\"Nome\";\"Número identificação\";\"Nome do Evento\";\"Local\";\"Data\";\"Horainício\"");
+
+                while (resultSet.next()) {
+                    String nome = resultSet.getString("Nome");
+                    int studentNumber = resultSet.getInt("Número identificação");
+                    String eventNome = resultSet.getString("NomeEvento");
+                    String local = resultSet.getString("Local");
+                    String data = resultSet.getString("Data");
+                    String horaInicio = resultSet.getString("HoraInicio");
+
+                    // Adicione dados ao CSV
+                    csvLines.add("\"" + nome + "\";\"" + studentNumber + "\";\"" + eventNome + "\";\"" + local + "\";\"" + data + "\";\"" + horaInicio + "\"");
+                }
+            }
+        } catch (SQLException e) {
+            return "Error getting event presence CSV: " + e.getMessage();
+        }
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // Escreva todas as linhas de dados no CSV
+            for (String line : csvLines) {
+                writer.write(line + "\n");
+            }
+            System.out.println("CSV file generated successfully at: " + filePath);
+        } catch (IOException e) {
+            return "Error writing CSV file: " + e.getMessage();
+        }
+        return new File(filePath);
+    }
+
 
     public User getUserData(String username) {
         String query = "SELECT * FROM User WHERE username = ?";

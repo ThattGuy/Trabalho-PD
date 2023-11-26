@@ -18,6 +18,8 @@ public class ViewEventPresences extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+
+            case CSV -> data.sendToServer(new CSVEventPresence(data.getEventToEdit()));
             case BACK -> changeState(ClientStates.VIEW_EVENTS);
         }
 
