@@ -38,4 +38,11 @@ public class RegisterCode implements Serializable {
     public Date getExpirationTime() {
         return expirationTime;
     }
+
+    public long getExpirationTimeMinutes() {
+        long currentTime = System.currentTimeMillis();
+        long remainingMillis = expirationTime.getTime() - currentTime;
+
+        return remainingMillis / (60 * 1000);
+    }
 }

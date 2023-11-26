@@ -30,7 +30,8 @@ public class EditEvent extends ClientStateAdapter {
                                 splitString[1],
                                 splitString[2],
                                 splitString[3],
-                                splitString[4]);
+                                splitString[4],
+                                (int) data.getEventToEdit().getPresenceCodes().get(0).getExpirationTimeMinutes());
                         data.sendToServer(new EditedEvent(event, data.getEventToEdit().getName()));
                     } catch (NumberFormatException e) {
                         data.setMessage("Wrong format");

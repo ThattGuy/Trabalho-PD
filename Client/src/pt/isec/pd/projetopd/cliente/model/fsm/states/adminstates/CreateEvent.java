@@ -24,14 +24,15 @@ public class CreateEvent extends ClientStateAdapter {
             case SUBMIT -> {
                 String[] splitString = string.split("\n");
 
-                if (splitString.length == 5) {
+                if (splitString.length == 6) {
                     try {
                         data.sendToServer(new Event(
                                 splitString[0],
                                 splitString[1],
                                 splitString[2],
                                 splitString[3],
-                                splitString[4]));
+                                splitString[4],
+                                Integer.parseInt(splitString[5])));
                     } catch (NumberFormatException e) {
                         data.setMessage("Wrong format");
                         return false;

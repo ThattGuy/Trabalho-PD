@@ -20,7 +20,7 @@ public class CreateEventUI extends BorderPane {
 
     private Manager manager;
     private Button btnSubmit, btnBack;
-    private TextField eventName, local, date, beginning, endTime;
+    private TextField eventName, local, date, beginning, endTime, codeExpirationTime;
 
     private VBox vbox;
     private GridPane grid;
@@ -68,6 +68,10 @@ public class CreateEventUI extends BorderPane {
         endTime = new TextField();
         endTime.setPromptText("Enter EndTime");
 
+        Label lCodeExpirationTime = new Label("Code Expiration Time");
+        codeExpirationTime = new TextField();
+        codeExpirationTime.setPromptText("Enter Code Expiration Time");
+
         messageLabel = new Label();
         messageLabel.getStyleClass().add("info");
         messageLabel.setTextFill(Color.RED);
@@ -98,6 +102,10 @@ public class CreateEventUI extends BorderPane {
         grid.add(lEndTime, 0, rowIndex);
         grid.add(endTime, 1, rowIndex, 20, 1);
 
+        rowIndex++;
+        grid.add(lCodeExpirationTime, 0, rowIndex);
+        grid.add(codeExpirationTime, 1, rowIndex, 20, 1);
+
         hBox = new HBox(btnBack, btnSubmit);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
@@ -115,6 +123,7 @@ public class CreateEventUI extends BorderPane {
         date.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         beginning.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         endTime.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
+        codeExpirationTime.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
 
         VBox container = new VBox(vbox);
         container.setAlignment(Pos.CENTER);
@@ -135,7 +144,8 @@ public class CreateEventUI extends BorderPane {
                     + local.getText() + "\n"
                     + date.getText() + "\n"
                     + beginning.getText() + "\n"
-                    + endTime.getText() + "\n";
+                    + endTime.getText() + "\n"
+                    + codeExpirationTime.getText();
             manager.selectOption(OPTIONS.SUBMIT, string);
             update();
         });

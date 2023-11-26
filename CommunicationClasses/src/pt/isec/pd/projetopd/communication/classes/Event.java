@@ -19,7 +19,7 @@ public class Event implements Serializable {
         this.date = date;
         this.beginning = beginning;
         this.endTime = endTime;
-       registerCodes.add(new RegisterCode(codeExpirationTime);
+       registerCodes.add(new RegisterCode(codeExpirationTime));
     }
 
     public String getName() {return name;}
