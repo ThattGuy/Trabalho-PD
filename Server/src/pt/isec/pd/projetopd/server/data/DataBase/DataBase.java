@@ -61,7 +61,7 @@ public class DataBase {
             statement.execute("CREATE TABLE IF NOT EXISTS UserEvent ( " +
                     "id INTEGER PRIMARY KEY, " +
                     "user_id INTEGER, " +
-                    "event_nome INTEGER, " +
+                    "event_nome TEXT, " +
                     "FOREIGN KEY (user_id) REFERENCES User(id), " +
                     "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
@@ -431,9 +431,8 @@ public class DataBase {
     }
     public Serializable registerPresence(UUID code, String clientMail) {
         String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
-                "WHERE codigo = ? AND hora_termino > datetime('now')";
+                "WHERE codigo = ? ";
         int validCodeCount = 0;
-
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
             checkStatement.setString(1, code.toString());
 
@@ -449,7 +448,6 @@ public class DataBase {
         if (validCodeCount == 0) {
             return "Invalid or expired registration code.";
         }
-
         String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), " +
                 "(SELECT event_nome FROM CodigoRegisto WHERE codigo = ?))";
 
@@ -600,7 +598,7 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.event_name = ?";
+                "WHERE UserEvent.event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, eventName);
@@ -672,7 +670,7 @@ public class DataBase {
                 String horaInicio = resultSet.getString("HoraInicio");
                 String horaFim = resultSet.getString("HoraFim");
 
-                Event event = new Event(nome, local, data, horaInicio, horaFim,0);
+                Event event = new Event(nome, local, data, horaInicio, horaFim,null);
                 eventList.add(event);
             }
         } catch (SQLException e) {
@@ -689,7 +687,7 @@ public class DataBase {
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
-                "JOIN Event ON UserEvent.event_name = Event.name " +
+                "JOIN Event ON UserEvent.event_nome = Event.name " +
                 "JOIN User ON UserEvent.user_id = User.id " +
                 "WHERE UserEvent.user_id = ? AND Event.nome = ?";
 
@@ -737,6 +735,12 @@ public class DataBase {
             return "Registration code already exists for the event.";
         }
 
+        Event event = getEventByName(eventName);
+        if (event != null) {
+            RegisterCode registerCode = new RegisterCode(code,expirationTime);
+            event.addPresenceCode(registerCode);
+        }
+
         String insertCodeQuery = "INSERT INTO CodigoRegisto (codigo, event_nome, hora_termino) VALUES (?, ?, ?)";
         try (PreparedStatement insertCodeStatement = con.prepareStatement(insertCodeQuery)) {
             insertCodeStatement.setString(1, code.toString());
@@ -757,6 +761,30 @@ public class DataBase {
         }
 
         return "PresenceCode successfully created: " + code.toString();
+    }
+
+    private Event getEventByName(String eventName) {
+        String query = "SELECT nome, Local, Data, HoraInicio, HoraFim FROM Event WHERE nome = ?";
+        try (PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setString(1, eventName);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String name = resultSet.getString("nome");
+                    String location = resultSet.getString("Local");
+                    String date = resultSet.getString("Data");
+                    String beginning = resultSet.getString("HoraInicio");
+                    String endTime = resultSet.getString("HoraFim");
+                    List<RegisterCode> Codes = new ArrayList<>();
+
+                    return new Event(name, location, date, beginning, endTime,Codes);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
 

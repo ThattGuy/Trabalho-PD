@@ -49,7 +49,7 @@ public class HandleRequests {
                 return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
             }
             case UUID code -> {
-                return manDB.registerPresence(code, ClientMail);
+                return manDB.registerPresence(code, "xicor@isec.pt");
             }
             case EditedEvent editedEvent-> {
                 return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
