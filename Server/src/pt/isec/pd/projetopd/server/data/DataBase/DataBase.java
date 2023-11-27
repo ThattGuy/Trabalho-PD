@@ -71,26 +71,6 @@ public class DataBase {
         }
     }
 
-    public List<Map<String, Object>> getDatabaseCopy() throws SQLException {
-
-        List<Map<String, Object>> databaseCopy = new ArrayList<>();
-
-        try  {
-            DatabaseMetaData metaData = con.getMetaData();
-            ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
-
-            while (tables.next()) {
-                String tableName = tables.getString("TABLE_NAME");
-                databaseCopy.addAll(getDataFromTable(con, tableName));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting database copy: ");
-            // Handle exceptions appropriately based on your application's needs
-        }
-
-        return databaseCopy;
-    }
 
     private List<Map<String, Object>> getDataFromTable(Connection connection, String tableName) throws SQLException {
         List<Map<String, Object>> tableData = new ArrayList<>();

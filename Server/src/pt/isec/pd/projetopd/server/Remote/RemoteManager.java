@@ -1,5 +1,6 @@
 package pt.isec.pd.projetopd.server.Remote;
 
+import pt.isec.pd.projetopd.server.ServerInfo;
 import pt.isec.pd.projetopd.server.data.DataBase.DataBase;
 
 import java.io.File;
@@ -49,7 +50,7 @@ public class RemoteManager {
                 System.out.println("Registry provavelmente ja' em execucao!");
             }
 
-            this.getRemote = new GetRemote(directory);
+            this.getRemote = new GetRemote(directory, 0);
             //this.getRemote = (GetRemote) UnicastRemoteObject.exportObject(this.getRemote, port_registry);
 
 
@@ -62,6 +63,10 @@ public class RemoteManager {
             System.out.println("Erro - " + e);
             System.exit(1);
         }
+    }
+
+    public void setDatabaseVersion(int databaseVersion){
+        this.getRemote.setDatabaseVersion(databaseVersion);
     }
 
 }
