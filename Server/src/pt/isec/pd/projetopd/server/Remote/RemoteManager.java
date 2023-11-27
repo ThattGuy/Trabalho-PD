@@ -77,7 +77,8 @@ public class RemoteManager {
     }
 
     public void sendNotification(Object data) {
-        for(BackupServerInterface backup : backupServers){
+
+       /* for(BackupServerInterface backup : backupServers){
             try {
                 backup.updateDB(data);
             } catch (RemoteException e) {
@@ -86,6 +87,8 @@ public class RemoteManager {
                 throw new RuntimeException(e);
             }
         }
+
+        */
     }
 
 }

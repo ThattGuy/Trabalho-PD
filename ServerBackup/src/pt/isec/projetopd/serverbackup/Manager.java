@@ -75,6 +75,6 @@ public class Manager {
         }
 
 
-        this.multicast.close();
+//        this.multicast.close();
     }
 }

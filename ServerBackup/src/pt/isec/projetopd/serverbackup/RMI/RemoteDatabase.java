@@ -1,11 +1,9 @@
 package pt.isec.projetopd.serverbackup.RMI;
 
 import pt.isec.pd.projetopd.communication.interfaces.BackupServerInterface;
-import pt.isec.projetopd.serverbackup.UpdateDatabase;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -13,11 +11,9 @@ public class RemoteDatabase extends UnicastRemoteObject implements BackupServerI
 
     FileOutputStream fout;
     String dbPath;
-    UpdateDatabase updateDatabase;
-    protected RemoteDatabase(String path) throws RemoteException {
+    protected RemoteDatabase() throws RemoteException {
         super();
-        this.dbPath = path;
-        this.updateDatabase = new UpdateDatabase(path);
+        //this.updateDatabase = new UpdateDatabase(path);
     }
 
     public void setFout(FileOutputStream localFileOutputStream) {
@@ -43,7 +39,7 @@ public class RemoteDatabase extends UnicastRemoteObject implements BackupServerI
     @Override
     public void updateDB(Object data) throws IOException, RemoteException {
 
-        updateDatabase.update((Serializable) data);
+        //updateDatabase.update((Serializable) data);
     }
 
 

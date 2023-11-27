@@ -44,7 +44,7 @@ public class HandleRmi  {
              * Cria o proprio servico.
              */
 
-            myRemoteService = new RemoteDatabase(this.NameMyRmi);
+            myRemoteService = new RemoteDatabase();
 
             /*
              * Regista o servico com o nome "backup" para que os clientes possam encontra'-lo, ou seja,
@@ -63,8 +63,9 @@ public class HandleRmi  {
 
     }
 
-    public void fileReceived(HbeatMessage o) {
 
+    public void fileReceived(HbeatMessage o) {}
+/*
         try {
             UpdateDB serverDB = (UpdateDB) Naming.lookup(o.getRMI());
             if (o.getDatabaseVersion() - 1 != this.databaseVersion) {
@@ -76,6 +77,8 @@ public class HandleRmi  {
         }
 
     }
+
+     */
 
     public void setLocalDatabase(HbeatMessage o) {
 
