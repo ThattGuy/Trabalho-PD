@@ -89,6 +89,6 @@ public class ClientContext {
     public String getEventCodes() {
         if(data.getEventToEdit() == null)
             return null;
-        return data.getEventToEdit().getPresenceCodes().toString();
+        return data.getEventToEdit().getPresenceCodesString();
     }
 }

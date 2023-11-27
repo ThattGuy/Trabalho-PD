@@ -150,10 +150,6 @@ public class Data {
         }
         return null;
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> fa242230fb69c70b03fb7585fb72206d720a5513
     public boolean createCSV(File csv) {
         return true;
     }

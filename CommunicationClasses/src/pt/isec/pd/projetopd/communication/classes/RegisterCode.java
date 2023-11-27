@@ -49,4 +49,11 @@ public class RegisterCode implements Serializable {
 
         return remainingMillis / (60 * 1000);
     }
+
+    @Override
+    public String toString() {
+        return "RegisterCode{" +
+                "code=" + code +
+                '}';
+    }
 }
