@@ -19,12 +19,15 @@ public class HandleRmi  {
     String directory;
     String NameMyRmi;
     RemoteDatabase myRemoteService;
+    int databaseVersion;
     public HandleRmi(String directory, String name) throws RemoteException {
 
         super();
         this.directory = directory;
         this.NameMyRmi = name;
+        databaseVersion = 0;
         StartmyRMI();
+
     }
     private void StartmyRMI(){
         try{
@@ -61,13 +64,16 @@ public class HandleRmi  {
 
     public void fileReceived(HbeatMessage o) {
 
-       // if(o.getDatabaseVersion() != local)
-        //TODO: Se dbversion diferente mandar o server backup a baixo!
+        if(o.getDatabaseVersion() + 1 != this.databaseVersion){
+            //TODO: Se dbversion diferente mandar o server backup a baixo!
+        }
         System.out.println("Received file from " + o.getRMI() + " with version " + o.getDatabaseVersion());
 
     }
 
     public void setLocalDatabase(HbeatMessage o) {
+
+        this.databaseVersion = o.getDatabaseVersion();
 
         //IR buscar a base de dados!
         try(FileOutputStream localFileOutputStream = new FileOutputStream(this.directory)){ //Cria o ficheiro local

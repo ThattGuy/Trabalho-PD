@@ -71,26 +71,6 @@ public class DataBase {
         }
     }
 
-    public List<Map<String, Object>> getDatabaseCopy() throws SQLException {
-
-        List<Map<String, Object>> databaseCopy = new ArrayList<>();
-
-        try  {
-            DatabaseMetaData metaData = con.getMetaData();
-            ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
-
-            while (tables.next()) {
-                String tableName = tables.getString("TABLE_NAME");
-                databaseCopy.addAll(getDataFromTable(con, tableName));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting database copy: ");
-            // Handle exceptions appropriately based on your application's needs
-        }
-
-        return databaseCopy;
-    }
 
     private List<Map<String, Object>> getDataFromTable(Connection connection, String tableName) throws SQLException {
         List<Map<String, Object>> tableData = new ArrayList<>();
@@ -400,6 +380,7 @@ public class DataBase {
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
+                System.out.println("Event edited successfully.");
                 return newEvent;
             } else {
                 return "No rows affected. Event with old name not found or no changes made.";
@@ -655,12 +636,16 @@ public class DataBase {
         return null;
     }
 
+<<<<<<< HEAD
 
     public Serializable getEventPresence(String eventName) {
 
+=======
+    public Serializable getEventPresence(String eventName, String mail) {
+>>>>>>> b021d3401fe0892472d511edac35b105c6c4703a
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
+        String query = "SELECT User.username AS Username, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.username = User.username " +
                 "WHERE UserEvent.event_nome = ?";
@@ -669,13 +654,13 @@ public class DataBase {
             preparedStatement.setString(1, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\"");
+                presenceList.add("\"Username\";\"Número identificação\"");
 
                 while (resultSet.next()) {
-                    String name = resultSet.getString("Nome");
+                    String username = resultSet.getString("Username");
                     int studentNumber = resultSet.getInt("Número identificação");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "");
+                    presenceList.add("\"" + username + "\";\"" + studentNumber + "");
                 }
             }
         } catch (SQLException e) {

@@ -70,8 +70,7 @@ public class HandleRequests {
             }
             case CSVEventPresence eventPresence-> {
                 //nao
-                return null;//todo Xico CSV retornar presenças de um evento em csv
-                //return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
 
             }
             default -> {
@@ -84,15 +83,17 @@ public class HandleRequests {
         String mail =this.serverInfo.getClientMail(Clientout);
         Serializable dbResponse = this.InterpretClientMessage(request, mail);
 
-        if(request instanceof Authentication && dbResponse instanceof User ) //Check if new client connecting
+        if(request instanceof Authentication && dbResponse instanceof User
+            || request instanceof User && dbResponse instanceof User
+        ) //Check if new client connecting or registring
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
-            //return dbResponse;
-            mail =this.serverInfo.getClientMail(Clientout);
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
+
+        this.serverInfo.updateBackup(dbResponse);
 
         return dbResponse;
     }

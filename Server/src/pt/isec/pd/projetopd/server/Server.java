@@ -95,11 +95,11 @@ public class Server
             SendHBeat sendHBeat = new SendHBeat(server.socket, hbeatMessage, server.MULTICAST_ADDRESS, server.MULTICAST_PORT);
 
 
-            ServerInfo serverInfo = new ServerInfo(sendHBeat);
+            RemoteManager remoteManager = new RemoteManager(server.REGISTRY_PORT, server.DATABASE_PATH, "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI);
+            ServerInfo serverInfo = new ServerInfo( sendHBeat, remoteManager);
             NotificationThread notificationThread = new NotificationThread(7001, serverInfo);
             HandleRequests handleRequests = new HandleRequests(args[1], serverInfo);
             ReceiveTCPClients recvClient = new ReceiveTCPClients(server.TCP_PORT, handleRequests);
-            RemoteManager remoteManager = new RemoteManager(server.REGISTRY_PORT, server.DATABASE_PATH, "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/"+ server.RMI);
 
 
 

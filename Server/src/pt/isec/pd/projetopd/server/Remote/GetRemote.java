@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.rmi.Remote;
@@ -23,11 +24,16 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB {
     public static final int MAX_CHUNCK_SIZE = 10000; //bytes
     File directory;
     List<BackupServerInterface> backupServers;
+    private int databaseVersion;
 
-    protected GetRemote(File direc) throws RemoteException {
+    protected GetRemote(File direc, int version) throws RemoteException {
         this.directory = direc;
         backupServers = new ArrayList<>();
+        this.databaseVersion = version;
 
+    }
+    protected void setDatabaseVersion(int databaseVersion){
+        this.databaseVersion = databaseVersion;
     }
 
     protected FileInputStream getRequestedFileInputStream(String fileName) throws IOException {
@@ -88,7 +94,6 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB {
         }
 
     }
-
     private boolean checkIfNewBackup(BackupServerInterface backup){
         return !this.backupServers.contains(backup);
 
@@ -100,6 +105,13 @@ public class GetRemote extends UnicastRemoteObject implements UpdateDB {
         byte[] fileBytes = Files.readAllBytes(directory.toPath());
 
         backup.writeFileChunk(fileBytes, fileBytes.length);
+
+
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(databaseVersion);
+        byte[] bytes = buffer.array();
+        backup.writeFileChunk(bytes, bytes.length);
+
         if(checkIfNewBackup(backup)) backupServers.add(backup);
     }
 }
