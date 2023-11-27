@@ -40,14 +40,13 @@ public class HandleRequests {
             }
             case User clientInfo -> {
                 //nao
-                return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
+                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case EditUser editUser -> {
                 //nao
                 User clientInfo = editUser.getUser();
                 return manDB.editDataUser(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress());
             }
-
 
             case Event event -> {
 
@@ -95,17 +94,19 @@ public class HandleRequests {
         String mail =this.serverInfo.getClientMail(Clientout);
         Serializable dbResponse = this.InterpretClientMessage(request, mail);
 
-        if(request instanceof Authentication && dbResponse instanceof User
-            || request instanceof User && dbResponse instanceof User
-        ) //Check if new client connecting or registring
-        {
+
+        //Check if new client connecting or registring
+        if(request instanceof Authentication && dbResponse instanceof User)
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
-        }
+
+          else
+              if( request instanceof User && dbResponse instanceof User)
+                    this.serverInfo.addClient(((User) request).getUsername(), Clientout);
+
+
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
-
-        this.serverInfo.updateBackup(dbResponse);
 
         return dbResponse;
     }
