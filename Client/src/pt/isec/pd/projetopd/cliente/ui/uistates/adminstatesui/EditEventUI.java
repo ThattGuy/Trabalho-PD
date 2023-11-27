@@ -160,8 +160,13 @@ public class EditEventUI extends BorderPane {
 
         this.setFocusTraversable(true);
         this.setOnKeyPressed((key) -> {
+            String string = eventName.getText() + "\n"
+                    + local.getText() + "\n"
+                    + date.getText() + "\n"
+                    + beginning.getText() + "\n"
+                    + endTime.getText() + "\n";
             if (key.getCode() == KeyCode.ENTER) {
-                manager.selectOption(OPTIONS.SUBMIT, eventName.getText() + "\n" + local.getText());
+                manager.selectOption(OPTIONS.SUBMIT, string);
                 update();
             }
         });
@@ -179,6 +184,14 @@ public class EditEventUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.EDIT_EVENT) {
+            eventName.setText(null);
+            local.setText(null);
+            date.setText(null);
+            beginning.setText(null);
+            endTime.setText(null);
+            codeExpTime.setText(null);
+
+
             this.setVisible(false);
             return;
         }

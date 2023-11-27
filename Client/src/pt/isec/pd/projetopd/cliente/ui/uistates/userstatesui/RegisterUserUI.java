@@ -176,6 +176,15 @@ public class RegisterUserUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.REG_USER) {
+            usernameField.setText(null);
+            passwordField.setText(null);
+            name.setText(null);
+            studentNumber.setText(null);
+            nif.setText(null);
+            id.setText(null);
+            address.setText(null);
+
+
             this.setVisible(false);
             return;
         }
