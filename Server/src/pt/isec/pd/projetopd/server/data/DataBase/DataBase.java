@@ -400,6 +400,7 @@ public class DataBase {
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
+                System.out.println("Event edited successfully.");
                 return newEvent;
             } else {
                 return "No rows affected. Event with old name not found or no changes made.";
@@ -658,7 +659,7 @@ public class DataBase {
     public Serializable getEventPresence(String eventName, String mail) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
+        String query = "SELECT User.username AS Username, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.username = User.username " +
                 "WHERE UserEvent.event_nome = ?";
@@ -667,13 +668,13 @@ public class DataBase {
             preparedStatement.setString(1, eventName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                presenceList.add("\"Nome\";\"Número identificação\"");
+                presenceList.add("\"Username\";\"Número identificação\"");
 
                 while (resultSet.next()) {
-                    String name = resultSet.getString("Nome");
+                    String username = resultSet.getString("Username");
                     int studentNumber = resultSet.getInt("Número identificação");
 
-                    presenceList.add("\"" + name + "\";\"" + studentNumber + "");
+                    presenceList.add("\"" + username + "\";\"" + studentNumber + "");
                 }
             }
         } catch (SQLException e) {
