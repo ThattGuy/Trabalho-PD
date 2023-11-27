@@ -105,9 +105,6 @@ public class ViewEventPresencesUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.VIEW_EVENT_PRESENCE) {
-            userName.setText(null);
-            eventName.setText(null);
-
             this.setVisible(false);
             return;
         }

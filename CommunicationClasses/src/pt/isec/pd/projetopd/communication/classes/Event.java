@@ -13,6 +13,7 @@ public class Event implements Serializable {
     private String beginning;
     private String endTime;
     private List<RegisterCode> registerCodes;
+
     public Event(String name, String location, String date, String beginning, String endTime, List<RegisterCode> registerCodes) {
         this.name = name;
         this.location = location;
@@ -22,11 +23,25 @@ public class Event implements Serializable {
         this.registerCodes = registerCodes;
     }
 
-    public String getName() {return name;}
-    public String getLocation() {return location;}
-    public String getDate() {return date;}
-    public String getBeginning() {return beginning;}
-    public String getEndTime() {return endTime;}
+    public String getName() {
+        return name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getBeginning() {
+        return beginning;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
 
     public List<RegisterCode> getPresenceCodes() {
         return registerCodes;
@@ -41,6 +56,14 @@ public class Event implements Serializable {
             this.registerCodes = new ArrayList<>();
         }
         this.registerCodes.add(newRegisterCode);
+    }
+
+    public String getPresenceCodesString() {
+        StringBuilder sb = new StringBuilder();
+        for (RegisterCode registerCode : registerCodes) {
+            sb.append(registerCode.toString());
+        }
+        return sb.toString();
     }
 
     @Override
