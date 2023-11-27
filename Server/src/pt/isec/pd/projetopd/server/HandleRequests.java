@@ -86,6 +86,10 @@ public class HandleRequests {
                 //nao
                 return manDB.deleteEvent(deleteEvent.getEventName());
             }
+            case RemovePresence removePresence-> {
+                //nao
+                return manDB.deletePresence(removePresence.getUser(),removePresence.getEventName());
+            }
             default -> {
                 return RESPONSE.DECLINED;
             }
