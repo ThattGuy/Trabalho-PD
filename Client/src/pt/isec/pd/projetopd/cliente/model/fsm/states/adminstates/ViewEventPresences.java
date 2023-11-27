@@ -48,17 +48,10 @@ public class ViewEventPresences extends ClientStateAdapter {
         }
 
         if(message instanceof EventPresencesList eventPresencesList){
-<<<<<<< HEAD
-            if(data.getUserName().equals(eventPresencesList.getUsername())){
-                data.addPresences(eventPresencesList);
-                return true;
-            }
-=======
             if(Objects.equals(eventPresencesList.getEventName(), data.getEventToEdit().getName()))
                 data.addPresences(eventPresencesList.toString());
             return true;
         }
->>>>>>> 7af178f074cb01f8f07d0a3f15129bf21cbb8026
 
         if(message instanceof File csv){
             return data.createCSV(csv);
