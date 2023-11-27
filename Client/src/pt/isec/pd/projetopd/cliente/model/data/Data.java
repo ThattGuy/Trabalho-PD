@@ -4,6 +4,7 @@ import pt.isec.pd.projetopd.communication.classes.*;
 
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
@@ -67,8 +68,8 @@ public class Data {
         return sb;
     }
 
-    public synchronized void addPresences(EventPresencesList eventPresencesList) {
-        this.presences = eventPresencesList.toString();
+    public synchronized void addPresences(String eventPresencesList) {
+        this.presences = eventPresencesList;
     }
 
     public synchronized String getPresenceString() {
@@ -149,5 +150,8 @@ public class Data {
 
     public void modifyEditEvent(Event event) {
         events.set(indexOfEventObject, event);
+    }
+
+    public boolean createCSV(File csv) {
     }
 }

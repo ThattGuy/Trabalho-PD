@@ -71,12 +71,12 @@ public class EditEvent extends ClientStateAdapter {
         }
 
         if (message instanceof Event event) {
-            data.modifyEditEvent(event);
-            return true;
-        } else {
-            data.setMessage("Error deserializing the Event object");
-            return false;
+            if(event.getName().equals(data.getEventToEdit().getName())){
+                data.modifyEditEvent(event);
+                return true;
+            }
         }
+        return false;
     }
 
     @Override

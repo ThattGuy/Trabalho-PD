@@ -7,8 +7,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 import pt.isec.pd.projetopd.communication.classes.EventPresencesList;
-
-import java.util.Objects;
+import pt.isec.pd.projetopd.communication.classes.UserPresences;
 
 public class ViewPresence extends ClientStateAdapter {
     public ViewPresence(ClientContext context, Data data) {
@@ -31,9 +30,9 @@ public class ViewPresence extends ClientStateAdapter {
     @Override
     public synchronized boolean onMessageReceived(Object message) {
 
-        if(message instanceof EventPresencesList eventPresencesList){
-            if(Objects.equals(eventPresencesList.getEventName(), data.getEventToEdit().getName()))
-                data.addPresences(eventPresencesList);
+        if(message instanceof UserPresences userPresences){
+            if(data.getUserName() == userPresences.getUsername())
+                data.addPresences(userPresences.getPresences());
             return true;
         }
 
