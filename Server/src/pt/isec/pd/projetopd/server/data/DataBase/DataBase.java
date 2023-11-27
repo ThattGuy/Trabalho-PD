@@ -242,20 +242,23 @@ public class DataBase {
         }
     }
 
-    public Serializable deleteUser(String id) {
-        String query = "DELETE FROM User WHERE id = ?";
+    public Serializable deletePresence(String username, String eventName) {
+        String query = "DELETE FROM UserEvent WHERE username = ? AND event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
-            preparedStatement.setString(1, id);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, eventName);
 
             int rowsAffected = preparedStatement.executeUpdate();
+
             if (rowsAffected > 0) {
-               return "User deleted successfully.";
+                return "Presence deleted successfully.";
+            } else {
+                return "Presence not found or no rows affected.";
             }
         } catch (SQLException e) {
-            return "Error removing user: " + e.getMessage();
+            return "Error removing presence: " + e.getMessage();
         }
-        return false;
     }
 
     public Serializable deleteEvent(String nome) {
