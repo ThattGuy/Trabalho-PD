@@ -27,7 +27,7 @@ public class HandleClient implements Runnable {
 
     @Override
     public void run() {
-
+        String mail = null;
         try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             sendPort(new ServerPort(7001), out);
@@ -37,7 +37,7 @@ public class HandleClient implements Runnable {
                 if(o == null) { socket.close(); return;}
 
                 o = handleRequests.receive(o, out);
-                if(o instanceof User) socket.setSoTimeout(0);
+                if(o instanceof User) {socket.setSoTimeout(0); mail = ((User) o).getUsername();}
 
                 out.writeObject(o);
                 out.flush();
@@ -48,6 +48,8 @@ public class HandleClient implements Runnable {
         }catch(IOException | ClassNotFoundException e){
             try {
                 socket.close();
+                if(mail != null)
+                    handleRequests.closeClient(mail);
                 System.out.println("I closed the socket");
 
 

@@ -71,7 +71,7 @@ public class HandleRmi  {
             if (o.getDatabaseVersion() - 1 != this.databaseVersion) {
                 serverDB.deleteBackup(myRemoteService);
             }
-            else this.databaseVersion++;
+            else {this.databaseVersion++; System.out.println("Database version: enterede");}
 
             System.out.println("Database version: " + this.databaseVersion);
         } catch (NotBoundException | IOException e) {
@@ -83,7 +83,7 @@ public class HandleRmi  {
 
     public void setLocalDatabase(HbeatMessage o) {
 
-        this.databaseVersion = o.getDatabaseVersion();
+        this.databaseVersion = o.getDatabaseVersion()+2;
 
         //IR buscar a base de dados!
         try(FileOutputStream localFileOutputStream = new FileOutputStream(this.directory)){ //Cria o ficheiro local
