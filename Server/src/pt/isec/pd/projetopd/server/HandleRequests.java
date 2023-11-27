@@ -25,7 +25,7 @@ public class HandleRequests {
         this.serverInfo = serverInfo;
     }
 
-    private Serializable InterpretClientMessage(Object request, String clientMail) {
+    private synchronized Serializable InterpretClientMessage(Object request, String clientMail) {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
@@ -80,7 +80,7 @@ public class HandleRequests {
         }
     }
 
-    public Serializable receive(Object request, ObjectOutputStream Clientout){
+    public synchronized Serializable receive(Object request, ObjectOutputStream Clientout){
         String mail =this.serverInfo.getClientMail(Clientout);
         Serializable dbResponse = this.InterpretClientMessage(request, mail);
 
@@ -98,7 +98,7 @@ public class HandleRequests {
     }
 
 
-    private Serializable InterpretRequest(REQUESTS request, String clientMail)
+    private synchronized Serializable InterpretRequest(REQUESTS request, String clientMail)
     {
         switch (request){
             case PRESENCE -> {
