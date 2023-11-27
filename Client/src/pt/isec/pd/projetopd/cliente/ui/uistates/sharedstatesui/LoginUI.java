@@ -107,6 +107,9 @@ public class LoginUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.LOGIN) {
+            usernameField.setText(null);
+            passwordField.setText(null);
+
             this.setVisible(false);
             return;
         }

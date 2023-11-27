@@ -21,19 +21,20 @@ public class EditInfo extends ClientStateAdapter {
             case SUBMIT -> {
                 String[] splitString = string.split("\n");
 
-                if (splitString.length >= 7) {
+                if (splitString.length >= 5) {
                     try {
-                        int studentNumber = Integer.parseInt(splitString[3]);
-                        int nif = Integer.parseInt(splitString[4]);
+                        int studentNumber = Integer.parseInt(splitString[2]);
+                        int nif = Integer.parseInt(splitString[3]);
 
                         data.sendToServer(new User(
+                                data.getUserName(),
                                 splitString[0],
                                 splitString[1],
-                                splitString[2],
                                 studentNumber,
                                 nif,
-                                splitString[5],
-                                splitString[6]));
+                                data.getID(),
+                                splitString[4]
+                                ));
                     } catch (NumberFormatException e) {
                         data.setMessage("Student Number and ID need to be numbers");
                         return false;

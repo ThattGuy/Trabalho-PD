@@ -166,6 +166,13 @@ public class CreateEventUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.CREATE_EVENT) {
+            eventName.setText(null);
+            local.setText(null);
+            date.setText(null);
+            beginning.setText(null);
+            endTime.setText(null);
+            codeExpirationTime.setText(null);
+
             this.setVisible(false);
             return;
         }
