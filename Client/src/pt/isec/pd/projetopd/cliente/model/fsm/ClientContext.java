@@ -85,4 +85,10 @@ public class ClientContext {
     public String getName() {
         return data.getName();
     }
+
+    public String getEventCodes() {
+        if(data.getEventToEdit() == null)
+            return null;
+        return data.getEventToEdit().getPresenceCodes().toString();
+    }
 }
