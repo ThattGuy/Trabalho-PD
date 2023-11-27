@@ -710,7 +710,9 @@ public class DataBase {
                 String horaInicio = resultSet.getString("HoraInicio");
                 String horaFim = resultSet.getString("HoraFim");
 
-                Event event = new Event(nome, local, data, horaInicio, horaFim,null);
+                List<RegisterCode> codes = getRegisterCodesForEvent(nome);
+
+                Event event = new Event(nome, local, data, horaInicio, horaFim, codes);
                 eventList.add(event);
             }
         } catch (SQLException e) {
@@ -721,7 +723,6 @@ public class DataBase {
 
         return events;
     }
-
 
     public Serializable createCode(String eventName, UUID code, Date expirationTime) {
         String getLastCodeQuery = "SELECT codigo FROM CodigoRegisto WHERE event_nome = ? ORDER BY hora_termino DESC LIMIT 1";
@@ -783,9 +784,10 @@ public class DataBase {
                     String date = resultSet.getString("Data");
                     String beginning = resultSet.getString("HoraInicio");
                     String endTime = resultSet.getString("HoraFim");
-                    List<RegisterCode> Codes = new ArrayList<>();
 
-                    return new Event(name, location, date, beginning, endTime,Codes);
+                    List<RegisterCode> codes = getRegisterCodesForEvent(eventName);
+
+                    return new Event(name, location, date, beginning, endTime, codes);
                 }
             }
         } catch (SQLException e) {
@@ -793,6 +795,27 @@ public class DataBase {
         }
 
         return null;
+    }
+
+    private List<RegisterCode> getRegisterCodesForEvent(String eventName) {
+        List<RegisterCode> codes = new ArrayList<>();
+        String query = "SELECT codigo, hora_termino FROM CodigoRegisto WHERE event_nome = ?";
+        try (PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setString(1, eventName);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    UUID code = UUID.fromString(resultSet.getString("codigo"));
+                    Date expirationTime = resultSet.getDate("hora_termino");
+
+                    codes.add(new RegisterCode(code, expirationTime));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return codes;
     }
 }
 
