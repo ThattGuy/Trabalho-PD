@@ -413,6 +413,7 @@ public class DataBase {
         String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
                 "WHERE codigo = ? ";
         int validCodeCount = 0;
+        String eventName = null;
 
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
             checkStatement.setString(1, code.toString());
@@ -420,6 +421,7 @@ public class DataBase {
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
                     validCodeCount = resultSet.getInt(1);
+                    eventName = resultSet.getString("event_nome");
                 }
             }
         } catch (SQLException e) {
@@ -449,19 +451,45 @@ public class DataBase {
             return "User not found.";
         }
 
-        String insertQuery = "INSERT INTO UserEvent (username, event_nome) VALUES (?, " +
-                "(SELECT event_nome FROM CodigoRegisto WHERE codigo = ?))";
+        String insertQuery = "INSERT INTO UserEvent (username, event_nome) VALUES (?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, code.toString());
+            preparedStatement.setString(2, eventName);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return new EventPresencesList(//nomeEvento,presençasEvento) ;
+            if (rowsAffected > 0) {
+                String presencesList = getPresencesListAsString(eventName);
+                return new EventPresencesList(eventName, presencesList);
+            } else {
+                return "Failed to register presence.";
+            }
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
+    }
+
+    private String getPresencesListAsString(String eventName) throws SQLException {
+        StringBuilder presencesStringBuilder = new StringBuilder();
+        String getPresencesQuery = "SELECT username FROM UserEvent WHERE event_nome = ?";
+        try (PreparedStatement getPresencesStatement = con.prepareStatement(getPresencesQuery)) {
+            getPresencesStatement.setString(1, eventName);
+
+            try (ResultSet resultSet = getPresencesStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String username = resultSet.getString("username");
+                    presencesStringBuilder.append(username).append(", ");
+                }
+            }
+        }
+
+        // Remove a vírgula extra no final, se houver
+        if (presencesStringBuilder.length() > 0) {
+            presencesStringBuilder.setLength(presencesStringBuilder.length() - 2);
+        }
+
+        return presencesStringBuilder.toString();
     }
 
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
