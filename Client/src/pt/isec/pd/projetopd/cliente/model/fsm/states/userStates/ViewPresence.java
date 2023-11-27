@@ -9,6 +9,8 @@ import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 import pt.isec.pd.projetopd.communication.classes.EventPresencesList;
 import pt.isec.pd.projetopd.communication.classes.UserPresences;
 
+import java.io.File;
+
 public class ViewPresence extends ClientStateAdapter {
     public ViewPresence(ClientContext context, Data data) {
         super(context, data);
@@ -36,6 +38,9 @@ public class ViewPresence extends ClientStateAdapter {
             return true;
         }
 
+        if(message instanceof File csv){
+            return data.createCSV(csv);
+        }
 
         return false;
     }

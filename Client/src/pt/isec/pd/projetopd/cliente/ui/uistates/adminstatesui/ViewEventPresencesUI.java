@@ -90,6 +90,11 @@ public class ViewEventPresencesUI extends BorderPane {
             update();
         });
 
+        btnCSV.setOnAction(event -> {
+            manager.selectOption(OPTIONS.CSV, null);
+            update();
+        });
+
         btnRemove.setOnAction(event -> {
             String string = userName.getText() + "\n" + eventName.getText();
             manager.selectOption(OPTIONS.SUBMIT, string);
