@@ -100,6 +100,7 @@ public class SelectOptAdminUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.SELECT_OPT_ADMIN) {
+
             this.setVisible(false);
             return;
         }

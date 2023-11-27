@@ -81,13 +81,6 @@ public class Data {
         return null;
     }
 
-    public String getName() {
-        if(userInfo != null){
-            return userInfo.getName();
-        }
-        return null;
-    }
-
     public int getStudentNumber() {
         if(userInfo != null){
             return userInfo.getStudentNumber();
@@ -185,5 +178,12 @@ public class Data {
             System.err.println("Invalid CSV file provided.");
         }
         return false;
+    }
+
+    public String getName() {
+        if(userInfo != null){
+            return userInfo.getName();
+        }
+        return null;
     }
 }

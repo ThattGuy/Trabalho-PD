@@ -51,10 +51,6 @@ public class ClientContext {
         return data.getUserName();
     }
 
-    public String getName() {
-        return data.getName();
-    }
-
     public int getStudentNumber() {
         return data.getStudentNumber();
     }
@@ -84,5 +80,9 @@ public class ClientContext {
         if(data.getEventToEdit() == null)
             return null;
         return data.getEventToEdit().getVariables();
+    }
+
+    public String getName() {
+        return data.getName();
     }
 }

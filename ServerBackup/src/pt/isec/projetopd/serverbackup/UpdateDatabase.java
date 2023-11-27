@@ -21,10 +21,11 @@ public class UpdateDatabase {
 
     public void update(Serializable clientInfo) {
         //TODO update database
-        if(clientInfo instanceof User)
-            register((clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
+        //if(clientInfo instanceof User)
+            //register((clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
     }
 
+    /*
     private boolean register(String username, String psswd, String name, int studentnumber, int nif, String id, String address, boolean admin){
 
         String query = "INSERT INTO User (username, password, name, studentNumber, nif, id, address, admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -48,6 +49,8 @@ public class UpdateDatabase {
             return "Error registering user: " + e.getMessage();
         }
     }
+
+     */
 
 
 }

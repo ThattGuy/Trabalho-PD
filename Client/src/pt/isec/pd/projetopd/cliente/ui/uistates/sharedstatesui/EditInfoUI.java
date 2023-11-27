@@ -18,8 +18,8 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 
 public class EditInfoUI extends BorderPane {
     private Manager manager;
-    private Button btnRegister, btnBack;
-    private TextField usernameField, passwordField, name, studentNumber, nif, id, address;
+    private Button btnSubmit, btnBack;
+    private TextField passwordField, name, studentNumber, nif, address;
 
     private VBox vbox;
     private GridPane grid;
@@ -37,18 +37,14 @@ public class EditInfoUI extends BorderPane {
      * Cria os botões e imagens
      */
     private void createViews() {
-        btnRegister = new Button("Register");
-        btnRegister.setMinWidth(200);
-        btnRegister.setMinHeight(50);
+        btnSubmit = new Button("Submit");
+        btnSubmit.setMinWidth(200);
+        btnSubmit.setMinHeight(50);
 
 
         btnBack = new Button("Back");
         btnBack.setMinWidth(200);
         btnBack.setMinHeight(50);
-
-        Label emailLabel = new Label("Email:");
-        usernameField = new TextField(manager.getUserName());
-        usernameField.setPromptText("Enter new Email");
 
         Label passwordLabel = new Label("Password: ");
         passwordField = new TextField();
@@ -66,9 +62,6 @@ public class EditInfoUI extends BorderPane {
         nif = new TextField(String.valueOf(manager.getNIF()));
         nif.setPromptText("Enter new NIF");
 
-        Label idLabel = new Label("id:");
-        id = new TextField(manager.getID());
-        id.setPromptText("Enter new id");
 
         Label addressLabel = new Label("Address:");
         address = new TextField(manager.getAddress());
@@ -85,8 +78,6 @@ public class EditInfoUI extends BorderPane {
         grid.setVgap(10);
 
         int rowIndex = 0;
-        grid.add(emailLabel, 0, rowIndex);
-        grid.add(usernameField, 1, rowIndex, 25, 1); // Make the text field span 2 columns
 
         rowIndex++;
         grid.add(passwordLabel, 0, rowIndex);
@@ -105,14 +96,10 @@ public class EditInfoUI extends BorderPane {
         grid.add(nif, 1, rowIndex, 20, 1);
 
         rowIndex++;
-        grid.add(idLabel, 0, rowIndex);
-        grid.add(id, 1, rowIndex, 20, 1);
-
-        rowIndex++;
         grid.add(addressLabel, 0, rowIndex);
         grid.add(address, 1, rowIndex, 50, 1);
 
-        hBox = new HBox(btnBack, btnRegister);
+        hBox = new HBox(btnBack, btnSubmit);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
 
@@ -124,12 +111,10 @@ public class EditInfoUI extends BorderPane {
 
 
         double fieldsWidthPercentage = 0.5;
-        usernameField.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         passwordField.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         name.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         studentNumber.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         nif.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
-        id.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
         address.maxWidthProperty().bind(vbox.widthProperty().multiply(fieldsWidthPercentage));
 
         VBox container = new VBox(vbox);
@@ -146,13 +131,12 @@ public class EditInfoUI extends BorderPane {
 
         manager.addPropertyChangeListener(evt -> { Platform.runLater(this::update);});
 
-        btnRegister.setOnAction(event -> {
-            String string = usernameField.getText() + "\n"
-                    + passwordField.getText() + "\n"
+        btnSubmit.setOnAction(event -> {
+            String string =
+                    passwordField.getText() + "\n"
                     + name.getText() + "\n"
                     + studentNumber.getText() + "\n"
                     + nif.getText() + "\n"
-                    + id.getText() + "\n"
                     + address.getText();
 
             manager.selectOption(OPTIONS.SUBMIT, string);
@@ -162,19 +146,31 @@ public class EditInfoUI extends BorderPane {
         this.setFocusTraversable(true);
         this.setOnKeyPressed((key) -> {
             if (key.getCode() == KeyCode.ENTER) {
-                manager.selectOption(OPTIONS.SUBMIT, usernameField.getText() + "\n" + passwordField.getText());
+                String string =
+                        passwordField.getText() + "\n"
+                                + name.getText() + "\n"
+                                + studentNumber.getText() + "\n"
+                                + nif.getText() + "\n"
+                                + address.getText();
+                manager.selectOption(OPTIONS.SUBMIT,  string+ "\n");
                 update();
             }
         });
 
         btnBack.setOnAction(event -> {
-            manager.selectOption(OPTIONS.BACK, usernameField.getText() + "\n" + passwordField.getText());
+            manager.selectOption(OPTIONS.BACK, null);
             update();
         });
     }
 
     private void update() {
         if (manager.getState() != ClientStates.EDIT_USER_DATA) {
+            passwordField.setText(null);
+            name.setText(null);
+            studentNumber.setText(null);
+            nif.setText(null);
+            address.setText(null);
+
             this.setVisible(false);
             return;
         }
@@ -185,12 +181,10 @@ public class EditInfoUI extends BorderPane {
             messageLabel.setText(msg);
         }
 
-        usernameField.setText(manager.getUserName());
         passwordField.setText("");
         name.setText(manager.getName());
         studentNumber.setText(String.valueOf(manager.getStudentNumber()));
         nif.setText(String.valueOf(manager.getNIF()));
-        id.setText(manager.getID());
         address.setText(manager.getAddress());
 
         this.layoutChildren();

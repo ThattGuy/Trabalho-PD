@@ -99,6 +99,7 @@ public class RegisterPresenceUI extends BorderPane {
 
     private void update() {
         if (manager.getState() != ClientStates.REG_PRESENCE) {
+            presenceCode.setText(null);
             this.setVisible(false);
             return;
         }
