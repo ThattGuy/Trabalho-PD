@@ -718,9 +718,7 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting all events: " + e.getMessage());
         }
-
         EventList events = new EventList(eventList);
-
         return events;
     }
 
