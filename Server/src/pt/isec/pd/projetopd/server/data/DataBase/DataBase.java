@@ -415,7 +415,6 @@ public class DataBase {
             return "Invalid or expired registration code.";
         }
 
-        // Buscar o nome do evento usando o código UUID
         String getEventNameQuery = "SELECT event_nome FROM CodigoRegisto WHERE codigo = ?";
         try (PreparedStatement getEventNameStatement = con.prepareStatement(getEventNameQuery)) {
             getEventNameStatement.setString(1, code.toString());
@@ -663,7 +662,7 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-        return new EventPresencesList(presenceList.toString(), eventName);
+        return new EventPresencesList(eventName,presenceList.toString());
     }
 
     public String getPresenceForUser(String userName) {

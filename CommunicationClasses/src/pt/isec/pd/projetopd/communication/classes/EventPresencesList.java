@@ -7,7 +7,7 @@ public class EventPresencesList implements Serializable {
     String eventName;
     String presences;
 
-    public EventPresencesList(String presences, String eventName) {
+    public EventPresencesList(String eventName,String presences) {
         this.presences = presences;
         this.eventName = eventName;
     }
