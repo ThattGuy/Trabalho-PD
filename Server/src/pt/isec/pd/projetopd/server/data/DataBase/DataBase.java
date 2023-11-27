@@ -637,7 +637,6 @@ public class DataBase {
     }
 
     public Serializable getEventPresence(String eventName) {
-
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.username AS Username, User.studentNumber AS \"Número identificação\"" +
