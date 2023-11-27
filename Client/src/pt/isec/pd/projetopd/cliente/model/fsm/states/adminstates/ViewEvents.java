@@ -5,6 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
+import pt.isec.pd.projetopd.communication.classes.Event;
 import pt.isec.pd.projetopd.communication.classes.EventList;
 import pt.isec.pd.projetopd.communication.classes.REQUESTS;
 
@@ -64,6 +65,10 @@ public class ViewEvents extends ClientStateAdapter {
         if(message instanceof EventList events){
             data.addEvents(events);
             return true;
+        }
+
+        if(message instanceof Event event){
+            data.sendToServer(REQUESTS.EVENTS);
         }
 
         return false;

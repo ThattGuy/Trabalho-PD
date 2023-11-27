@@ -5,10 +5,7 @@ import pt.isec.pd.projetopd.cliente.model.data.OPTIONS;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientContext;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
-import pt.isec.pd.projetopd.communication.classes.EditedEvent;
-import pt.isec.pd.projetopd.communication.classes.Event;
-import pt.isec.pd.projetopd.communication.classes.CreateCode;
-import pt.isec.pd.projetopd.communication.classes.RegisterCode;
+import pt.isec.pd.projetopd.communication.classes.*;
 
 import java.util.ArrayList;
 
@@ -26,7 +23,6 @@ public class EditEvent extends ClientStateAdapter {
                 String[] splitString = string.split("\n");
                 if (splitString.length == 5) {
                     try {
-                        ArrayList<RegisterCode> registerCodes = new ArrayList<>();
                         Event event = new Event(
                                 splitString[0],
                                 splitString[1],
@@ -53,6 +49,10 @@ public class EditEvent extends ClientStateAdapter {
                     return false;
                 }
             }
+            case DELETE -> {
+                data.sendToServer(new DeleteEvent(data.getEventToEdit().getName()));
+            }
+
             case BACK -> {
                 data.setEventIndexEdit(-1);
                 changeState(ClientStates.VIEW_EVENTS);

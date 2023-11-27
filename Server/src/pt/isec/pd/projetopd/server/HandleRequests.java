@@ -81,8 +81,10 @@ public class HandleRequests {
             case CSVEventPresence eventPresence-> {
                 //nao
                 return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
-
-
+            }
+            case DeleteEvent deleteEvent-> {
+                //nao
+                return manDB.deleteEvent(deleteEvent.getEventName());
             }
             default -> {
                 return RESPONSE.DECLINED;
