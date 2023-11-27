@@ -34,12 +34,17 @@ public class NotificationThread  extends Thread {
         for (; ; ) {
             try {
                 Socket client = CliSocket.accept(); //Aceita um novo cliente
-                serverInfo.addNotificationClient(client);
+                ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+                //out.writeObject("Notification");
+                //System.out.println("Notification sent to client");
+                //out.flush();
+                serverInfo.addNotificationClient(out);
 
                 System.out.println("Received client on notification ");
 
             }catch(SocketTimeoutException e) {
 
+                e.printStackTrace();
                 System.out.println("No client entered!");
             }
             catch (Exception e) {

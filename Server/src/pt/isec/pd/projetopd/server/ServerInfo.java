@@ -3,6 +3,7 @@ package pt.isec.pd.projetopd.server;
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
 import pt.isec.pd.projetopd.server.Remote.RemoteManager;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class ServerInfo {
     private int nTCPConnections;
     private int databaseVersion;
     private SendHBeat sendHBeat;
-    private ArrayList<Socket> notificationClients;
+    private ArrayList<ObjectOutputStream> notificationClients;
     private RemoteManager myRemote;
 
 
@@ -28,7 +29,7 @@ public class ServerInfo {
         this.myRemote = remote;
     }
 
-    public void addNotificationClient(Socket socket){
+    public void addNotificationClient(ObjectOutputStream socket){
         this.notificationClients.add(socket);
     }
 
@@ -54,16 +55,17 @@ public class ServerInfo {
     }
     private void updateAllClientsViews(Object data) {
 
-        Iterator<Socket> iterator = notificationClients.iterator();
-        while (iterator.hasNext()) {
-            Socket sock = iterator.next();
-            try (ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream())) {
+        Iterator<ObjectOutputStream> iterator = notificationClients.iterator();
+        try{
+            while (iterator.hasNext()) {
+                ObjectOutputStream out = iterator.next();
                 out.writeObject(data);
                 out.flush();
                 out.reset();
-            } catch (Exception e) {
-                iterator.remove(); // Use the Iterator's remove method
             }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
