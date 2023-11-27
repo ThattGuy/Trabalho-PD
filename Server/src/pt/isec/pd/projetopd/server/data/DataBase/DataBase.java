@@ -638,7 +638,7 @@ public class DataBase {
         return null;
     }
 
-    public Serializable getEventPresence(String eventName, String mail) {
+    public Serializable getEventPresence(String eventName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
@@ -662,7 +662,7 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-        return new EventPresencesList(presenceList.toString(), mail);
+        return new EventPresencesList(presenceList.toString(), eventName);
     }
 
     public String getPresenceForUser(String userName) {

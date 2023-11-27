@@ -48,7 +48,7 @@ public class HandleRequests {
             }
             case EventPresenceRequest eventPresenceRequest -> {
                 //sim
-                dbresponse =  manDB.getEventPresence(eventPresenceRequest.getEvent().getName(),clientMail);
+                dbresponse =  manDB.getEventPresence(eventPresenceRequest.getEvent().getName());
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
