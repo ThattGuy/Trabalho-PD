@@ -143,6 +143,9 @@ public class HandleRequests {
 
         return RESPONSE.DECLINED;
     }
+    public void closeClient(String mail){
+        this.serverInfo.removeClient(mail);
+    }
 
 
 
