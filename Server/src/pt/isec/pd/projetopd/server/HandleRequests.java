@@ -96,17 +96,23 @@ public class HandleRequests {
 
 
         //Check if new client connecting or registring
-        if(request instanceof Authentication && dbResponse instanceof User)
+        if(request instanceof Authentication && dbResponse instanceof User) {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
+            return dbResponse;
+        }
 
           else
               if( request instanceof User && dbResponse instanceof User)
                     this.serverInfo.addClient(((User) request).getUsername(), Clientout);
 
-
         else
-            if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
+            if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)
+              || request instanceof REQUESTS || request instanceof CSVEventPresence) //Client operation declined
                 return dbResponse;
+
+        else serverInfo.updateBackup(dbResponse);
+
+        System.out.println("This is my version: " + this.serverInfo.getDBVersion());
 
         return dbResponse;
     }
