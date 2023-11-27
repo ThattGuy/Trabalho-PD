@@ -27,14 +27,13 @@ public class EditEvent extends ClientStateAdapter {
                 if (splitString.length == 5) {
                     try {
                         ArrayList<RegisterCode> registerCodes = new ArrayList<>();
-                        registerCodes.add(new RegisterCode(Integer.parseInt(splitString[5])));
                         Event event = new Event(
                                 splitString[0],
                                 splitString[1],
                                 splitString[2],
                                 splitString[3],
                                 splitString[4],
-                                registerCodes
+                                data.getEventToEdit().getPresenceCodes()
                         );
 
                         data.sendToServer(new EditedEvent(event, data.getEventToEdit().getName()));
@@ -73,6 +72,7 @@ public class EditEvent extends ClientStateAdapter {
         if (message instanceof Event event) {
             if(event.getName().equals(data.getEventToEdit().getName())){
                 data.modifyEditEvent(event);
+                data.setMessage("Event edited successfully");
                 return true;
             }
         }

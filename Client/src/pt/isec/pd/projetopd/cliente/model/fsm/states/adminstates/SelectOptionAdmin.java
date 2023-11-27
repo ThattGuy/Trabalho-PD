@@ -9,7 +9,7 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 public class SelectOptionAdmin extends ClientStateAdapter {
     public SelectOptionAdmin(ClientContext context, Data data) {
         super(context, data);
-        System.out.println("SELECT_OPT STATE");
+        System.out.println("SELECT_OPT_ADMIN STATE");
     }
 
     @Override
