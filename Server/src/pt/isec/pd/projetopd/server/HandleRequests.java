@@ -70,8 +70,7 @@ public class HandleRequests {
             }
             case CSVEventPresence eventPresence-> {
                 //nao
-                return null;//todo Xico CSV retornar presenças de um evento em csv
-                //return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
 
             }
             default -> {
