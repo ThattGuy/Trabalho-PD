@@ -639,7 +639,7 @@ public class DataBase {
     public Serializable getEventPresence(String eventName) {
         List<String> presenceList = new ArrayList<>();
 
-        String query = "SELECT User.username AS Username, User.studentNumber AS \"Número identificação\"" +
+        String query = "SELECT User.username AS Username, User.studentNumber AS \"Número identificação\" " +
                 "FROM UserEvent " +
                 "JOIN User ON UserEvent.username = User.username " +
                 "WHERE UserEvent.event_nome = ?";
