@@ -73,6 +73,11 @@ public class ViewPresenceUI extends BorderPane {
             Platform.runLater(this::update);
         });
 
+        btnCSV.setOnAction(event -> {
+            manager.selectOption(OPTIONS.CSV, null);
+            update();
+        });
+
         btnBack.setOnAction(event -> {
             manager.selectOption(OPTIONS.BACK, null);
             update();
