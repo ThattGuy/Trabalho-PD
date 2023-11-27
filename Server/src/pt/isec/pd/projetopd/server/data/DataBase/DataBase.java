@@ -61,9 +61,9 @@ public class DataBase {
 
             statement.execute("CREATE TABLE IF NOT EXISTS UserEvent ( " +
                     "id INTEGER PRIMARY KEY, " +
-                    "user_id INTEGER, " +
+                    "username TEXT, " +
                     "event_nome TEXT, " +
-                    "FOREIGN KEY (user_id) REFERENCES User(id), " +
+                    "FOREIGN KEY (username) REFERENCES User(username), " +
                     "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
         } catch (SQLException e) {
@@ -136,7 +136,6 @@ public class DataBase {
         }
         return false;
     }
-
 
 
     public Serializable CheckLogin(String user, String pass) {
@@ -414,6 +413,7 @@ public class DataBase {
         String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
                 "WHERE codigo = ? ";
         int validCodeCount = 0;
+
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
             checkStatement.setString(1, code.toString());
 
@@ -429,11 +429,31 @@ public class DataBase {
         if (validCodeCount == 0) {
             return "Invalid or expired registration code.";
         }
-        String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), " +
+
+        String getUserIdQuery = "SELECT username FROM User WHERE username = ?";
+        String username = null;
+
+        try (PreparedStatement getUserIdStatement = con.prepareStatement(getUserIdQuery)) {
+            getUserIdStatement.setString(1, clientMail);
+
+            try (ResultSet resultSet = getUserIdStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    username = resultSet.getString("username");
+                }
+            }
+        } catch (SQLException e) {
+            return "Error getting username: " + e.getMessage();
+        }
+
+        if (username == null) {
+            return "User not found.";
+        }
+
+        String insertQuery = "INSERT INTO UserEvent (username, event_nome) VALUES (?, " +
                 "(SELECT event_nome FROM CodigoRegisto WHERE codigo = ?))";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
-            preparedStatement.setString(1, clientMail);
+            preparedStatement.setString(1, username);
             preparedStatement.setString(2, code.toString());
 
             int rowsAffected = preparedStatement.executeUpdate();
