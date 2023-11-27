@@ -61,9 +61,9 @@ public class DataBase {
 
             statement.execute("CREATE TABLE IF NOT EXISTS UserEvent ( " +
                     "id INTEGER PRIMARY KEY, " +
-                    "user_id INTEGER, " +
+                    "username TEXT, " +
                     "event_nome TEXT, " +
-                    "FOREIGN KEY (user_id) REFERENCES User(id), " +
+                    "FOREIGN KEY (username) REFERENCES User(username), " +
                     "FOREIGN KEY (event_nome) REFERENCES Event(nome) " +
                     ");");
         } catch (SQLException e) {
@@ -116,7 +116,6 @@ public class DataBase {
         }
         return false;
     }
-
 
 
     public Serializable CheckLogin(String user, String pass) {
@@ -394,6 +393,8 @@ public class DataBase {
         String checkQuery = "SELECT COUNT(*) FROM CodigoRegisto " +
                 "WHERE codigo = ? ";
         int validCodeCount = 0;
+        String eventName = null;
+
         try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
             checkStatement.setString(1, code.toString());
 
@@ -409,19 +410,83 @@ public class DataBase {
         if (validCodeCount == 0) {
             return "Invalid or expired registration code.";
         }
-        String insertQuery = "INSERT INTO UserEvent (user_id, event_nome) VALUES ((SELECT id FROM User WHERE username = ?), " +
-                "(SELECT event_nome FROM CodigoRegisto WHERE codigo = ?))";
+
+        // Buscar o nome do evento usando o código UUID
+        String getEventNameQuery = "SELECT event_nome FROM CodigoRegisto WHERE codigo = ?";
+        try (PreparedStatement getEventNameStatement = con.prepareStatement(getEventNameQuery)) {
+            getEventNameStatement.setString(1, code.toString());
+
+            try (ResultSet resultSet = getEventNameStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    eventName = resultSet.getString("event_nome");
+                }
+            }
+        } catch (SQLException e) {
+            return "Error getting event name: " + e.getMessage();
+        }
+
+        if (eventName == null) {
+            return "Event not found.";
+        }
+
+        String getUserIdQuery = "SELECT username FROM User WHERE username = ?";
+        String username = null;
+
+        try (PreparedStatement getUserIdStatement = con.prepareStatement(getUserIdQuery)) {
+            getUserIdStatement.setString(1, clientMail);
+
+            try (ResultSet resultSet = getUserIdStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    username = resultSet.getString("username");
+                }
+            }
+        } catch (SQLException e) {
+            return "Error getting username: " + e.getMessage();
+        }
+
+        if (username == null) {
+            return "User not found.";
+        }
+
+        String insertQuery = "INSERT INTO UserEvent (username, event_nome) VALUES (?, ?)";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
-            preparedStatement.setString(1, clientMail);
-            preparedStatement.setString(2, code.toString());
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, eventName);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return "Presence registered successfully.";
+            if (rowsAffected > 0) {
+                String presencesList = getPresencesListAsString(eventName);
+                return new EventPresencesList(eventName, presencesList);
+            } else {
+                return "Failed to register presence.";
+            }
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
+    }
+
+    private String getPresencesListAsString(String eventName) throws SQLException {
+        StringBuilder presencesStringBuilder = new StringBuilder();
+        String getPresencesQuery = "SELECT username FROM UserEvent WHERE event_nome = ?";
+        try (PreparedStatement getPresencesStatement = con.prepareStatement(getPresencesQuery)) {
+            getPresencesStatement.setString(1, eventName);
+
+            try (ResultSet resultSet = getPresencesStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String username = resultSet.getString("username");
+                    presencesStringBuilder.append(username).append(", ");
+                }
+            }
+        }
+
+        // Remove a vírgula extra no final, se houver
+        if (presencesStringBuilder.length() > 0) {
+            presencesStringBuilder.setLength(presencesStringBuilder.length() - 2);
+        }
+
+        return presencesStringBuilder.toString();
     }
 
     public List<String> getPresenceWithinTimeRange(String mail, String startTime, String endTime) {
@@ -430,8 +495,8 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
+                "JOIN User ON UserEvent.username = User.id " +
+                "WHERE UserEvent.username = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, mail);
@@ -464,8 +529,8 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ?";
+                "JOIN User ON UserEvent.username = User.username " +
+                "WHERE UserEvent.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, mail);
@@ -506,7 +571,7 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome AS NomeEvento, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username= User.username " +
                 "WHERE UserEvent.event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -575,7 +640,7 @@ public class DataBase {
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username = User.username " +
                 "WHERE UserEvent.event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -594,16 +659,16 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-        return new PresencesList(presenceList.toString(), mail);
+        return new EventPresencesList(presenceList.toString(), mail);
     }
 
-    public PresencesList getPresenceForUser(String userName) {
+    public String getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username = User.username " +
                 "WHERE User.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -626,9 +691,7 @@ public class DataBase {
             System.err.println("Error getting presence for user: " + e.getMessage());
         }
 
-        PresencesList pl = new PresencesList(presenceList.toString(), userName);
-
-        return pl;
+        return presenceList.toString();
     }
 
     public EventList getAllEvents() {

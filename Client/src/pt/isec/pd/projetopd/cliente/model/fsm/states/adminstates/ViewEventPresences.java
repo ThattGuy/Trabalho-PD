@@ -7,13 +7,14 @@ import pt.isec.pd.projetopd.cliente.model.fsm.ClientStateAdapter;
 import pt.isec.pd.projetopd.cliente.model.fsm.ClientStates;
 import pt.isec.pd.projetopd.communication.classes.*;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.Objects;
 
 public class ViewEventPresences extends ClientStateAdapter {
     public ViewEventPresences(ClientContext context, Data data) {
         super(context, data);
         System.out.println("VIEW_PRESENCE_STATE STATE");
-        data.sendToServer(new EventPresence(data.getEventToEdit()));
+        data.sendToServer(new EventPresenceRequest(data.getEventToEdit()));
     }
 
     @Override
@@ -46,10 +47,14 @@ public class ViewEventPresences extends ClientStateAdapter {
             return true;
         }
 
-        if(message instanceof PresencesList presencesList){
-            if(data.getUserName() == presencesList.getUsername())
-                data.addPresences(presencesList);
+        if(message instanceof EventPresencesList eventPresencesList){
+            if(Objects.equals(eventPresencesList.getEventName(), data.getEventToEdit().getName()))
+                data.addPresences(eventPresencesList.toString());
             return true;
+        }
+
+        if(message instanceof File csv){
+            return data.createCSV(csv);
         }
 
         return false;

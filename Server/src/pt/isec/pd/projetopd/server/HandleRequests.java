@@ -25,14 +25,14 @@ public class HandleRequests {
         this.serverInfo = serverInfo;
     }
 
-    private Serializable InterpretClientMessage(Object request, String ClientMail) {
+    private synchronized Serializable InterpretClientMessage(Object request, String clientMail) {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
         Serializable dbresponse = null;
         switch (request) {
             case REQUESTS requests -> {
-                return this.InterpretRequest(requests, ClientMail);
+                return this.InterpretRequest(requests, clientMail);
             }
             case Authentication auth -> {
                 //nao
@@ -44,11 +44,11 @@ public class HandleRequests {
             }
             case Event event -> {
                 //nao
-                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
             }
-            case EventPresence eventPresence -> {
+            case EventPresenceRequest eventPresenceRequest -> {
                 //sim
-                dbresponse =  manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
+                dbresponse =  manDB.getEventPresence(eventPresenceRequest.getEvent().getName(),clientMail);
                 this.serverInfo.sendNotification(dbresponse);
                 return dbresponse;
             }
@@ -60,7 +60,7 @@ public class HandleRequests {
             }
             case UUID code -> {
                 //nao
-                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+                return manDB.registerPresence(code, clientMail);//TODO mudar para o mail do cliente pois está a receber null
             }
             case EditedEvent editedEvent-> {
                 //sim
@@ -70,8 +70,7 @@ public class HandleRequests {
             }
             case CSVEventPresence eventPresence-> {
                 //nao
-                return null;//todo Xico CSV retornar presenças de um evento em csv
-                //return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
 
             }
             default -> {
@@ -80,7 +79,7 @@ public class HandleRequests {
         }
     }
 
-    public Serializable receive(Object request, ObjectOutputStream Clientout){
+    public synchronized Serializable receive(Object request, ObjectOutputStream Clientout){
         String mail =this.serverInfo.getClientMail(Clientout);
         Serializable dbResponse = this.InterpretClientMessage(request, mail);
 
@@ -100,14 +99,14 @@ public class HandleRequests {
     }
 
 
-    private Serializable InterpretRequest(REQUESTS request, String clientMail)
+    private synchronized Serializable InterpretRequest(REQUESTS request, String clientMail)
     {
         switch (request){
             case PRESENCE -> {
                 return manDB.getPresenceForUser(clientMail);//Enviar id do evento com o qual quer ver as presenças
             }
             case CSV_PRESENCE -> {
-                //return manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
+                return manDB.generateCSV(clientMail,"csvgenerated.csv");//Enviar id do user com o qual quer imprimir as presenças em csv
             }
             //todo event presence
             case USER_DATA -> {
