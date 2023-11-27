@@ -73,5 +73,8 @@ public class Manager {
         catch(RuntimeException | IOException e){
             throw new RuntimeException(e);
         }
+
+
+        this.multicast.close();
     }
 }

@@ -47,7 +47,8 @@ public class ReceiveHbeat extends Thread{
                         rmiHandler.setLocalDatabase((HbeatMessage) o);
                         first = false;
                     }
-                    else rmiHandler.fileReceived((HbeatMessage) o);
+                    else
+                        rmiHandler.fileReceived((HbeatMessage) o);
                 }
                 else{
                     o = null;

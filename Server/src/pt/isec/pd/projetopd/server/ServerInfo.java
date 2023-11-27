@@ -74,6 +74,7 @@ public class ServerInfo {
         //TODO: Atualizar backups atraves do rmi!!
     }
     public void sendNotification(Object data){
+        myRemote.sendNotification(data);
         updateAllClientsViews(data);
 
     }

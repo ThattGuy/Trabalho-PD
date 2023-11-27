@@ -43,8 +43,10 @@ public class HandleRequests {
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
             case Event event -> {
-                //nao
-                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
+
+                dbresponse =  manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case EventPresenceRequest eventPresenceRequest -> {
                 //sim
@@ -60,7 +62,9 @@ public class HandleRequests {
             }
             case UUID code -> {
                 //nao
-                return manDB.registerPresence(code, clientMail);//TODO mudar para o mail do cliente pois está a receber null
+                dbresponse = manDB.registerPresence(code, clientMail);//TODO mudar para o mail do cliente pois está a receber null
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case EditedEvent editedEvent-> {
                 //sim

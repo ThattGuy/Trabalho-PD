@@ -6,6 +6,7 @@ import pt.isec.pd.projetopd.communication.interfaces.UpdateDB;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
@@ -43,7 +44,7 @@ public class HandleRmi  {
              * Cria o proprio servico.
              */
 
-            myRemoteService = new RemoteDatabase();
+            myRemoteService = new RemoteDatabase(this.NameMyRmi);
 
             /*
              * Regista o servico com o nome "backup" para que os clientes possam encontra'-lo, ou seja,
@@ -64,10 +65,15 @@ public class HandleRmi  {
 
     public void fileReceived(HbeatMessage o) {
 
-        if(o.getDatabaseVersion() + 1 != this.databaseVersion){
-            //TODO: Se dbversion diferente mandar o server backup a baixo!
+        try {
+            UpdateDB serverDB = (UpdateDB) Naming.lookup(o.getRMI());
+            if (o.getDatabaseVersion() - 1 != this.databaseVersion) {
+                serverDB.deleteBackup(myRemoteService);
+            }
+
+        } catch (NotBoundException | IOException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Received file from " + o.getRMI() + " with version " + o.getDatabaseVersion());
 
     }
 
