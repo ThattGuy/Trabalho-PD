@@ -39,9 +39,16 @@ public class ServerInfo {
     public void addClient(String mail, ObjectOutputStream out) {
         this.clientsList.put(mail,out);
         this.nTCPConnections++;
+        this.databaseVersion++;
         this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
+    public void removeClient(String mail) {
+        this.clientsList.remove(mail);
+        this.nTCPConnections--;
+        this.databaseVersion--;
+        this.sendHBeat.SendHeartBeat(databaseVersion);
+    }
     private void updateAllClientsViews(Object data) {
 
         Iterator<Socket> iterator = notificationClients.iterator();
@@ -58,7 +65,7 @@ public class ServerInfo {
     }
 
 
-    public void sendNotification(Object data, ObjectOutputStream out){
+    public void sendNotification(Object data){
         this.databaseVersion++;
         this.sendHBeat.SendHeartBeat(databaseVersion);
         System.out.println("I sended a notification");
@@ -71,8 +78,9 @@ public class ServerInfo {
 
     public String getClientMail(ObjectOutputStream out) {
         for (Map.Entry<String, ObjectOutputStream> entry : clientsList.entrySet()) {
-            if(entry.getValue() == out)
+            if(entry.getValue() == out) {
                 return entry.getKey();
+            }
         }
         return null;
     }

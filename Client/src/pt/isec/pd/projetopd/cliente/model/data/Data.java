@@ -67,8 +67,8 @@ public class Data {
         return sb;
     }
 
-    public synchronized void addPresences(PresencesList presencesList) {
-        this.presences = presencesList.toString();
+    public synchronized void addPresences(EventPresencesList eventPresencesList) {
+        this.presences = eventPresencesList.toString();
     }
 
     public synchronized String getPresenceString() {

@@ -458,7 +458,7 @@ public class DataBase {
 
             int rowsAffected = preparedStatement.executeUpdate();
 
-            return "Presence registered successfully.";
+            return new EventPresencesList(//nomeEvento,presençasEvento) ;
         } catch (SQLException e) {
             return "Error registering presence: " + e.getMessage();
         }
@@ -634,10 +634,10 @@ public class DataBase {
         } catch (SQLException e) {
             System.err.println("Error getting presence for event: " + e.getMessage());
         }
-        return new PresencesList(presenceList.toString(), mail);
+        return new EventPresencesList(presenceList.toString(), mail);
     }
 
-    public PresencesList getPresenceForUser(String userName) {
+    public EventPresencesList getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
@@ -666,7 +666,7 @@ public class DataBase {
             System.err.println("Error getting presence for user: " + e.getMessage());
         }
 
-        PresencesList pl = new PresencesList(presenceList.toString(), userName);
+        EventPresencesList pl = new EventPresencesList(presenceList.toString(), userName);
 
         return pl;
     }

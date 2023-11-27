@@ -19,7 +19,9 @@ public class ViewEvents extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
+            case CSV -> data.sendToServer(REQUESTS.CSV_PRESENCE); //todo
             case EDIT_EVENT -> {
+
                     try {
                         int index = Integer.parseInt(string);
                         if(index >= 0 ){
@@ -64,6 +66,7 @@ public class ViewEvents extends ClientStateAdapter {
             data.addEvents(events);
             return true;
         }
+
         return false;
     }
 

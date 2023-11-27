@@ -25,13 +25,14 @@ public class HandleRequests {
         this.serverInfo = serverInfo;
     }
 
-    private Serializable InterpretClientMessage(Object request, String ClientMail) {
+    private Serializable InterpretClientMessage(Object request, String clientMail) {
         System.out.println(request.toString());
 
         Boolean isReturn = null;
+        Serializable dbresponse = null;
         switch (request) {
             case REQUESTS requests -> {
-                return this.InterpretRequest(requests, ClientMail);
+                return this.InterpretRequest(requests, clientMail);
             }
             case Authentication auth -> {
                 //nao
@@ -43,27 +44,34 @@ public class HandleRequests {
             }
             case Event event -> {
                 //nao
-                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), ClientMail);
+                return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
             }
-            case EventPresence eventPresence -> {
+            case EventPresenceRequest eventPresenceRequest -> {
                 //sim
-                return manDB.getEventPresence(eventPresence.getEvent().getName(),ClientMail);
+                dbresponse =  manDB.getEventPresence(eventPresenceRequest.getEvent().getName(),clientMail);
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case CreateCode eventCode-> {
                 //sim
-                return manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                dbresponse = manDB.createCode(eventCode.getEventName(),eventCode.getEventCode().getCode(),eventCode.getEventCode().getExpirationTime());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case UUID code -> {
                 //nao
-                return manDB.registerPresence(code, ClientMail);//TODO mudar para o mail do cliente pois está a receber null
+                return manDB.registerPresence(code, clientMail);//TODO mudar para o mail do cliente pois está a receber null
             }
             case EditedEvent editedEvent-> {
                 //sim
-                return manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                dbresponse = manDB.editEvent(editedEvent.getEvent(), editedEvent.getOldName());
+                this.serverInfo.sendNotification(dbresponse);
+                return dbresponse;
             }
             case CSVEventPresence eventPresence-> {
                 //nao
-                return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
+                return null;//todo Xico CSV retornar presenças de um evento em csv
+                //return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
 
             }
             default -> {
@@ -80,12 +88,12 @@ public class HandleRequests {
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
             //return dbResponse;
+            mail =this.serverInfo.getClientMail(Clientout);
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-        this.serverInfo.sendNotification(dbResponse, Clientout);
         return dbResponse;
     }
 
@@ -105,6 +113,9 @@ public class HandleRequests {
             }
             case EVENTS -> {
                 return manDB.getAllEvents();
+            }
+            case LOGOUT -> {
+                this.serverInfo.removeClient(clientMail);
             }
         }
 
