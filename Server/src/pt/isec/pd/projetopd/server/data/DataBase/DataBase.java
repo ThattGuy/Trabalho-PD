@@ -655,12 +655,9 @@ public class DataBase {
         return null;
     }
 
-<<<<<<< HEAD
+
     public Serializable getEventPresence(String eventName) {
-=======
-    public Serializable getEventPresence(String eventName, String mail) {
-        //123
->>>>>>> 9abc6114e2b63fbbbc413a4f597e431b865e2795
+
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
