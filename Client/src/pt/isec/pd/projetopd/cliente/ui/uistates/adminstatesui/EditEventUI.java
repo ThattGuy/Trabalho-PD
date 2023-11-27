@@ -21,12 +21,12 @@ import java.util.List;
 public class EditEventUI extends BorderPane {
 
     private Manager manager;
-    private Button btnSubmit, btnBack, btnNewCode;
+    private Button btnSubmit, btnBack, btnNewCode, btnDelete;
     private TextField eventName, local, date, beginning, endTime, codeExpTime;
     private VBox vbox;
     private GridPane grid;
     private HBox hBox;
-    private Label messageLabel;
+    private Label messageLabel, codesLabel;
     private List<String> eventVariables;
     private String nameS, locationS, dateS, beginningS, endTimeS;
 
@@ -57,6 +57,10 @@ public class EditEventUI extends BorderPane {
         btnBack.setMinWidth(200);
         btnBack.setMinHeight(50);
 
+        btnDelete = new Button("Delete");
+        btnDelete.setMinWidth(200);
+        btnDelete.setMinHeight(50);
+
         Label lName = new Label("Name:");
         eventName = new TextField();
         eventName.setPromptText("Enter new Name");
@@ -80,6 +84,8 @@ public class EditEventUI extends BorderPane {
         Label lCodeExpTime = new Label("Code Expiration Time");
         codeExpTime = new TextField();
         codeExpTime.setPromptText("Enter Code Expiration Time");
+
+        codesLabel = new Label();
 
         messageLabel = new Label();
         messageLabel.getStyleClass().add("info");
@@ -115,12 +121,12 @@ public class EditEventUI extends BorderPane {
         grid.add(lCodeExpTime, 0, rowIndex);
         grid.add(codeExpTime, 1, rowIndex, 20, 1);
 
-        hBox = new HBox(btnBack, btnSubmit,btnNewCode);
+        hBox = new HBox(btnBack, btnSubmit,btnNewCode, btnDelete);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
 
 
-        vbox = new VBox( grid, hBox, messageLabel);
+        vbox = new VBox(codesLabel, grid, hBox, messageLabel);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(25);
         vbox.setPadding(new Insets(10));
@@ -180,6 +186,11 @@ public class EditEventUI extends BorderPane {
             manager.selectOption(OPTIONS.NEW_CODE, codeExpTime.getText());
             update();
         });
+
+        btnDelete.setOnAction(event -> {
+            manager.selectOption(OPTIONS.DELETE, null);
+            update();
+        });
     }
 
     private void update() {
@@ -208,6 +219,9 @@ public class EditEventUI extends BorderPane {
         dateS = eventVariables.get(2);
         beginningS = eventVariables.get(3);
         endTimeS = eventVariables.get(4);
+
+
+        codesLabel.setText(manager.getEventCodes());
 
         eventName.setText(nameS);
         local.setText(locationS);

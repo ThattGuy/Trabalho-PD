@@ -60,7 +60,7 @@ public class CreateEvent extends ClientStateAdapter {
         }
 
         if(message instanceof Event event){
-            data.setMessage("Event Created register codes" + event.getPresenceCodes().get(0).toString());
+            data.setMessage("Event Created register codes" + event.getPresenceCodes().get(0).getCode().toString());
         }
 
         return false;
