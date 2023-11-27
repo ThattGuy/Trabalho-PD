@@ -42,6 +42,13 @@ public class HandleRequests {
                 //nao
                 return manDB.register(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress(), false);
             }
+            case EditUser editUser -> {
+                //nao
+                User clientInfo = editUser.getUser();
+                return manDB.editDataUser(clientInfo.getUsername(), clientInfo.getPassword(), clientInfo.getName(), clientInfo.getStudentNumber(), clientInfo.getNIF(), clientInfo.getId(), clientInfo.getAddress());
+            }
+
+
             case Event event -> {
                 //nao
                 return manDB.registerEvent(event.getName(), event.getLocation(), event.getDate(), event.getBeginning(), event.getEndTime(),event.getPresenceCodes().get(0), clientMail);
@@ -72,6 +79,7 @@ public class HandleRequests {
                 //nao
                 return manDB.generateEventCSV(eventPresence.getEvent().getName(), "csveventgenerated.csv");
 
+
             }
             default -> {
                 return RESPONSE.DECLINED;
@@ -93,7 +101,7 @@ public class HandleRequests {
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-        this.serverInfo.updateBackup(dbResponse);
+        //this.serverInfo.updateBackup(dbResponse);
 
         return dbResponse;
     }

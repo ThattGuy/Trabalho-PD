@@ -26,7 +26,7 @@ public class EditInfo extends ClientStateAdapter {
                         int studentNumber = Integer.parseInt(splitString[2]);
                         int nif = Integer.parseInt(splitString[3]);
 
-                        data.sendToServer(new User(
+                        data.sendToServer(new EditUser(new User(
                                 data.getUserName(),
                                 splitString[0],
                                 splitString[1],
@@ -34,7 +34,7 @@ public class EditInfo extends ClientStateAdapter {
                                 nif,
                                 data.getID(),
                                 splitString[4]
-                                ));
+                        )));
                     } catch (NumberFormatException e) {
                         data.setMessage("Student Number and ID need to be numbers");
                         return false;
