@@ -13,6 +13,7 @@ import java.net.MulticastSocket;
 public class ReceiveHbeat extends Thread{
     private final MulticastSocket ms;
     private HandleRmi rmiHandler;
+    private int previousDatabaseVersion;
 
     public ReceiveHbeat(MulticastSocket ms, HandleRmi rmiHandler){
         this.ms = ms;
@@ -37,18 +38,20 @@ public class ReceiveHbeat extends Thread{
 
                 ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(dp.getData(), 0, dp.getLength()));
                 o = ois.readObject();
-                //TODO: Verifcar se versao BD local igual a que vem no hbeat
+
                 if(o instanceof HbeatMessage info)
                 {
 
                     System.out.println("Received heartbeat from " + info.getRMI() + " " + info.getRegistryPort());
-                    //TODO: Update databse version
+
                     if(first) {
                         rmiHandler.setLocalDatabase((HbeatMessage) o);
                         first = false;
                     }
-                    else
+                    else if(previousDatabaseVersion != info.getDatabaseVersion())
                         rmiHandler.fileReceived((HbeatMessage) o);
+
+                    this.previousDatabaseVersion = info.getDatabaseVersion();
                 }
                 else{
                     o = null;
