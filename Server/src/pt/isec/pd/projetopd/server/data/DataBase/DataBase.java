@@ -421,7 +421,6 @@ public class DataBase {
             try (ResultSet resultSet = checkStatement.executeQuery()) {
                 if (resultSet.next()) {
                     validCodeCount = resultSet.getInt(1);
-                    eventName = resultSet.getString("event_nome");
                 }
             }
         } catch (SQLException e) {
@@ -430,6 +429,24 @@ public class DataBase {
 
         if (validCodeCount == 0) {
             return "Invalid or expired registration code.";
+        }
+
+        // Buscar o nome do evento usando o código UUID
+        String getEventNameQuery = "SELECT event_nome FROM CodigoRegisto WHERE codigo = ?";
+        try (PreparedStatement getEventNameStatement = con.prepareStatement(getEventNameQuery)) {
+            getEventNameStatement.setString(1, code.toString());
+
+            try (ResultSet resultSet = getEventNameStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    eventName = resultSet.getString("event_nome");
+                }
+            }
+        } catch (SQLException e) {
+            return "Error getting event name: " + e.getMessage();
+        }
+
+        if (eventName == null) {
+            return "Event not found.";
         }
 
         String getUserIdQuery = "SELECT username FROM User WHERE username = ?";
@@ -498,8 +515,8 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
+                "JOIN User ON UserEvent.username = User.id " +
+                "WHERE UserEvent.username = ? AND Event.HoraInicio >= ? AND Event.HoraFim <= ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, mail);
@@ -532,8 +549,8 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
-                "WHERE UserEvent.user_id = ?";
+                "JOIN User ON UserEvent.username = User.username " +
+                "WHERE UserEvent.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
             preparedStatement.setString(1, mail);
@@ -574,7 +591,7 @@ public class DataBase {
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\", Event.nome AS NomeEvento, Event.Local, Event.Data, Event.HoraInicio " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username= User.username " +
                 "WHERE UserEvent.event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -638,12 +655,17 @@ public class DataBase {
         return null;
     }
 
+<<<<<<< HEAD
     public Serializable getEventPresence(String eventName) {
+=======
+    public Serializable getEventPresence(String eventName, String mail) {
+        //123
+>>>>>>> 9abc6114e2b63fbbbc413a4f597e431b865e2795
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT User.name AS Nome, User.studentNumber AS \"Número identificação\"" +
                 "FROM UserEvent " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username = User.username " +
                 "WHERE UserEvent.event_nome = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
@@ -671,7 +693,7 @@ public class DataBase {
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
                 "FROM UserEvent " +
                 "JOIN Event ON UserEvent.event_nome = Event.nome " +
-                "JOIN User ON UserEvent.user_id = User.id " +
+                "JOIN User ON UserEvent.username = User.username " +
                 "WHERE User.username = ?";
 
         try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
