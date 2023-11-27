@@ -19,7 +19,6 @@ public class ViewEvents extends ClientStateAdapter {
     public boolean selOpt(OPTIONS opt, String string) {
 
         switch (opt){
-            case CSV -> data.sendToServer(REQUESTS.CSV_PRESENCE); //todo
             case EDIT_EVENT -> {
 
                     try {

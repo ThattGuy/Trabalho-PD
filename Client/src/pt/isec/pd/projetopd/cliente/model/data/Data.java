@@ -4,8 +4,7 @@ import pt.isec.pd.projetopd.communication.classes.*;
 
 import pt.isec.pd.projetopd.cliente.model.data.communication.TCPSend;
 
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +66,8 @@ public class Data {
         return sb;
     }
 
-    public synchronized void addPresences(EventPresencesList eventPresencesList) {
-        this.presences = eventPresencesList.toString();
+    public synchronized void addPresences(String eventPresencesList) {
+        this.presences = eventPresencesList;
     }
 
     public synchronized String getPresenceString() {
@@ -149,5 +148,42 @@ public class Data {
 
     public void modifyEditEvent(Event event) {
         events.set(indexOfEventObject, event);
+    }
+
+    public synchronized static boolean createCSV(File csvFile) {
+        // Check if the provided File is not null and is a CSV file
+        if (csvFile != null && csvFile.getName().endsWith(".csv")) {
+            try {
+                // Specify the destination path for the new CSV file
+                String destinationPath = "path/to/destination/directory/" + csvFile.getName();
+
+                // Create input stream to read from the source file
+                FileInputStream fis = new FileInputStream(csvFile);
+
+                // Create output stream to write to the destination file
+                FileOutputStream fos = new FileOutputStream(destinationPath);
+
+                // Buffer for efficient copying
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                // Copy data from source to destination
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+
+                // Close the streams
+                fis.close();
+                fos.close();
+
+                System.out.println("CSV file copied successfully to: " + destinationPath);
+                return true;
+            } catch (IOException e) {
+                System.err.println("Error copying CSV file: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Invalid CSV file provided.");
+        }
+        return false;
     }
 }

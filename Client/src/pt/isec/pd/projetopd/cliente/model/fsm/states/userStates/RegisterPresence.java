@@ -43,6 +43,10 @@ public class RegisterPresence extends ClientStateAdapter {
         if(message instanceof String response){
             data.setMessage(response);
         }
+
+        if(message instanceof EventPresencesList){
+            data.setMessage("Presence registered");
+        }
         return false;
     }
 

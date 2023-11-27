@@ -665,7 +665,7 @@ public class DataBase {
         return new EventPresencesList(presenceList.toString(), mail);
     }
 
-    public EventPresencesList getPresenceForUser(String userName) {
+    public String getPresenceForUser(String userName) {
         List<String> presenceList = new ArrayList<>();
 
         String query = "SELECT Event.nome, Event.Local, Event.Data, Event.HoraInicio, Event.HoraFim " +
@@ -694,9 +694,7 @@ public class DataBase {
             System.err.println("Error getting presence for user: " + e.getMessage());
         }
 
-        EventPresencesList pl = new EventPresencesList(presenceList.toString(), userName);
-
-        return pl;
+        return presenceList.toString();
     }
 
     public EventList getAllEvents() {
