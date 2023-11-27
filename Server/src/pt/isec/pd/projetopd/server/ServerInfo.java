@@ -73,12 +73,11 @@ public class ServerInfo {
     public void updateBackup(Object data){
         this.databaseVersion++; myRemote.setDatabaseVersion(databaseVersion);
         this.sendHBeat.SendHeartBeat(databaseVersion);
+        myRemote.sendNotification(data);
         //TODO: Atualizar backups atraves do rmi!!
     }
     public void sendNotification(Object data){
-        myRemote.sendNotification(data);
         updateAllClientsViews(data);
-
     }
 
     public String getClientMail(ObjectOutputStream out) {

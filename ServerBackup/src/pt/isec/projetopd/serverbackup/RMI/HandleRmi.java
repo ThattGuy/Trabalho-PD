@@ -72,6 +72,8 @@ public class HandleRmi  {
                 serverDB.deleteBackup(myRemoteService);
             }
             else this.databaseVersion++;
+
+            System.out.println("Database version: " + this.databaseVersion);
         } catch (NotBoundException | IOException e) {
             throw new RuntimeException(e);
         }
