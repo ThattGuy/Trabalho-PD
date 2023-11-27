@@ -154,8 +154,4 @@ public class Data {
     public boolean createCSV(File csv) {
         return true;
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 5459928ecf695c083cc72ab2b384d68291ab68a7
 }
