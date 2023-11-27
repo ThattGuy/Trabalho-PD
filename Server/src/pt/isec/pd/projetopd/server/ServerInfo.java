@@ -1,6 +1,7 @@
 package pt.isec.pd.projetopd.server;
 
 import pt.isec.pd.projetopd.server.HeartBeat.SendHBeat;
+import pt.isec.pd.projetopd.server.Remote.RemoteManager;
 
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -15,14 +16,16 @@ public class ServerInfo {
     private int databaseVersion;
     private SendHBeat sendHBeat;
     private ArrayList<Socket> notificationClients;
+    private RemoteManager myRemote;
 
 
-    public ServerInfo(SendHBeat sendHBeat){
+    public ServerInfo(SendHBeat sendHBeat, RemoteManager remote) {
         this.clientsList = new HashMap<>();
         this.nTCPConnections = 0;
         this.sendHBeat = sendHBeat;
         this.databaseVersion = 0;
         this.notificationClients = new ArrayList<>();
+        this.myRemote = remote;
     }
 
     public void addNotificationClient(Socket socket){
@@ -39,14 +42,14 @@ public class ServerInfo {
     public void addClient(String mail, ObjectOutputStream out) {
         this.clientsList.put(mail,out);
         this.nTCPConnections++;
-        this.databaseVersion++;
+        this.databaseVersion++; myRemote.setDatabaseVersion(databaseVersion);
         this.sendHBeat.SendHeartBeat(databaseVersion);
     }
 
     public void removeClient(String mail) {
         this.clientsList.remove(mail);
         this.nTCPConnections--;
-        this.databaseVersion--;
+        this.databaseVersion--;myRemote.setDatabaseVersion(databaseVersion);
         this.sendHBeat.SendHeartBeat(databaseVersion);
     }
     private void updateAllClientsViews(Object data) {
@@ -65,13 +68,12 @@ public class ServerInfo {
     }
 
 
-    public void sendNotification(Object data){
-        this.databaseVersion++;
+    public void updateBackup(Object data){
+        this.databaseVersion++; myRemote.setDatabaseVersion(databaseVersion);
         this.sendHBeat.SendHeartBeat(databaseVersion);
-        System.out.println("I sended a notification");
-
         //TODO: Atualizar backups atraves do rmi!!
-
+    }
+    public void sendNotification(Object data){
         updateAllClientsViews(data);
 
     }

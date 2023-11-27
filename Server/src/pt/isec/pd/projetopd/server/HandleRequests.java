@@ -84,15 +84,17 @@ public class HandleRequests {
         String mail =this.serverInfo.getClientMail(Clientout);
         Serializable dbResponse = this.InterpretClientMessage(request, mail);
 
-        if(request instanceof Authentication && dbResponse instanceof User ) //Check if new client connecting
+        if(request instanceof Authentication && dbResponse instanceof User
+            || request instanceof User && dbResponse instanceof User
+        ) //Check if new client connecting or registring
         {
             this.serverInfo.addClient(((Authentication) request).getUsername(), Clientout);
-            //return dbResponse;
-            mail =this.serverInfo.getClientMail(Clientout);
         }
         else
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
+
+        this.serverInfo.updateBackup(dbResponse);
 
         return dbResponse;
     }
