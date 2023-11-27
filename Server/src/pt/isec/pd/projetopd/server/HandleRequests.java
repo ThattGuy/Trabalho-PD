@@ -105,7 +105,7 @@ public class HandleRequests {
             if(dbResponse instanceof RESPONSE && dbResponse.equals(RESPONSE.DECLINED)) //Client operation declined
                 return dbResponse;
 
-        //this.serverInfo.updateBackup(dbResponse);
+        this.serverInfo.updateBackup(dbResponse);
 
         return dbResponse;
     }

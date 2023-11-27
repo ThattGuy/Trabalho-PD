@@ -26,6 +26,7 @@ public class TCPReceive extends Thread {
 
             while (true) {
                 Object receivedObject = objectInputStream.readObject();
+                System.out.println("Received object: " + receivedObject);
 
                 createNotificationThread(receivedObject);
 
@@ -62,7 +63,7 @@ public class TCPReceive extends Thread {
             if (receivedObject instanceof ServerPort serverPort) {
                 try {
                     Socket notificationSocket = new Socket(ip, serverPort.getPortNumber());
-                    new TCPReceive(ip, notificationSocket, this.listener);
+                    new TCPReceive(ip, notificationSocket, this.listener).start();
                     hasServerSocket = true;
                 } catch (IOException e) {
                     String errorMessage = "Error creating notificationThread: " + e.getMessage();

@@ -64,21 +64,20 @@ public class HandleRmi  {
     }
 
 
-    public void fileReceived(HbeatMessage o) {}
-/*
+    public void fileReceived(HbeatMessage o) {
+
         try {
             UpdateDB serverDB = (UpdateDB) Naming.lookup(o.getRMI());
             if (o.getDatabaseVersion() - 1 != this.databaseVersion) {
                 serverDB.deleteBackup(myRemoteService);
             }
-
+            else this.databaseVersion++;
         } catch (NotBoundException | IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-     */
 
     public void setLocalDatabase(HbeatMessage o) {
 
